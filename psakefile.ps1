@@ -19,9 +19,11 @@ Task Rebuild {
 
 Task Build -depends Restore, Rebuild
 
-Task Deploy -depends Build {
+Task DeployBuilt {
     Exec { python -m twine upload --skip-existing --repository pypi "dist/*" }
 }
+
+Task Deploy -depends Build, DeployBuilt
 
 Task Install {
 
@@ -58,7 +60,7 @@ Task Demo {
     Exec { coxbuild --help }
 }
 
-Task Test -depends Install, Demo, DataTest, Uninstall
+Task Test -depends Install, Demo, Uninstall
 
 Task Clean {
     Remove-Item -Recurse ./dist
