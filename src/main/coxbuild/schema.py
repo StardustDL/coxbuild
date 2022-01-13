@@ -1,6 +1,8 @@
 import functools
 from typing import Callable
 
+from importlib_metadata import pathlib
+
 from coxbuild.managers import Manager
 from coxbuild.tasks import Task
 
@@ -22,3 +24,12 @@ def depend(*names: str | Task):
             inner.deps.append(name if isinstance(name, str) else name.name)
         return inner
     return decorator
+
+
+def run(cmds: list[str], env: dict[str, str] | None = None,
+        cwd: pathlib.Path | None = None, timeout: float | None = None,
+        input: str | None = None,
+        shell: bool = False, pipe: bool = False,
+        retry: int = 0, fail: bool = False):
+    from coxbuild import invocation
+    return invocation.run(invocation.CommandExecutionArgs(cmds, env, cwd, timeout, input, shell, pipe), retry=retry, fail=fail)

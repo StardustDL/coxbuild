@@ -13,6 +13,8 @@ class CommandExecutionArgs:
     cwd: pathlib.Path | None = None
     timeout: float | None = None
     input: str | None = None
+    shell: bool = False
+    pipe: bool = False
 
 
 @dataclass
@@ -31,8 +33,8 @@ class CommandExecutionResult:
 
 def execmd(args: CommandExecutionArgs) -> CommandExecutionResult:
     try:
-        result = subprocess.run(args=args.cmds, env=args.env, cwd=args.cwd, encoding="utf-8", text=True, input=args.input,
-                                timeout=args.timeout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result = subprocess.run(args=args.cmds, env=args.env, cwd=args.cwd, encoding="utf-8", text=True, input=args.input, shell=args.shell,
+                                timeout=args.timeout, stdout=subprocess.PIPE if args.pipe else None, stderr=subprocess.PIPE if args.pipe else None)
         return CommandExecutionResult(args, result.returncode, result.stdout, result.stderr)
     except subprocess.TimeoutExpired:
         return CommandExecutionResult(args)
@@ -46,5 +48,8 @@ def run(args: CommandExecutionArgs, retry: int = 0, fail: bool = False) -> Comma
             if result:
                 break
     if not fail and not result:
-        raise CoxbuildException("Failed to execute command.")
+        if result.timeout():
+            raise CoxbuildException("Timeout to execute command.")
+        else:
+            raise CoxbuildException(f"Fail to execute command: exitcode {result.code}.")
     return result

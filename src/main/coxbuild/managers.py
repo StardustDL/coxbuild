@@ -4,6 +4,7 @@ from graphlib import TopologicalSorter
 from queue import Queue
 from timeit import default_timer as timer
 from typing import Any, Callable, Tuple
+import traceback
 
 from coxbuild.exceptions import CoxbuildException
 from coxbuild.tasks import Task, TaskResult
@@ -36,10 +37,12 @@ class Runner:
                 with task as run:
                     run()
                 self._results.append(task.result)
+                if not task.result:
+                    break
 
         return runner
 
-    def __exit__(self, exc_type, exc_value, traceback) -> bool:
+    def __exit__(self, exc_type, exc_value, exc_tb) -> bool:
         exception = None if exc_value is None else CoxbuildException(
             f"Failed to run runner", cause=exc_value)
         duration = timedelta(seconds=timer()-self._tic)
@@ -57,6 +60,9 @@ class Runner:
         for tr in self.result.tasks:
             print(f"  {tr.name}: {'SUCCESS' if tr else 'FAILED'} @ {tr.duration}")
 
+        if exc_value is not None:
+            traceback.print_exception(exc_type, exc_value, exc_tb)
+        
         return True
 
 

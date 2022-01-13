@@ -6,3 +6,6 @@ class CoxbuildException(Exception):
 
     def __str__(self) -> str:
         return f"{self.message}{f' ({repr(self.cause)})' if self.cause else ''}"
+    
+    def __repr__(self) -> str:
+        return str(self)

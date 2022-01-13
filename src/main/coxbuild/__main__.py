@@ -43,14 +43,12 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
 
     src = schemafile.read_text(encoding="utf-8")
 
-    import coxbuild.invocation
     import coxbuild.schema
-    import coxbuild.tasks
 
     exec(src, {
         "task": coxbuild.schema.task,
         "depend": coxbuild.schema.depend,
-        "run": coxbuild.invocation.run
+        "run": coxbuild.schema.run
     })
 
     if not tasks:
