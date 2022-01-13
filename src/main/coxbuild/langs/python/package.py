@@ -1,4 +1,5 @@
 from pathlib import Path
+import shutil
 from typing import Tuple
 from . import task, mconfig
 from coxbuild.schema import depend, precond, run, group
@@ -9,7 +10,10 @@ task = group("package", task)
 def loadFromRequirements(lines: list[str]) -> dict[str, str]:
     results: dict[str, str] = {}
     for line in lines:
-        k, v = line.split("==")
+        sl = line.split("==")
+        if len(sl) != 2:
+            continue
+        k, v = sl
         results[k] = v
     return results
 
@@ -51,8 +55,13 @@ def prebuild():
 @depend(prebuild)
 @task()
 def build():
+    src: Path = mconfig["buildSrc"]
     run(["python", "-m", "build", "-o", str(mconfig["buildDist"])],
-        cwd=mconfig["buildSrc"])
+        cwd=src)
+    for item in src.glob("*.egg-info"):
+        if not item.is_dir():
+            continue
+        shutil.rmtree(item)
 
 
 @depend(build)
