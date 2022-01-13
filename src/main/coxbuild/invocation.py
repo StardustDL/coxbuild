@@ -1,7 +1,9 @@
+from datetime import timedelta
 import functools
 import pathlib
 import subprocess
 from dataclasses import dataclass, field
+from timeit import default_timer as timer
 
 from coxbuild.exceptions import CoxbuildException
 
@@ -20,6 +22,7 @@ class CommandExecutionArgs:
 @dataclass
 class CommandExecutionResult:
     args: CommandExecutionArgs
+    duration: timedelta
     code: int | None = None
     stdout: str = ""
     stderr: str = ""
@@ -32,12 +35,15 @@ class CommandExecutionResult:
 
 
 def execmd(args: CommandExecutionArgs) -> CommandExecutionResult:
+    tic = timer()
     try:
         result = subprocess.run(args=args.cmds, env=args.env, cwd=args.cwd, encoding="utf-8", text=True, input=args.input, shell=args.shell,
                                 timeout=args.timeout, stdout=subprocess.PIPE if args.pipe else None, stderr=subprocess.PIPE if args.pipe else None)
-        return CommandExecutionResult(args, result.returncode, result.stdout, result.stderr)
+        toc = timer()
+        return CommandExecutionResult(args, timedelta(seconds=toc-tic), result.returncode, result.stdout, result.stderr)
     except subprocess.TimeoutExpired as te:
-        return CommandExecutionResult(args, None, te.stdout, te.stderr)
+        toc = timer()
+        return CommandExecutionResult(args, timedelta(seconds=toc-tic), None, te.stdout, te.stderr)
 
 
 def run(args: CommandExecutionArgs, retry: int = 0, fail: bool = False) -> CommandExecutionResult:
@@ -50,14 +56,14 @@ def run(args: CommandExecutionArgs, retry: int = 0, fail: bool = False) -> Comma
     if not fail and not result:
         if result.timeout():
             raise CoxbuildException("\n".join([
-                f"Timeout to execute command.",
+                f"Timeout to execute command ({result.duration}).",
                 "Standard Output:",
                 result.stdout,
                 "Standard Error:",
                 result.stderr]))
         else:
             raise CoxbuildException("\n".join([
-                f"Fail to execute command: exitcode {result.code}.",
+                f"Fail to execute command ({result.duration}): exitcode {result.code}.",
                 "Standard Output:",
                 result.stdout,
                 "Standard Error:",

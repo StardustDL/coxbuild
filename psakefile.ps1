@@ -81,7 +81,22 @@ Task TestBuild {
     Exec { coxbuild -D ./test/demo b }
 }
 
-Task Test -depends Install, Demo, TestBuild, Uninstall
+Task TestCommand {
+    Write-Output "⏳ 1️⃣ Normal Command ⏳"
+
+    Exec { coxbuild -D ./test/demo -f command.py }
+
+    Write-Output "⏳ 2️⃣ Failing Command ⏳"
+
+    coxbuild -D ./test/demo -f command.py fail retry
+
+    if ($?) {
+        Write-Output "Unexpected success for failing command."
+        exit 1
+    }
+}
+
+Task Test -depends Install, Demo, TestBuild, TestCommand, Uninstall
 
 Task Clean {
     Remove-Item -Recurse ./dist
