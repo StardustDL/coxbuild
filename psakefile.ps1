@@ -7,14 +7,14 @@ Task Restore {
 Task Rebuild {
     $readme = $(Get-Childitem "README.md")[0]
 
-    Set-Location src
+    Set-Location src/main
     Write-Output "📦 Build main"
 
     Copy-Item $readme ./README.md
-    Exec { python -m build -o ../dist }
+    Exec { python -m build -o ../../dist }
     Remove-Item ./README.md
     
-    Set-Location ..
+    Set-Location ../..
 }
 
 Task Build -depends Restore, Rebuild
