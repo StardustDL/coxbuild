@@ -103,7 +103,13 @@ Task TestCommand {
     }
 }
 
+Task BuildSelf {
+    Exec { coxbuild }
+}
+
 Task Test -depends Install, Demo, TestBuild, TestCommand, Uninstall
+
+Task Self -depends Install, BuildSelf, Uninstall
 
 Task Clean {
     Remove-Item -Recurse ./dist

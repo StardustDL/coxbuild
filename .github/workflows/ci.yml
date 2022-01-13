@@ -61,3 +61,8 @@ jobs:
         PYTHONUTF8: 1
       run: |
         Invoke-psake test
+    - name: Build Self by Self
+      env:
+        PYTHONUTF8: 1
+      run: |
+        Invoke-psake self

@@ -50,7 +50,7 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
         "task": coxbuild.schema.task,
         "depend": coxbuild.schema.depend,
         "run": coxbuild.schema.run,
-        "grouptask": coxbuild.schema.grouptask,
+        "group": coxbuild.schema.group,
         "precond": coxbuild.schema.precond,
         "postcond": coxbuild.schema.postcond,
         "invoke": coxbuild.schema.invoke

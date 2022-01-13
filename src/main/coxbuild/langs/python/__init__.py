@@ -1,19 +1,20 @@
-from coxbuild.schema import depend, run, grouptask
+from importlib_metadata import pathlib
+import coxbuild
+from coxbuild.schema import group, run, config
 
-task = grouptask("python")
-
-
-@task
-def prebuildPackage():
-    run(["python", "-m", "pip", "install", "--upgrade", "build", "twine"], retry=3)
+task = group("python")
+mconfig = config.section("python")
 
 
-@task
-def buildPackage():
-    run(["python", "-m", "build"])
+def settings(requirements: pathlib.Path | None = None, buildSrc: pathlib.Path | None = None, buildDist: pathlib.Path | None = None):
+    buildSrc = buildSrc if buildSrc else coxbuild.get_working_directory()
+    buildDist = buildDist if buildDist else buildSrc.joinpath("dist")
+    requirements = requirements if requirements else buildSrc.joinpath(
+        "requirements.txt")
+
+    mconfig["buildSrc"] = buildSrc.absolute()
+    mconfig["buildDist"] = buildDist.absolute()
+    mconfig["requirements"] = requirements.absolute()
 
 
-@task
-def deployPackage():
-    run(["python", "-m", "twine", "upload",
-        "--skip-existing", "--repository", "pypi", "dist/*"])
+settings()

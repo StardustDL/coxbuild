@@ -9,3 +9,7 @@ __version__ = "0.0.1"
 
 def get_app_directory() -> Path:
     return Path(os.path.split(__file__)[0])
+
+
+def get_working_directory() -> Path:
+    return Path(os.curdir)
