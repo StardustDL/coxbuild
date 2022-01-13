@@ -3,7 +3,7 @@ from typing import Callable
 
 from coxbuild.managers import Manager
 from coxbuild.tasks import Task
-from importlib_metadata import pathlib
+import pathlib
 
 manager = Manager()
 

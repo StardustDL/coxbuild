@@ -1,3 +1,5 @@
+from coxbuild.schema import task, depend, run
+
 @task()
 def pre():
     print("pre")
