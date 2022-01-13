@@ -49,18 +49,17 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
     exec(src, {
         "task": coxbuild.schema.task,
         "depend": coxbuild.schema.depend,
-        "run": coxbuild.schema.run
+        "run": coxbuild.schema.run,
+        "grouptask": coxbuild.schema.grouptask,
+        "precond": coxbuild.schema.precond,
+        "postcond": coxbuild.schema.postcond,
+        "invoke": coxbuild.schema.invoke
     })
 
     if not tasks:
         tasks = ["default"]
 
-    runner = coxbuild.schema.manager(*tasks)
-
-    with runner as run:
-        run()
-
-    result = runner.result
+    result = coxbuild.schema.manager.invoke(*tasks)
 
     if result:
         exit(0)

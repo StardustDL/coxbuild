@@ -74,6 +74,13 @@ Task TestBuild {
         exit 1
     }
 
+    coxbuild -vvv -D ./test/demo -f fail.py default2
+
+    if ($?) {
+        Write-Output "Unexpected success for failing build."
+        exit 1
+    }
+
     Write-Output "⏳ 3️⃣ Partial Build ⏳"
 
     Exec { coxbuild -vvv -D ./test/demo a }

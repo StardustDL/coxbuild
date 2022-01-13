@@ -1,4 +1,5 @@
-from coxbuild.schema import task, depend, run
+from coxbuild.schema import postcond, task, depend, run
+
 
 @task()
 def pre():
@@ -7,9 +8,15 @@ def pre():
 
 @depend(pre)
 @task()
-def a():
-    print("a")
+def executeFail():
     raise Exception("Try fail")
+
+
+@postcond(lambda: False)
+@depend(pre)
+@task()
+def postCondFail():
+    pass
 
 
 @depend(pre)
@@ -18,7 +25,13 @@ def b():
     print("b")
 
 
-@depend(a, b)
+@depend(executeFail, b)
 @task()
 def default():
+    pass
+
+
+@depend(postCondFail, b)
+@task()
+def default2():
     pass

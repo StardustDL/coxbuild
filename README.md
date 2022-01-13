@@ -15,8 +15,10 @@ pip install coxbuild
 ### Build Schema
 
 ```python
-from coxbuild.schema import task, depend, run # this line can be omitted
+from coxbuild.schema import precond, postcond, task, depend, run, grouptask, invoke # this line can be omitted
 
+@precond(lambda: True)
+@postcond(lambda: True)
 @task()
 def pre():
     print("pre task")

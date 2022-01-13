@@ -1,4 +1,5 @@
-from coxbuild.schema import task, depend, run
+from coxbuild.schema import precond, task, depend, run
+
 
 @task()
 def pre():
@@ -17,7 +18,13 @@ def b():
     print("b")
 
 
-@depend(a, b)
+@precond(lambda: False)
+@task()
+def ignored():
+    raise Exception("Execute ignored task")
+
+
+@depend(a, b, ignored)
 @task()
 def default():
     pass
