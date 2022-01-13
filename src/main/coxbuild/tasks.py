@@ -1,10 +1,13 @@
+import logging
+import traceback
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from timeit import default_timer as timer
 from typing import Any, Callable
-import traceback
 
 from coxbuild.exceptions import CoxbuildException
+
+logger = logging.getLogger("tasks")
 
 
 def EMPTY_BODY() -> None:
@@ -20,6 +23,10 @@ class TaskResult:
     def __bool__(self):
         return self.exception is None
 
+    @property
+    def description(self) -> str:
+        return "SUCCESS" if self else "FAILED"
+
 
 class Task:
     def __init__(self, name: str = "default", body: Callable[[], None] | None = None, deps: list[str] | None = None) -> None:
@@ -29,7 +36,8 @@ class Task:
         self.result = None
 
     def __enter__(self) -> Callable[[], None]:
-        print(f"{'-'*5} Task {self.name} (Start @ {datetime.now()}) {'-'*5}")
+        logger.debug(f"Start task {self.name}.")
+        print(f"{'>'*3} Task {self.name} (Start @ {datetime.now()})")
 
         self.result = None
         self._tic = timer()
@@ -42,11 +50,13 @@ class Task:
         self.result = TaskResult(
             self.name, duration=duration, exception=exception)
 
-        print(f"{'-'*5} Task {self.name} ({'SUCCESS' if self.result else 'FAILED'} @ {self.result.duration}) {'-'*5}")
-
-        del self._tic
+        print(
+            f"{'<'*3} Task {self.name} ({self.result.description} @ {self.result.duration})")
 
         if exc_value is not None:
             traceback.print_exception(exc_type, exc_value, exc_tb)
 
+        logger.debug(f"Finish task {self.name}: {self.result}.")
+
+        del self._tic
         return True

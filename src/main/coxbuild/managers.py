@@ -1,69 +1,17 @@
+import logging
+import traceback
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from graphlib import TopologicalSorter
 from queue import Queue
 from timeit import default_timer as timer
 from typing import Any, Callable, Tuple
-import traceback
 
 from coxbuild.exceptions import CoxbuildException
+from coxbuild.runner import Runner
 from coxbuild.tasks import Task, TaskResult
 
-
-@dataclass
-class RunnerResult:
-    duration: timedelta
-    tasks: list[TaskResult]
-    exception: CoxbuildException | None = None
-
-    def __bool__(self):
-        return self.exception is None and all(self.tasks)
-
-
-class Runner:
-    def __init__(self, tasks: list[Task]) -> None:
-        self.tasks = tasks
-        self.result = None
-
-    def __enter__(self) -> Callable[[], None]:
-        print(f"{'-'*5} Running @ {datetime.now()} {'-'*5}")
-
-        self.result = None
-        self._tic = timer()
-        self._results: list[TaskResult] = []
-
-        def runner():
-            for task in self.tasks:
-                with task as run:
-                    run()
-                self._results.append(task.result)
-                if not task.result:
-                    break
-
-        return runner
-
-    def __exit__(self, exc_type, exc_value, exc_tb) -> bool:
-        exception = None if exc_value is None else CoxbuildException(
-            f"Failed to run runner", cause=exc_value)
-        duration = timedelta(seconds=timer()-self._tic)
-        self.result = RunnerResult(
-            duration=duration, tasks=self._results, exception=exception)
-        del self._tic
-        del self._results
-
-        print(
-            f"{'-'*5} Done ({'SUCCESS' if self.result else 'FAILED'} @ {self.result.duration}) {'-'*5}")
-
-        print(f"{'SUCCESS' if self.result else 'FAILED'} @ {self.result.duration}")
-        if self.result.exception:
-            print(f"Exception: {self.result.exception}")
-        for tr in self.result.tasks:
-            print(f"  {tr.name}: {'SUCCESS' if tr else 'FAILED'} @ {tr.duration}")
-
-        if exc_value is not None:
-            traceback.print_exception(exc_type, exc_value, exc_tb)
-        
-        return True
+logger = logging.getLogger("manager")
 
 
 class Manager:
@@ -75,6 +23,7 @@ class Manager:
             raise CoxbuildException(
                 f"Register multiple task with the same name {task.name}.")
         self.tasks[task.name] = task
+        logger.debug(f"Register task {task.name}")
 
     def __call__(self, *args: Any, **kwds: Any) -> Runner:
         tks = set()
@@ -95,4 +44,9 @@ class Manager:
         for key in tks:
             graph[key] = {d for d in self.tasks[key].deps}
 
-        return Runner(list((self.tasks[name] for name in TopologicalSorter(graph).static_order())))
+        tasks = list((self.tasks[name]
+                     for name in TopologicalSorter(graph).static_order()))
+
+        logger.debug(f"Tasks to run: {', '.join((t.name for t in tasks))}")
+
+        return Runner(tasks)

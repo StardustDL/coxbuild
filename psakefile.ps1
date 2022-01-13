@@ -63,11 +63,11 @@ Task Demo {
 Task TestBuild {
     Write-Output "⏳ 1️⃣ Normal Build ⏳"
 
-    Exec { coxbuild -D ./test/demo }
+    Exec { coxbuild -vvvvv -D ./test/demo }
 
     Write-Output "⏳ 2️⃣ Failing Build ⏳"
 
-    coxbuild -D ./test/demo -f fail.py
+    coxbuild -vvv -D ./test/demo -f fail.py
 
     if ($?) {
         Write-Output "Unexpected success for failing build."
@@ -76,19 +76,19 @@ Task TestBuild {
 
     Write-Output "⏳ 3️⃣ Partial Build ⏳"
 
-    Exec { coxbuild -D ./test/demo a }
+    Exec { coxbuild -vvv -D ./test/demo a }
 
-    Exec { coxbuild -D ./test/demo b }
+    Exec { coxbuild -vvv -D ./test/demo b }
 }
 
 Task TestCommand {
     Write-Output "⏳ 1️⃣ Normal Command ⏳"
 
-    Exec { coxbuild -D ./test/demo -f command.py }
+    Exec { coxbuild -vvv -D ./test/demo -f command.py }
 
     Write-Output "⏳ 2️⃣ Failing Command ⏳"
 
-    coxbuild -D ./test/demo -f command.py fail retry
+    coxbuild -vvv -D ./test/demo -f command.py fail retry
 
     if ($?) {
         Write-Output "Unexpected success for failing command."

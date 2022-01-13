@@ -1,10 +1,9 @@
 import functools
 from typing import Callable
 
-from importlib_metadata import pathlib
-
 from coxbuild.managers import Manager
 from coxbuild.tasks import Task
+from importlib_metadata import pathlib
 
 manager = Manager()
 
