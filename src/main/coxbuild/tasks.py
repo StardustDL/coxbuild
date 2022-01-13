@@ -1,4 +1,5 @@
 import logging
+import sys
 import traceback
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -23,7 +24,7 @@ class TaskResult:
     @property
     def description(self) -> str:
         return "🟢 SUCCESS" if self else "🔴 FAILING"
-    
+
     def ensure(self) -> None:
         if not self:
             raise self.exception
@@ -94,13 +95,13 @@ class TaskRunner(Runner):
         self.result = TaskResult(
             self.task.name, duration=self.duration, exception=exception)
 
-        print(
-            f"{'-'*3} 🔺 {self.task.name} {self.result.description} ⏱️ {self.result.duration} {'-'*3}")
-
         if self.exc_value is not None:
             traceback.print_exception(
-                self.exc_type, self.exc_value, self.exc_tb)
+                self.exc_type, self.exc_value, self.exc_tb, file=sys.stdout)
 
         logger.debug(f"Finish task {self.task.name}: {self.result}.")
+
+        print(
+            f"{'-'*3} 🔺 {self.task.name} {self.result.description} ⏱️ {self.result.duration} {'-'*3}")
 
         return True

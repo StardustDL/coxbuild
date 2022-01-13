@@ -51,7 +51,7 @@ def execmd(args: CommandExecutionArgs) -> CommandExecutionResult:
     tic = timer()
     try:
         subresult = subprocess.run(args=args.cmds, env=args.env, cwd=args.cwd, encoding="utf-8", text=True, input=args.input, shell=args.shell,
-                                   timeout=args.timeout, stdout=subprocess.PIPE if args.pipe else None, stderr=subprocess.PIPE if args.pipe else None)
+                                   timeout=args.timeout, capture_output=args.pipe)
         result.code = subresult.returncode
         result.stdout = subresult.stdout if subresult.stdout else ""
         result.stderr = subresult.stderr if subresult.stderr else ""

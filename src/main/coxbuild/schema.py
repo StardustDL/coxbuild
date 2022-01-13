@@ -1,13 +1,14 @@
+from dataclasses import asdict
 import functools
-from typing import Callable
+from typing import Any, Callable
 from coxbuild.configuration import Configuration
 
-from coxbuild.managers import Manager
+from coxbuild.pipelines import Pipeline, TaskHook
 from coxbuild.tasks import Task, TaskResult
 from coxbuild.invocation import CommandExecutionResult, run as inrun, CommandExecutionArgs
 import pathlib
 
-manager = Manager()
+pipeline = Pipeline()
 config = Configuration()
 
 TaskFuncDecorator = Callable[[Callable[..., None]], Task]
@@ -22,7 +23,7 @@ def task(name: str = "") -> TaskFuncDecorator:
 
         tk = Task(tname, body)
 
-        manager.register(tk)
+        pipeline.register(tk)
         return tk
     return decorator
 
@@ -60,9 +61,65 @@ def postcond(predicate: Callable[..., bool]):
 
 def invoke(name: str | Task, /, *args, **kwds) -> TaskResult:
     if isinstance(name, str):
-        name = manager.tasks[name]
+        name = pipeline.tasks[name]
 
     return name.invoke(*args, **kwds)
+
+
+def before(name: str | Task):
+    def decorator(body: Callable[..., None]) -> Callable[..., None]:
+        tname = name if isinstance(name, str) else name.name
+        if tname in pipeline.hooks:
+            old = asdict(pipeline.hooks[tname])
+            old.update(before=body)
+            hk = TaskHook(**old)
+        else:
+            hk = TaskHook(before=body)
+        pipeline.hook(tname, hk)
+        return body
+    return decorator
+
+
+def after(name: str | Task):
+    def decorator(body: Callable[..., None]) -> Callable[..., None]:
+        tname = name if isinstance(name, str) else name.name
+        if tname in pipeline.hooks:
+            old = asdict(pipeline.hooks[tname])
+            old.update(after=body)
+            hk = TaskHook(**old)
+        else:
+            hk = TaskHook(after=body)
+        pipeline.hook(tname, hk)
+        return body
+    return decorator
+
+
+def args(name: str | Task):
+    def decorator(body: Callable[[], list[Any]]) -> Callable[[], list[Any]]:
+        tname = name if isinstance(name, str) else name.name
+        if tname in pipeline.hooks:
+            old = asdict(pipeline.hooks[tname])
+            old.update(args=body)
+            hk = TaskHook(**old)
+        else:
+            hk = TaskHook(args=body)
+        pipeline.hook(tname, hk)
+        return body
+    return decorator
+
+
+def kwds(name: str | Task):
+    def decorator(body: Callable[[], dict[str, Any]]) -> Callable[[], dict[str, Any]]:
+        tname = name if isinstance(name, str) else name.name
+        if tname in pipeline.hooks:
+            old = asdict(pipeline.hooks[tname])
+            old.update(kwds=body)
+            hk = TaskHook(**old)
+        else:
+            hk = TaskHook(kwds=body)
+        pipeline.hook(tname, hk)
+        return body
+    return decorator
 
 
 def run(cmds: list[str], env: dict[str, str] | None = None,

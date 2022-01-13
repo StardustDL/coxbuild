@@ -53,13 +53,17 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
         "group": coxbuild.schema.group,
         "precond": coxbuild.schema.precond,
         "postcond": coxbuild.schema.postcond,
-        "invoke": coxbuild.schema.invoke
+        "invoke": coxbuild.schema.invoke,
+        "before": coxbuild.schema.before,
+        "after": coxbuild.schema.after,
+        "args": coxbuild.schema.args,
+        "kwds": coxbuild.schema.kwds,
     })
 
     if not tasks:
         tasks = ["default"]
 
-    result = coxbuild.schema.manager.invoke(*tasks)
+    result = coxbuild.schema.pipeline.invoke(*tasks)
 
     if result:
         exit(0)

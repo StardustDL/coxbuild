@@ -17,7 +17,7 @@ Coxbuild can build itself by itself, see [here](coxbuild.py) for details.
 ### Build Schema
 
 ```python
-from coxbuild.schema import precond, postcond, task, depend, run, group, invoke # this line can be omitted
+from coxbuild.schema import precond, postcond, task, depend, run, group, invoke, before, after # this line can be omitted
 
 @precond(lambda: True)
 @postcond(lambda: True)
@@ -35,6 +35,10 @@ def echo():
 @task()
 def git():
     run(["git", "status"])
+
+@before(git)
+def beforeGit():
+    print("Before git")
 
 
 @task()

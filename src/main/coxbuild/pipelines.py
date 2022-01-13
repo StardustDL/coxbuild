@@ -1,4 +1,6 @@
+from enum import Enum
 import logging
+import sys
 import traceback
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -15,7 +17,15 @@ logger = logging.getLogger("manager")
 
 
 @dataclass
-class ManagedRunnerResult:
+class TaskHook:
+    before: Callable[..., None] | None = None
+    after: Callable[..., None] | None = None
+    args: Callable[[], list[Any]] | None = None
+    kwds: Callable[[], dict[str, Any]] | None = None
+
+
+@dataclass
+class PipelineResult:
     duration: timedelta
     tasks: list[TaskResult]
     exception: CoxbuildException | None = None
@@ -28,9 +38,10 @@ class ManagedRunnerResult:
         return "🟢 SUCCESS" if self else "🔴 FAILING"
 
 
-class ManagedRunner(Runner):
-    def __init__(self, tasks: list[Task]) -> None:
+class PipelineRunner(Runner):
+    def __init__(self, tasks: list[Task], hooks: dict[str, TaskHook]) -> None:
         self.tasks = tasks
+        self.hooks = hooks
         self.result = None
 
         super().__init__(self._run)
@@ -41,7 +52,27 @@ class ManagedRunner(Runner):
             logger.debug(f"Run task {i+1}({task.name}) of {n} tasks")
             print(f"{'-'*15} ({i+1}/{n}) 📜 Task {task.name} {'-'*15}")
 
-            res = task.invoke()
+            hook = self.hooks.get(task.name)
+
+            args = []
+            kwds = {}
+
+            if hook is not None:
+                if hook.args is not None:
+                    logger.debug(f"Run args hook for {task.name}")
+                    args = hook.args()
+                if hook.kwds is not None:
+                    logger.debug(f"Run kwds hook for {task.name}")
+                    kwds = hook.kwds()
+            if hook is not None and hook.before is not None:
+                logger.debug(f"Run before hook for {task.name}")
+                hook.before(*args, **kwds)
+
+            res = task.invoke(*args, **kwds)
+
+            if hook is not None and hook.after is not None:
+                logger.debug(f"Run after hook for {task.name}")
+                hook.after(*args, **kwds)
 
             print("")
             self._results.append(res)
@@ -62,31 +93,32 @@ class ManagedRunner(Runner):
 
         exception = None if self.exc_value is None else CoxbuildException(
             f"Failed to run runner", cause=self.exc_value)
-        self.result = ManagedRunnerResult(
+        self.result = PipelineResult(
             duration=self.duration, tasks=self._results, exception=exception)
+
+        if self.exc_value is not None:
+            traceback.print_exception(
+                self.exc_type, self.exc_value, self.exc_tb, file=sys.stdout)
+
+        logger.info(f"Finish: {self.result}")
 
         print(
             f"{'-'*20} 📋 Done {self.result.description} (⏱️ {self.result.duration}) {'-'*20}")
 
-        if self.result.exception:
-            print(f"⚠️ Exception: {self.result.exception}")
-        for tr in self.result.tasks:
-            print(f"{tr.description} ⏱️ {tr.duration} 📜 {tr.name}")
+        cnt = len(self.result.tasks)
 
-        if self.exc_value is not None:
-            traceback.print_exception(
-                self.exc_type, self.exc_value, self.exc_tb)
-
-        logger.info(f"Finish: {self.result}")
+        for i, tr in enumerate(self.result.tasks):
+            print(f"({i+1}/{cnt})\t{tr.description}\t⏱️ {tr.duration}\t📜 {tr.name}")
 
         del self._results
 
         return True
 
 
-class Manager:
+class Pipeline:
     def __init__(self) -> None:
         self.tasks: dict[str, Task] = {}
+        self.hooks: dict[str, TaskHook] = {}
 
     def register(self, task: Task) -> None:
         if task.name in self.tasks:
@@ -95,8 +127,11 @@ class Manager:
         self.tasks[task.name] = task
         logger.debug(f"Register task {task.name}")
 
-    def __call__(self, *args: Any, **kwds: Any) -> ManagedRunner:
-        tks = set()
+    def hook(self, name: str, thook: TaskHook) -> None:
+        self.hooks[name] = thook
+
+    def __call__(self, *args: str, **kwds: Any) -> PipelineRunner:
+        tks: set[str] = set()
         q: Queue[str] = Queue()
         for name in args:
             if name in self.tasks and name not in tks:
@@ -119,9 +154,9 @@ class Manager:
 
         logger.debug(f"Tasks to run: {', '.join((t.name for t in tasks))}")
 
-        return ManagedRunner(tasks)
+        return PipelineRunner(tasks, {k: v for k, v in self.hooks.items() if k in tks})
 
-    def invoke(self, *args: Any, **kwds: Any) -> ManagedRunnerResult:
+    def invoke(self, *args: str, **kwds: Any) -> PipelineResult:
         runner = self(*args, **kwds)
         with runner as run:
             run()
