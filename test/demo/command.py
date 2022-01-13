@@ -12,12 +12,12 @@ def git():
     run(["git", "status"])
 
 
-@task
+@task()
 def fail():
     run(["exit", "1"], shell=True)
 
 
-@task
+@task()
 def retry():
     run(["exit", "1"], shell=True, retry=3)
 

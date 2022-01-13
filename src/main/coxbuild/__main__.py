@@ -5,6 +5,7 @@ from pathlib import Path
 import click
 
 from coxbuild import __version__
+from coxbuild.schema import task
 
 
 @click.command()
