@@ -14,12 +14,12 @@ def git():
 
 @task()
 def fail():
-    run(["exit", "1"], shell=True)
+    run(["cat", "abc.txt"])
 
 
 @task()
 def retry():
-    run(["exit", "1"], shell=True, retry=3)
+    run(["cat", "abc.txt"], retry=3)
 
 
 @depend(git)
