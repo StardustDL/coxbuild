@@ -60,7 +60,28 @@ Task Demo {
     Exec { coxbuild --help }
 }
 
-Task Test -depends Install, Demo, Uninstall
+Task TestBuild {
+    Write-Output "⏳ 1️⃣ Normal Build ⏳"
+
+    Exec { coxbuild -D ./test/demo }
+
+    Write-Output "⏳ 2️⃣ Failing Build ⏳"
+
+    coxbuild -D ./test/demo -f fail.py
+
+    if $? {
+        Write-Output "Unexpected success for failing build."
+        exit 1
+    }
+
+    Write-Output "⏳ 3️⃣ Partial Build ⏳"
+
+    Exec { coxbuild -D ./test/demo a }
+
+    Exec { coxbuild -D ./test/demo b }
+}
+
+Task Test -depends Install, Demo, TestBuild, Uninstall
 
 Task Clean {
     Remove-Item -Recurse ./dist
