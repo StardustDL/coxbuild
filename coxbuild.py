@@ -13,13 +13,14 @@ pysettings(
 )
 
 
-@depend(pyrestore)
+@depend(pyrestore, pybuild)
 @task()
 def build():
-    readmeDst = Path("./src/main/README.md")
-    shutil.copyfile(Path("README.md"), readmeDst)
-    pybuild.invoke()
-    os.remove(readmeDst)
+    pass
+    # readmeDst = Path("./src/main/README.md")
+    # shutil.copyfile(Path("README.md"), readmeDst)
+    # pybuild.invoke().ensure()
+    # os.remove(readmeDst)
 
 
 @depend(build)

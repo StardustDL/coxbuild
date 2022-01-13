@@ -23,6 +23,10 @@ class TaskResult:
     @property
     def description(self) -> str:
         return "🟢 SUCCESS" if self else "🔴 FAILING"
+    
+    def ensure(self) -> None:
+        if not self:
+            raise self.exception
 
 
 class Task:
