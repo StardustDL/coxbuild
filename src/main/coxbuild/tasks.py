@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Any, Callable
 from timeit import default_timer as timer
+from typing import Any, Callable
 
 from coxbuild.exceptions import CoxbuildException
 
@@ -35,13 +35,12 @@ class Task:
         return self.body
 
     def __exit__(self, exc_type, exc_value, traceback) -> bool:
-        duration = timedelta(seconds=timer()-self._tic)        
+        duration = timedelta(seconds=timer()-self._tic)
         exception = None if exc_value is None else CoxbuildException(
             f"Failed to run task: {self.name}", cause=exc_value)
         self.result = TaskResult(
             self.name, duration=duration, exception=exception)
-        
+
         print(f"{'-'*5} Task {self.name} ({'SUCCESS' if self.result else 'FAILED'} @ {self.result.duration}) {'-'*5}")
         del self._tic
         return True
-

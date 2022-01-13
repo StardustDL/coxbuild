@@ -1,7 +1,7 @@
-from typing import Callable
-from coxbuild.managers import Manager
 import functools
+from typing import Callable
 
+from coxbuild.managers import Manager
 from coxbuild.tasks import Task
 
 manager = Manager()

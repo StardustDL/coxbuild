@@ -1,8 +1,7 @@
-from dataclasses import dataclass, field
 import functools
 import pathlib
 import subprocess
-from sys import stderr, stdout
+from dataclasses import dataclass, field
 
 from coxbuild.exceptions import CoxbuildException
 

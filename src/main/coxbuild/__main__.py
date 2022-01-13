@@ -1,9 +1,8 @@
-from ctypes import resize
-from pathlib import Path
-from build import os
-import click
 import logging
-from datetime import time
+import os
+from pathlib import Path
+
+import click
 
 from coxbuild import __version__
 
@@ -44,9 +43,9 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
 
     src = schemafile.read_text(encoding="utf-8")
 
+    import coxbuild.invocation
     import coxbuild.schema
     import coxbuild.tasks
-    import coxbuild.invocation
 
     exec(src, {
         "task": coxbuild.schema.task,

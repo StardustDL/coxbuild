@@ -1,11 +1,12 @@
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Any, Callable, Tuple
-from timeit import default_timer as timer
-from coxbuild.exceptions import CoxbuildException
-from coxbuild.tasks import Task, TaskResult
 from graphlib import TopologicalSorter
 from queue import Queue
+from timeit import default_timer as timer
+from typing import Any, Callable, Tuple
+
+from coxbuild.exceptions import CoxbuildException
+from coxbuild.tasks import Task, TaskResult
 
 
 @dataclass
@@ -47,7 +48,8 @@ class Runner:
         del self._tic
         del self._results
 
-        print(f"{'-'*5} Done ({'SUCCESS' if self.result else 'FAILED'} @ {self.result.duration}) {'-'*5}")
+        print(
+            f"{'-'*5} Done ({'SUCCESS' if self.result else 'FAILED'} @ {self.result.duration}) {'-'*5}")
 
         print(f"{'SUCCESS' if self.result else 'FAILED'} @ {self.result.duration}")
         if self.result.exception:
@@ -81,10 +83,10 @@ class Manager:
                 if d in self.tasks and d not in tks:
                     tks.add(d)
                     q.put(d)
-        
+
         graph = {}
 
         for key in tks:
             graph[key] = {d for d in self.tasks[key].deps}
-        
+
         return Runner(list((self.tasks[name] for name in TopologicalSorter(graph).static_order())))

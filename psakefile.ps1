@@ -69,7 +69,7 @@ Task TestBuild {
 
     coxbuild -D ./test/demo -f fail.py
 
-    if $? {
+    if ($?) {
         Write-Output "Unexpected success for failing build."
         exit 1
     }

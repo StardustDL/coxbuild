@@ -3,6 +3,6 @@ class CoxbuildException(Exception):
         super().__init__()
         self.message = message
         self.cause = cause
-    
+
     def __str__(self) -> str:
         return f"{self.message}{f' ({repr(self.cause)})' if self.cause else ''}"
