@@ -12,6 +12,16 @@ def git():
     run(["git", "status"])
 
 
+@task
+def fail():
+    run(["exit", "1"], shell=True)
+
+
+@task
+def retry():
+    run(["exit", "1"], shell=True, retry=3)
+
+
 @depend(git)
 @task()
 def default():

@@ -36,8 +36,8 @@ def execmd(args: CommandExecutionArgs) -> CommandExecutionResult:
         result = subprocess.run(args=args.cmds, env=args.env, cwd=args.cwd, encoding="utf-8", text=True, input=args.input, shell=args.shell,
                                 timeout=args.timeout, stdout=subprocess.PIPE if args.pipe else None, stderr=subprocess.PIPE if args.pipe else None)
         return CommandExecutionResult(args, result.returncode, result.stdout, result.stderr)
-    except subprocess.TimeoutExpired:
-        return CommandExecutionResult(args)
+    except subprocess.TimeoutExpired as te:
+        return CommandExecutionResult(args, None, te.stdout, te.stderr)
 
 
 def run(args: CommandExecutionArgs, retry: int = 0, fail: bool = False) -> CommandExecutionResult:
@@ -49,7 +49,17 @@ def run(args: CommandExecutionArgs, retry: int = 0, fail: bool = False) -> Comma
                 break
     if not fail and not result:
         if result.timeout():
-            raise CoxbuildException("Timeout to execute command.")
+            raise CoxbuildException("\n".join([
+                f"Timeout to execute command.",
+                "Standard Output:",
+                result.stdout,
+                "Standard Error:",
+                result.stderr]))
         else:
-            raise CoxbuildException(f"Fail to execute command: exitcode {result.code}.")
+            raise CoxbuildException("\n".join([
+                f"Fail to execute command: exitcode {result.code}.",
+                "Standard Output:",
+                result.stdout,
+                "Standard Error:",
+                result.stderr]))
     return result
