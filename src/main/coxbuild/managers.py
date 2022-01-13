@@ -25,7 +25,7 @@ class ManagedRunnerResult:
 
     @property
     def description(self) -> str:
-        return "SUCCESS" if self else "FAILED"
+        return "🟢 SUCCESS" if self else "🔴 FAILING"
 
 
 class ManagedRunner(Runner):
@@ -39,16 +39,18 @@ class ManagedRunner(Runner):
         n = len(self.tasks)
         for i, task in enumerate(self.tasks):
             logger.debug(f"Run task {i+1}({task.name}) of {n} tasks")
-            print(f"{'-'*5} ({i+1}/{n}) Task {task.name} {'-'*5}")
+            print(f"{'-'*15} ({i+1}/{n}) 📜 Task {task.name} {'-'*15}")
 
             res = task.invoke()
+
+            print("")
             self._results.append(res)
             if not res:
                 break
 
     def __enter__(self) -> Callable[[], None]:
         logger.debug("Running")
-        print(f"{'-'*5} Running @ {datetime.now()} {'-'*5}")
+        print(f"{'-'*20} ⌛ Running 🕰️ {datetime.now()} {'-'*20}\n")
 
         self.result = None
         self._results: list[TaskResult] = []
@@ -64,13 +66,12 @@ class ManagedRunner(Runner):
             duration=self.duration, tasks=self._results, exception=exception)
 
         print(
-            f"{'-'*5} Done ({self.result.description} @ {self.result.duration}) {'-'*5}")
+            f"{'-'*20} 📋 Done {self.result.description} (⏱️ {self.result.duration}) {'-'*20}")
 
-        print(f"{self.result.description} @ {self.result.duration}")
         if self.result.exception:
-            print(f"Exception: {self.result.exception}")
+            print(f"⚠️ Exception: {self.result.exception}")
         for tr in self.result.tasks:
-            print(f"  {tr.name}: {tr.description} @ {tr.duration}")
+            print(f"{tr.description} ⏱️ {tr.duration} 📜 {tr.name}")
 
         if self.exc_value is not None:
             traceback.print_exception(

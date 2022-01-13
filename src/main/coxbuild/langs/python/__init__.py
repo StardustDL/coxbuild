@@ -1,4 +1,4 @@
-from importlib_metadata import pathlib
+import pathlib
 import coxbuild
 from coxbuild.schema import group, run, config
 

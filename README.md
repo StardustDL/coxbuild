@@ -12,6 +12,8 @@ pip install coxbuild
 
 ## Usage
 
+Coxbuild can build itself by itself, see [here](coxbuild.py) for details.
+
 ### Build Schema
 
 ```python

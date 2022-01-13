@@ -22,7 +22,7 @@ class TaskResult:
 
     @property
     def description(self) -> str:
-        return "SUCCESS" if self else "FAILED"
+        return "🟢 SUCCESS" if self else "🔴 FAILING"
 
 
 class Task:
@@ -76,7 +76,7 @@ class TaskRunner(Runner):
 
     def __enter__(self) -> Callable[[], None]:
         logger.debug(f"Start task {self.task.name}.")
-        print(f"{'>'*3} Task {self.task.name} (Start @ {datetime.now()})")
+        print(f"{'-'*3} 🔻 {self.task.name} 🕰️ {datetime.now()} {'-'*3}")
 
         self.result = None
 
@@ -91,7 +91,7 @@ class TaskRunner(Runner):
             self.task.name, duration=self.duration, exception=exception)
 
         print(
-            f"{'<'*3} Task {self.task.name} ({self.result.description} @ {self.result.duration})")
+            f"{'-'*3} 🔺 {self.task.name} {self.result.description} ⏱️ {self.result.duration} {'-'*3}")
 
         if self.exc_value is not None:
             traceback.print_exception(

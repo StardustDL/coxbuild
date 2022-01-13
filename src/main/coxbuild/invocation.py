@@ -40,7 +40,7 @@ class CommandExecutionResult:
 
     @property
     def description(self):
-        return "SUCCESS" if self else ("TIMEOUT" if self.timeout else f"FAILED({self.code})")
+        return "🟢 SUCCESS" if self else ("🟡 TIMEOUT" if self.timeout else f"🔴 FAILING({self.code})")
 
 
 def execmd(args: CommandExecutionArgs) -> CommandExecutionResult:
