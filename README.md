@@ -15,7 +15,7 @@ Supported features:
   - Setup / Teardown
   - Before / After
 
-Language extensions:
+Extensions:
 
 - Python
 
@@ -235,6 +235,6 @@ coxbuild -D test/demo -f lifecycle.py
 ### Python
 
 ```python
-import coxbuild.langs.python
-import coxbuild.langs.python.package
+import coxbuild.extensions.python
+import coxbuild.extensions.python.package
 ```
