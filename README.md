@@ -2,7 +2,22 @@
 
 ![](https://github.com/StardustDL/coxbuild/workflows/CI/badge.svg) ![](https://img.shields.io/github/license/StardustDL/coxbuild.svg) [![](https://img.shields.io/pypi/dm/coxbuild)](https://pypi.org/project/coxbuild/)
 
-A tiny build automation tool.
+Coxbuild is a tiny python-script-based build automation tool, an alternative to make, psake and so on.
+
+![](docs/demo.gif)
+
+Supported features:
+
+- Task
+- Dependency
+- Pre / Post condition
+- Lifecycle hooks
+  - Setup / Teardown
+  - Before / After
+
+Language extensions:
+
+- Python
 
 ## Install
 
@@ -213,4 +228,13 @@ Go [here](test/demo/lifecycle.py) to see how to hook these events and how they w
 ```sh
 # See how lifecycle events occur
 coxbuild -D test/demo -f lifecycle.py
+```
+
+## Languages
+
+### Python
+
+```python
+import coxbuild.langs.python
+import coxbuild.langs.python.package
 ```
