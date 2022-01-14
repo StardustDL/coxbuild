@@ -69,6 +69,18 @@ def build():
         shutil.rmtree(item)
 
 
+@task()
+def installBuilt():
+    run(["python", "-m", "pip", "install",
+        str(list(Settings.buildDist.glob("*.whl"))[0])])
+
+
+@task()
+def uninstallBuilt():
+    run(["python", "-m", "pip", "uninstall",
+        str(list(Settings.buildDist.glob("*.whl"))[0]), "-y"])
+
+
 @depend(build)
 @task()
 def deploy():

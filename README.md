@@ -18,6 +18,9 @@ Supported features:
 Extensions:
 
 - Python
+- Shell
+- Git
+- Node.js
 
 ## Install
 
