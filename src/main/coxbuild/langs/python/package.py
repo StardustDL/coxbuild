@@ -1,8 +1,10 @@
-from pathlib import Path
 import shutil
+from pathlib import Path
 from typing import Tuple
-from . import task, mconfig
-from coxbuild.schema import depend, precond, run, group
+
+from coxbuild.schema import depend, group, precond, run
+
+from . import mconfig, task
 
 task = group("package", task)
 

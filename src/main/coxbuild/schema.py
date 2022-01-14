@@ -1,12 +1,14 @@
-from dataclasses import asdict
 import functools
-from typing import Any, Callable
-from coxbuild.configuration import Configuration
-
-from coxbuild.pipelines import Pipeline, PipelineContext, PipelineHook, PipelineResult, TaskContext, TaskHook
-from coxbuild.tasks import Task, TaskResult
-from coxbuild.invocation import CommandExecutionResult, run as inrun, CommandExecutionArgs
 import pathlib
+from dataclasses import asdict
+from typing import Any, Callable
+
+from coxbuild.configuration import Configuration
+from coxbuild.invocation import CommandExecutionArgs, CommandExecutionResult
+from coxbuild.invocation import run as inrun
+from coxbuild.pipelines import (Pipeline, PipelineContext, PipelineHook,
+                                PipelineResult, TaskContext, TaskHook)
+from coxbuild.tasks import Task, TaskResult
 
 pipeline = Pipeline()
 config = Configuration()

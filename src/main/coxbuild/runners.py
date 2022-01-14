@@ -29,4 +29,3 @@ class Runner:
 
         del self._tic
         return True
-

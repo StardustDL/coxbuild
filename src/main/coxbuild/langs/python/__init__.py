@@ -1,6 +1,7 @@
 import pathlib
+
 import coxbuild
-from coxbuild.schema import group, run, config
+from coxbuild.schema import config, group, run
 
 task = group("python")
 mconfig = config.section("python")

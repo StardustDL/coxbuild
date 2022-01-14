@@ -6,17 +6,41 @@ def log(f):
     @functools.wraps(f)
     def wrapper(*args, **kwds):
         print(f"Lifecycle: {f.__name__}")
-        f(*args, **kwds)
+        return f(*args, **kwds)
 
     return wrapper
 
 
+@log
+def precond_task1(*args, **kwds):
+    return True
+
+
+@log
+def precond_task2(*args, **kwds):
+    return True
+
+
+@log
+def postcond_task1(*args, **kwds):
+    return True
+
+
+@log
+def postcond_task2(*args, **kwds):
+    return True
+
+
+@precond(precond_task1)
+@postcond(postcond_task1)
 @task()
 @log
 def task1(*args, **kwds):
     print(f"task1: {args}, {kwds}")
 
 
+@precond(precond_task2)
+@postcond(postcond_task2)
 @task()
 @log
 def task2(*args, **kwds):

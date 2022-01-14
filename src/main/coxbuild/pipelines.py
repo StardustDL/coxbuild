@@ -1,9 +1,9 @@
-from enum import Enum
 import logging
 import sys
 import traceback
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
+from enum import Enum
 from graphlib import TopologicalSorter
 from queue import Queue
 from timeit import default_timer as timer
@@ -78,7 +78,7 @@ class PipelineRunner(Runner):
                 logger.info(message)
                 print(message)
                 return
-        
+
         print("")
 
         for i, task in enumerate(self.tasks):
@@ -109,18 +109,19 @@ class PipelineRunner(Runner):
             setup = hook.setup if hook and hook.setup else None
             teardown = hook.teardown if hook and hook.teardown else None
 
-            res = task.invoke(*tcontext.args, **tcontext.kwds, setup=setup, teardown=teardown)
+            res = task.invoke(*tcontext.args, **tcontext.kwds,
+                              setup=setup, teardown=teardown)
 
             self._results.append(res)
 
             if hook and hook.after:
                 logger.debug(f"Run task after hook for {task.name}")
                 hook.after(tcontext, res)
-            
+
             if self.phook.after:
                 logger.debug(f"Run pipeline after hook for {task.name}")
                 self.phook.after(tcontext, res)
-            
+
             print("")
 
             if not res:
