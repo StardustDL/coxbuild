@@ -1,7 +1,7 @@
 import logging
 import sys
 import traceback
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from timeit import default_timer as timer
 from typing import Any, Callable
@@ -43,21 +43,23 @@ class Task:
         self.precondition = precondition
         self.postcondition = postcondition
 
-    def __call__(self, *args: Any, **kwds: Any):
-        return TaskRunner(self, args, kwds)
+    def __call__(self, *args: Any, setup: Callable[..., None] | None = None, teardown: Callable[..., None] | None = None, **kwds: Any):
+        return TaskRunner(self, args, kwds, setup, teardown)
 
-    def invoke(self, *args: Any, **kwds: Any) -> TaskResult:
-        runner = self(*args, **kwds)
+    def invoke(self, *args: Any, setup: Callable[..., None] | None = None, teardown: Callable[..., None] | None = None, **kwds: Any) -> TaskResult:
+        runner = self(*args, setup=setup, teardown=teardown, **kwds)
         with runner as run:
             run()
         return runner.result
 
 
 class TaskRunner(Runner):
-    def __init__(self, task: Task, args: list[Any], kwds: dict[str, Any]) -> None:
+    def __init__(self, task: Task, args: list[Any], kwds: dict[str, Any],  setup: Callable[..., None] | None = None, teardown: Callable[..., None] | None = None) -> None:
         self.task = task
         self.args = args
         self.kwds = kwds
+        self.setup = setup
+        self.teardown = teardown
 
         super().__init__(self._run)
 
@@ -70,8 +72,14 @@ class TaskRunner(Runner):
                 print(message)
                 return
 
+        if self.setup is not None:
+            self.setup(*self.args, **self.kwds)
+
         if self.task.body is not None:
             self.task.body(*self.args, **self.kwds)
+
+        if self.teardown is not None:
+            self.teardown(*self.args, **self.kwds)
 
         if self.task.postcondition is not None:
             post = self.task.postcondition(*self.args, **self.kwds)

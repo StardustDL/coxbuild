@@ -56,8 +56,8 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
         "invoke": coxbuild.schema.invoke,
         "before": coxbuild.schema.before,
         "after": coxbuild.schema.after,
-        "args": coxbuild.schema.args,
-        "kwds": coxbuild.schema.kwds,
+        "setup": coxbuild.schema.setup,
+        "teardown": coxbuild.schema.teardown,
     })
 
     if not tasks:

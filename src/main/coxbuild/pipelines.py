@@ -2,7 +2,7 @@ from enum import Enum
 import logging
 import sys
 import traceback
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from graphlib import TopologicalSorter
 from queue import Queue
@@ -17,11 +17,23 @@ logger = logging.getLogger("manager")
 
 
 @dataclass
+class TaskContext:
+    task: Task
+    args: list[Any] = field(default_factory=list)
+    kwds: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
 class TaskHook:
-    before: Callable[..., None] | None = None
-    after: Callable[..., None] | None = None
-    args: Callable[[], list[Any]] | None = None
-    kwds: Callable[[], dict[str, Any]] | None = None
+    before: Callable[[TaskContext], bool] | None = None
+    setup: Callable[..., None] | None = None
+    teardown: Callable[..., None] | None = None
+    after: Callable[[TaskContext, TaskResult], None] | None = None
+
+
+@dataclass
+class PipelineContext:
+    tasks: list[TaskResult]
 
 
 @dataclass
@@ -38,50 +50,85 @@ class PipelineResult:
         return "🟢 SUCCESS" if self else "🔴 FAILING"
 
 
+@dataclass
+class PipelineHook:
+    setup: Callable[[PipelineContext], bool] | None = None
+    before: Callable[[TaskContext], bool] | None = None
+    after: Callable[[TaskContext, TaskResult], None] | None = None
+    teardown: Callable[[PipelineContext, PipelineResult], None] | None = None
+
+
 class PipelineRunner(Runner):
-    def __init__(self, tasks: list[Task], hooks: dict[str, TaskHook]) -> None:
+    def __init__(self, tasks: list[Task], hooks: dict[str, TaskHook], phook: PipelineHook) -> None:
         self.tasks = tasks
         self.hooks = hooks
+        self.phook = phook
+        self.context = PipelineContext(self.tasks)
         self.result = None
 
         super().__init__(self._run)
 
     def _run(self):
         n = len(self.tasks)
+
+        if self.phook.setup:
+            logger.debug(f"Run pipeline setup hook")
+            if self.phook.setup(self.context) == False:
+                message = "Stop pipeline running by pipeline setup hook"
+                logger.info(message)
+                print(message)
+                return
+        
+        print("")
+
         for i, task in enumerate(self.tasks):
             logger.debug(f"Run task {i+1}({task.name}) of {n} tasks")
             print(f"{'-'*15} ({i+1}/{n}) 📜 Task {task.name} {'-'*15}")
+            print("")
 
             hook = self.hooks.get(task.name)
 
-            args = []
-            kwds = {}
+            tcontext = TaskContext(task)
 
-            if hook is not None:
-                if hook.args is not None:
-                    logger.debug(f"Run args hook for {task.name}")
-                    args = hook.args()
-                if hook.kwds is not None:
-                    logger.debug(f"Run kwds hook for {task.name}")
-                    kwds = hook.kwds()
-            if hook is not None and hook.before is not None:
-                logger.debug(f"Run before hook for {task.name}")
-                hook.before(*args, **kwds)
+            if self.phook.before:
+                logger.debug(f"Run pipeline before hook for {task.name}")
+                if self.phook.before(tcontext) == False:
+                    message = f"Stop task {task.name} running by pipeline before hook"
+                    logger.info(message)
+                    print(message)
+                    continue
 
-            res = task.invoke(*args, **kwds)
+            if hook and hook.before:
+                logger.debug(f"Run task before hook for {task.name}")
+                if hook.before(tcontext) == False:
+                    message = f"Stop task {task.name} running by task before hook"
+                    logger.info(message)
+                    print(message)
+                    continue
 
-            if hook is not None and hook.after is not None:
-                logger.debug(f"Run after hook for {task.name}")
-                hook.after(*args, **kwds)
+            setup = hook.setup if hook and hook.setup else None
+            teardown = hook.teardown if hook and hook.teardown else None
 
-            print("")
+            res = task.invoke(*tcontext.args, **tcontext.kwds, setup=setup, teardown=teardown)
+
             self._results.append(res)
+
+            if hook and hook.after:
+                logger.debug(f"Run task after hook for {task.name}")
+                hook.after(tcontext, res)
+            
+            if self.phook.after:
+                logger.debug(f"Run pipeline after hook for {task.name}")
+                self.phook.after(tcontext, res)
+            
+            print("")
+
             if not res:
                 break
 
     def __enter__(self) -> Callable[[], None]:
         logger.debug("Running")
-        print(f"{'-'*20} ⌛ Running 🕰️ {datetime.now()} {'-'*20}\n")
+        print(f"{'-'*20} ⌛ Running 🕰️ {datetime.now()} {'-'*20}")
 
         self.result = None
         self._results: list[TaskResult] = []
@@ -99,6 +146,9 @@ class PipelineRunner(Runner):
         if self.exc_value is not None:
             traceback.print_exception(
                 self.exc_type, self.exc_value, self.exc_tb, file=sys.stdout)
+
+        if self.phook.teardown is not None:
+            self.phook.teardown(self.context, self.result)
 
         logger.info(f"Finish: {self.result}")
 
@@ -119,6 +169,7 @@ class Pipeline:
     def __init__(self) -> None:
         self.tasks: dict[str, Task] = {}
         self.hooks: dict[str, TaskHook] = {}
+        self.phook: PipelineHook = PipelineHook()
 
     def register(self, task: Task) -> None:
         if task.name in self.tasks:
@@ -127,8 +178,18 @@ class Pipeline:
         self.tasks[task.name] = task
         logger.debug(f"Register task {task.name}")
 
-    def hook(self, name: str, thook: TaskHook) -> None:
-        self.hooks[name] = thook
+    def hook(self, thook: TaskHook | PipelineHook, name: str | None = None) -> None:
+        if isinstance(thook, TaskHook):
+            if name:
+                self.hooks[name] = thook
+            else:
+                raise CoxbuildException("Empty task name for task hook.")
+        elif isinstance(thook, PipelineHook):
+            if name:
+                raise CoxbuildException(
+                    "Nonempty pipeline name for pipeline hook.")
+            else:
+                self.phook = thook
 
     def __call__(self, *args: str, **kwds: Any) -> PipelineRunner:
         tks: set[str] = set()
@@ -154,7 +215,7 @@ class Pipeline:
 
         logger.debug(f"Tasks to run: {', '.join((t.name for t in tasks))}")
 
-        return PipelineRunner(tasks, {k: v for k, v in self.hooks.items() if k in tks})
+        return PipelineRunner(tasks, {k: v for k, v in self.hooks.items() if k in tks}, self.phook)
 
     def invoke(self, *args: str, **kwds: Any) -> PipelineResult:
         runner = self(*args, **kwds)

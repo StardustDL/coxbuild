@@ -88,6 +88,10 @@ Task TestBuild {
     Exec { coxbuild -vvv -D ./test/demo b }
 }
 
+Task TestLifeCycle {
+    Exec { coxbuild -vvv -D ./test/demo -f lifecycle.py }
+}
+
 Task TestCommand {
     Write-Output "⏳ 1️⃣ Normal Command ⏳"
 
@@ -107,7 +111,7 @@ Task BuildSelf {
     Exec { coxbuild }
 }
 
-Task Test -depends Install, Demo, TestBuild, TestCommand, Uninstall
+Task Test -depends Install, Demo, TestBuild, TestLifeCycle, TestCommand, Uninstall
 
 Task Self -depends Install, BuildSelf, Uninstall
 
