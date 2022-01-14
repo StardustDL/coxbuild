@@ -10,10 +10,10 @@ from coxbuild import __version__
 @click.command()
 @click.argument("tasks", default=None, nargs=-1)
 @click.option('-D', '--directory', type=click.Path(exists=True, file_okay=False, resolve_path=True, path_type=Path), default=".", help="Path to working directory.")
-@click.option('-f', '--file', default="coxbuild.py", help="Schema file name.")
+@click.option('-f', '--file', default="build.cox", help="Schema file name.")
 @click.version_option(__version__, package_name="coxbuild", prog_name="coxbuild", message="%(prog)s v%(version)s, written by StardustDL.")
 @click.option('-v', '--verbose', count=True, default=0, type=click.IntRange(0, 5))
-def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: str = "coxbuild.py", verbose: int = 0) -> None:
+def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: str = "build.cox", verbose: int = 0) -> None:
     """Coxbuild (https://github.com/StardustDL/coxbuild)"""
     click.echo(f"Welcome to Coxbuild v{__version__}!")
 

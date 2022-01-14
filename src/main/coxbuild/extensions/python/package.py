@@ -4,7 +4,7 @@ from typing import Tuple
 
 from coxbuild.schema import depend, group, precond, run
 
-from . import mconfig, task
+from . import Settings, task
 
 task = group("package", task)
 
@@ -33,8 +33,12 @@ def hasPackages(packages: dict[str, str]):
     return True
 
 
+def upgradePackages(*packages: str):
+    run(["python", "-m", "pip", "install", "--upgrade", *packages], retry=3)
+
+
 def needRestore():
-    req: Path = mconfig["requirements"]
+    req: Path = Settings.requirements
     if not req.exists():
         return False
     reqs = loadFromRequirements(req.read_text("utf-8").splitlines())
@@ -45,22 +49,21 @@ def needRestore():
 @task()
 def restore():
     run(["python", "-m", "pip", "install", "-r",
-        str(mconfig["requirements"])], retry=3)
+        str(Settings.requirements)], retry=3)
 
 
 @precond(lambda: not hasPackages({"build": "*", "twine": "*"}))
 @task()
 def prebuild():
-    run(["python", "-m", "pip", "install", "--upgrade", "build", "twine"], retry=3)
+    upgradePackages("build", "twine")
 
 
 @depend(prebuild)
 @task()
 def build():
-    src: Path = mconfig["buildSrc"]
-    run(["python", "-m", "build", "-o", str(mconfig["buildDist"])],
-        cwd=src)
-    for item in src.glob("*.egg-info"):
+    run(["python", "-m", "build", "-o", str(Settings.buildDist)],
+        cwd=Settings.buildSrc)
+    for item in Settings.buildSrc.glob("*.egg-info"):
         if not item.is_dir():
             continue
         shutil.rmtree(item)
@@ -70,4 +73,4 @@ def build():
 @task()
 def deploy():
     run(["python", "-m", "twine", "upload",
-        "--skip-existing", "--repository", "pypi", str(mconfig["buildDist"]) + "/*"])
+        "--skip-existing", "--repository", "pypi", str(Settings.buildDist) + "/*"])
