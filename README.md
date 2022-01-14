@@ -4,7 +4,7 @@
 
 Coxbuild is a tiny python-script-based build automation tool, an alternative to make, psake and so on.
 
-![](docs/demo.gif)
+![](https://raw.githubusercontent.com/StardustDL/coxbuild/master/docs/demo.gif)
 
 Supported features:
 
@@ -27,7 +27,7 @@ pip install coxbuild
 
 ## Usage
 
-Coxbuild can build itself by itself, see [here](buildcox.py) for details.
+Coxbuild build itself by itself, see [here](https://github.com/StardustDL/coxbuild/blob/master/buildcox.py) for details.
 
 ### Write Schema
 

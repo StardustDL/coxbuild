@@ -20,11 +20,12 @@ jobs:
       with:
         python-version: '3.10'
         architecture: 'x64'
-    - name: Setup psake
-      run: Set-PSRepository -Name PSGallery -InstallationPolicy Trusted; Install-Module -Name psake
-    - name: Build package
+    - name: Build
+      env:
+        PYTHONUTF8: 1
       run: |
-        Invoke-psake build
+        cd src/main
+        python -m coxbuild -D ../..
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -49,24 +50,12 @@ jobs:
       with:
         python-version: ${{ matrix.python }}
         architecture: 'x64'
-    - name: Setup psake
-      run: Set-PSRepository -Name PSGallery -InstallationPolicy Trusted; Install-Module -Name psake
     - name: Download artifacts
       uses: actions/download-artifact@v2
       with:
         name: dist
         path: ./dist
     - name: Test
-      env:
-        PYTHONUTF8: 1
-      run: |
-        Invoke-psake test
-    - name: Build Self by Self
-      env:
-        PYTHONUTF8: 1
-      run: |
-        Invoke-psake self
-    - name: Test Self by self
       env:
         PYTHONUTF8: 1
       run: |

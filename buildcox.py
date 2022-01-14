@@ -4,7 +4,7 @@ import shutil
 
 from coxbuild.schema import task, depend, setup, teardown, run
 from coxbuild.extensions.python import Settings, settings as pysettings
-from coxbuild.extensions.python.package import build as pybuild, restore as pyrestore
+from coxbuild.extensions.python.package import build as pybuild, restore as pyrestore, deploy as pydeploy
 from coxbuild.extensions.python.format import format as pyformat
 
 readmeDst = Path("./src/main/README.md")
@@ -54,7 +54,7 @@ def demo():
 @depend(install)
 @task()
 def test_build():
-    run(["coxbuild", "-vvvvv", "./test/demo"])
+    run(["coxbuild", "-vvvvv", "-D", "./test/demo"])
     res = run(["coxbuild", "-vvv", "-D", "./test/demo",
               "-f", "fail.py"], fail=True)
     if res:
@@ -70,13 +70,13 @@ def test_build():
 @depend(install)
 @task()
 def test_lifecycle():
-    run(["coxbuild", "-vvv", "./test/demo", "-f", "lifecycle.py"])
+    run(["coxbuild", "-vvv", "-D", "./test/demo", "-f", "lifecycle.py"])
 
 
 @depend(install)
 @task()
 def test_command():
-    run(["coxbuild", "-vvv", "./test/demo", "-f", "command.py"])
+    run(["coxbuild", "-vvv", "-D", "./test/demo", "-f", "command.py"])
     res = run(["coxbuild", "-vvv", "-D", "./test/demo",
               "-f", "command.py", "fail", "retry"], fail=True)
     if res:
@@ -88,6 +88,12 @@ def test_command():
 def test():
     run(["python", "-m", "pip", "uninstall",
         str(list(Settings.buildDist.glob("coxbuild-*.whl"))[0]), "-y"])
+
+
+@depend(pydeploy)
+@task()
+def deploy():
+    pass
 
 
 @depend(build)
