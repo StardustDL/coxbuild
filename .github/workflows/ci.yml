@@ -66,3 +66,10 @@ jobs:
         PYTHONUTF8: 1
       run: |
         Invoke-psake self
+    - name: Test Self by self
+      env:
+        PYTHONUTF8: 1
+      run: |
+        cd src/main
+        python -m coxbuild -D ../.. test
+    

@@ -114,19 +114,3 @@ Task BuildSelf {
 Task Test -depends Install, Demo, TestBuild, TestLifeCycle, TestCommand, Uninstall
 
 Task Self -depends Install, BuildSelf, Uninstall
-
-Task Clean {
-    Remove-Item -Recurse ./dist
-    foreach ($egg in Get-Childitem -Recurse *.egg-info) {
-        Write-Output "🗑 Remove $egg"
-        Remove-Item -Recurse $egg
-    }
-}
-
-Task Format {
-    autopep8 -r --in-place ./src
-
-    foreach ($file in Get-Childitem "./src/**/*.py" -Recurse) {
-        isort $file
-    }
-}

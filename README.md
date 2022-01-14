@@ -27,7 +27,7 @@ pip install coxbuild
 
 ## Usage
 
-Coxbuild can build itself by itself, see [here](build.cox) for details.
+Coxbuild can build itself by itself, see [here](buildcox.py) for details.
 
 ### Write Schema
 
@@ -49,13 +49,13 @@ def default():
 ```sh
 coxbuild
     [-D <working directory = '.'>]
-    [-f <file name = 'build.cox'>]
+    [-f <file name = 'buildcox.py'>]
     [task names = 'default']
 
 # Run default schema and default task
 coxbuild
 # equivalent to
-coxbuild -D . -f build.cox default
+coxbuild -D . -f buildcox.py default
 
 # Run in other directory
 coxbuild -D path/to/other
