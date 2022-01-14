@@ -1,7 +1,8 @@
 from pathlib import Path
 
-import coxbuild
 from coxbuild.schema import config, group, run
+
+import coxbuild
 
 task = group("python")
 
@@ -9,33 +10,33 @@ task = group("python")
 class Settings:
     mconfig = config.section("python")
 
-    @classmethod
     @property
+    @classmethod
     def buildSrc(cls) -> Path:
         return cls.mconfig["buildSrc"]
 
-    @classmethod
     @buildSrc.setter
+    @classmethod
     def buildSrc(cls, value: Path) -> None:
         cls.mconfig["buildSrc"] = value
 
-    @classmethod
     @property
+    @classmethod
     def buildDist(cls) -> Path:
         return cls.mconfig["buildDist"]
 
-    @classmethod
     @buildDist.setter
+    @classmethod
     def buildDist(cls, value: Path) -> None:
         cls.mconfig["buildDist"] = value
 
-    @classmethod
     @property
+    @classmethod
     def requirements(cls) -> Path:
         return cls.mconfig["requirements"]
 
-    @classmethod
     @requirements.setter
+    @classmethod
     def requirements(cls, value: Path) -> None:
         cls.mconfig["requirements"] = value
 

@@ -1,4 +1,4 @@
-from coxbuild.schema import task, depend, run
+from coxbuild.schema import depend, run, task
 
 
 @task()

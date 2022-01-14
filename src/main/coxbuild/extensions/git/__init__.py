@@ -1,7 +1,8 @@
 from pathlib import Path
 
-import coxbuild
 from coxbuild.schema import config, group, run
+
+import coxbuild
 
 task = group("git")
 mconfig = config.section("git")

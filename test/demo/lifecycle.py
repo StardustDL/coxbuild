@@ -1,5 +1,6 @@
-from coxbuild.schema import *
 import functools
+
+from coxbuild.schema import *
 
 
 def log(f):

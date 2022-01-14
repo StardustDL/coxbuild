@@ -1,4 +1,4 @@
-from coxbuild.schema import postcond, task, depend, run
+from coxbuild.schema import depend, postcond, run, task
 
 
 @task()

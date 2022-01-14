@@ -1,7 +1,9 @@
+from coxbuild.schema import depend, group, precond, run
+
 from coxbuild import get_working_directory
+
 from . import Settings, task
 from .package import hasPackages, upgradePackages
-from coxbuild.schema import depend, precond, run, group
 
 task = group("format", task)
 
@@ -14,7 +16,7 @@ def restore():
 
 @task()
 def autopep8():
-    run(["autopep8", "-r", "--in-place"])
+    run(["autopep8", "-r", "--in-place", str(get_working_directory())])
 
 
 @task()
