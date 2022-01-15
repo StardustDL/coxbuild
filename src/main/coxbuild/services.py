@@ -3,6 +3,8 @@ from cgitb import handler
 from dataclasses import dataclass
 from typing import Any, Awaitable, Callable, Tuple
 
+from coxbuild.exceptions import EventCannotOccur
+
 from .runners import Runner
 
 
@@ -14,7 +16,11 @@ class EventHandler:
 
     async def handle(self):
         while True:
-            await self.event()
+            try:
+                await self.event()
+            except EventCannotOccur:
+                break
+
             self.handler()
 
             if self.repeat == 0:

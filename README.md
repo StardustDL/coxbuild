@@ -183,9 +183,9 @@ def pipeline_after(context: TaskContext, result: TaskResult):
 
 ### Setup/Teardown
 
-Use `setup` hook to do something before task body.
-Use `teardown` hook to do something after task body.
-These hooks recieve the same arguments as the task body.
+Use `setup` hook to do something before task body (in task execution scope).
+Use `teardown` hook to do something after task body (in task execution scope, even some exception raises in task body).
+These hooks have the same parameters as the task body.
 
 ```python
 @setup(task2)
@@ -215,20 +215,22 @@ def teardown_pipeline(context: PipelineContext, result: PipelineResult):
 
 ### Lifecycle Events
 
-- Pipeline Setup
+> The execution scope in written in parentheses.
+
+- Pipeline Setup (Pipeline)
   - Task 1
-    - Pipeline Before
-      - Task Before
-        - Task Precondition
-          - Task Setup
-            - Task Body
-          - Task Teardown
-        - Task Postcondition
-      - Task After
-    - Pipeline After
+    - Pipeline Before (Pipeline)
+      - Task Before (Pipeline)
+        - Task Precondition (Task)
+          - Task Setup (Task)
+            - Task Body (Task)
+          - Task Teardown (Task)
+        - Task Postcondition (Task)
+      - Task After (Pipeline)
+    - Pipeline After (Pipeline)
   - Task 2
     - ... (as same as Task 1)
-- Pipeline Teardown
+- Pipeline Teardown (Pipeline)
 
 Go [here](test/demo/lifecycle.py) to see how to hook these events and how they work.
 
@@ -244,21 +246,23 @@ You can schedule some build when event occurs.
 Coxbuild provides some builtin events in `coxbuild.events` module.
 
 ```python
+from coxbuild.events import atdatetime
+
 async def e():
     print(datetime.now())
-    await asyncio.sleep(1)
+    await asyncio.sleep(0.5)
 
 @on(event=e, repeat=1)
 def do():
     print(datetime.now())
     print("done")
-  
-@on(e)
-def do_pipeline():
+
+@on(atdatetime(datetime.now() + timedelta(seconds=1)))
+def do_pipeline_at_next_second():
     pipeline.invoke("task1", task2)
 ```
 
-`event` parameter is a awaitable builder, i.e. `Callable[[], Awaitable]`.
+`event` parameter is a awaitable builder, i.e. `Callable[[], Awaitable]`, when the event occurs, the awaitable return.
 
 `repeat` parameter is an integer.
 

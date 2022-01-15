@@ -75,11 +75,12 @@ class TaskRunner(Runner):
         if self.setup is not None:
             self.setup(*self.args, **self.kwds)
 
-        if self.task.body is not None:
-            self.task.body(*self.args, **self.kwds)
-
-        if self.teardown is not None:
-            self.teardown(*self.args, **self.kwds)
+        try:
+            if self.task.body is not None:
+                self.task.body(*self.args, **self.kwds)
+        finally:
+            if self.teardown is not None:
+                self.teardown(*self.args, **self.kwds)
 
         if self.task.postcondition is not None:
             post = self.task.postcondition(*self.args, **self.kwds)

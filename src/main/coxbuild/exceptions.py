@@ -9,3 +9,7 @@ class CoxbuildException(Exception):
 
     def __repr__(self) -> str:
         return str(self)
+
+
+class EventCannotOccur(CoxbuildException):
+    pass
