@@ -11,11 +11,9 @@ from coxbuild import __version__
 @click.argument("tasks", default=None, nargs=-1)
 @click.option('-D', '--directory', type=click.Path(exists=True, file_okay=False, resolve_path=True, path_type=Path), default=".", help="Path to working directory.")
 @click.option('-f', '--file', default="buildcox.py", help="Schema file name.")
-@click.option("-l", "--list", is_flag=True, default=False, help="List all defined tasks.")
-@click.option("-s", "--serve", is_flag=True, default=False, help="Serve event handlers.")
 @click.version_option(__version__, package_name="coxbuild", prog_name="coxbuild", message="%(prog)s v%(version)s, written by StardustDL.")
 @click.option('-v', '--verbose', count=True, default=0, type=click.IntRange(0, 5))
-def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: str = "buildcox.py", verbose: int = 0, list: bool = False, serve: bool = False) -> None:
+def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: str = "buildcox.py", verbose: int = 0) -> None:
     """Coxbuild (https://github.com/StardustDL/coxbuild)"""
     click.echo(f"Welcome to Coxbuild v{__version__}!")
 
@@ -47,7 +45,11 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
 
     from coxbuild import schema
 
-    exec(src, {
+    import coxbuild.extensions.builtin
+
+    code = compile(src, schemafile, "exec")
+
+    exec(code, {
         "task": schema.task,
         "depend": schema.depend,
         "run": schema.run,
@@ -59,16 +61,8 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
         "after": schema.after,
         "setup": schema.setup,
         "teardown": schema.teardown,
+        "on": schema.on,
     })
-
-    if list:
-        for item in schema.pipeline.tasks:
-            print(item)
-        exit(0)
-
-    if serve:
-        schema.service()
-        exit(0)
 
     if not tasks:
         tasks = ["default"]

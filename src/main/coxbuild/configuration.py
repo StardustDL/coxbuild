@@ -5,7 +5,7 @@ from typing import Any
 class Configuration:
     def __init__(self, name: str = "", data: dict[str, Any] | None = None) -> None:
         self.name = name
-        self.data: dict[str, Any] = data if data is not None else {}
+        self.data: dict[str, Any] = data or {}
         self.cache: dict[str, Configuration] = {}
         if not self.name:
             self.loadenv()

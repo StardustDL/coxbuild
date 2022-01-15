@@ -48,6 +48,7 @@ def needRestore():
 @precond(needRestore)
 @task()
 def restore():
+    """Restore Python packages from requirements.txt."""
     run(["python", "-m", "pip", "install", "-r",
         str(Settings.requirements)], retry=3)
 
@@ -55,12 +56,14 @@ def restore():
 @precond(lambda: not hasPackages({"build": "*", "twine": "*"}))
 @task()
 def prebuild():
+    """Restore Python package build tools."""
     upgradePackages("build", "twine")
 
 
 @depend(prebuild)
 @task()
 def build():
+    """Build Python package."""
     run(["python", "-m", "build", "-o", str(Settings.buildDist)],
         cwd=Settings.buildSrc)
     for item in Settings.buildSrc.glob("*.egg-info"):
@@ -71,12 +74,14 @@ def build():
 
 @task()
 def installBuilt():
+    """Install the built package."""
     run(["python", "-m", "pip", "install",
         str(list(Settings.buildDist.glob("*.whl"))[0])])
 
 
 @task()
 def uninstallBuilt():
+    """Uninstall the built package."""
     run(["python", "-m", "pip", "uninstall",
         str(list(Settings.buildDist.glob("*.whl"))[0]), "-y"])
 
@@ -84,5 +89,6 @@ def uninstallBuilt():
 @depend(build)
 @task()
 def deploy():
+    """Upload the package to PYPI."""
     run(["python", "-m", "twine", "upload",
         "--skip-existing", "--repository", "pypi", str(Settings.buildDist) + "/*"])

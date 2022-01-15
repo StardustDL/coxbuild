@@ -33,13 +33,15 @@ class TaskResult:
 class Task:
     def __init__(self, name: str = "default",
                  body: Callable[..., None] | None = None,
+                 doc: str = "",
                  deps: list[str] | None = None,
                  precondition: Callable[..., bool] | None = None,
                  postcondition: Callable[..., bool] | None = None
                  ) -> None:
         self.name = name
         self.body = body
-        self.deps = deps if deps else []
+        self.doc = doc
+        self.deps = deps or []
         self.precondition = precondition
         self.postcondition = postcondition
 

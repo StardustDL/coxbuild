@@ -21,7 +21,7 @@ class Settings:
 
 
 def settings(src: Path | None = None):
-    src = src if src else coxbuild.get_working_directory()
+    src = src or coxbuild.get_working_directory()
 
     Settings.src = src.absolute()
 
@@ -31,19 +31,23 @@ settings()
 
 @task()
 def restore():
+    """Restore npm packages (ci)."""
     run(["npm", "ci"], cwd=Settings.src, retry=3)
 
 
 @task()
 def build():
+    """Build npm project."""
     run(["npm", "run", "build"], cwd=Settings.src)
 
 
 @task()
 def dev():
+    """Run dev script."""
     run(["npm", "run", "dev"], cwd=Settings.src)
 
 
 @task()
 def serve():
+    """Run serve script."""
     run(["npm", "run", "serve"], cwd=Settings.src)

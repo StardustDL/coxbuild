@@ -25,7 +25,7 @@ def task(name: str = "") -> TaskFuncDecorator:
         else:
             tname = name
 
-        tk = Task(tname, body)
+        tk = Task(tname, body, body.__doc__ or "")
 
         pipeline.register(tk)
         return tk

@@ -55,8 +55,6 @@ def default():
 coxbuild
     [-D <working directory = '.'>]
     [-f <file name = 'buildcox.py'>]
-    [-l/--list]
-    [-s/--serve]
     [task names = 'default']
 
 # Run default schema and default task
@@ -85,12 +83,21 @@ Use `task` decorator to define a (named) task.
 def use_function_name_as_task_name(): pass
 
 @task("custom-task-name")
-def use_function_name_as_task_name(): pass
+def use_custom_name():
+    """task document"""
+    pass
 
 # default task
 @task()
 def default(): pass
 ```
+
+Builtin tasks:
+
+| Name     | Description               |
+| -------- | ------------------------- |
+| `:list`  | List all defined tasks    |
+| `:serve` | Start event-based service |
 
 ### Dependency
 
@@ -270,10 +277,10 @@ def do_pipeline_at_next_second():
 - positive integer for finite repeat
 - negative integer for infinite repeat
 
-To start the long-run service, use `-s` flag.
+To start the long-run service, use builtin task `:serve`.
 
 ```sh
-coxbuild -s
+coxbuild :serve
 ```
 
 ## Library

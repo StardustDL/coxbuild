@@ -41,9 +41,9 @@ class Settings:
 
 
 def settings(requirements: Path | None = None, buildSrc: Path | None = None, buildDist: Path | None = None):
-    buildSrc = buildSrc if buildSrc else coxbuild.get_working_directory()
-    buildDist = buildDist if buildDist else buildSrc.joinpath("dist")
-    requirements = requirements if requirements else buildSrc.joinpath(
+    buildSrc = buildSrc or coxbuild.get_working_directory()
+    buildDist = buildDist or buildSrc.joinpath("dist")
+    requirements = requirements or buildSrc.joinpath(
         "requirements.txt")
 
     Settings.buildSrc = buildSrc.absolute()

@@ -57,6 +57,13 @@ def test_build():
 
 @depend(install)
 @task()
+def test_builtin():
+    run([*demoCmdPre, ":list"])
+    run([*demoCmdPre, ":serve"])
+
+
+@depend(install)
+@task()
 def test_lifecycle():
     run([*demoCmdPre, "-f", "lifecycle.py"])
 
@@ -64,7 +71,7 @@ def test_lifecycle():
 @depend(install)
 @task()
 def test_service():
-    run([*demoCmdPre, "-f", "event.py", "-s"])
+    run([*demoCmdPre, "-f", "event.py", ":serve"])
 
 
 @depend(install)
@@ -77,7 +84,7 @@ def test_command():
         raise Exception("Unexpected success for failing command.")
 
 
-@depend(demo, test_build, test_lifecycle, test_command, test_service)
+@depend(demo, test_build, test_lifecycle, test_command, test_service, test_builtin)
 @task()
 def test():
     uninstall.invoke()

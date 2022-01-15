@@ -41,7 +41,7 @@ class Settings:
 
 
 def settings(src: Path | None = None):
-    src = src if src else coxbuild.get_working_directory()
+    src = src or coxbuild.get_working_directory()
 
     Settings.src = src.absolute()
 
