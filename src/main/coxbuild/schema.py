@@ -19,8 +19,14 @@ TaskFuncDecorator = Callable[[Callable[..., None]], Task]
 
 
 def task(name: str = "") -> TaskFuncDecorator:
+    """
+    Define a task.
+
+    name: use custom task name, empty to use function name.
+    """
     def decorator(body: Callable[..., None]) -> Task:
-        if name == "" or name.endswith(":"): # endswith(":") support empty name with group name
+        # endswith(":") support empty name with group name
+        if name == "" or name.endswith(":"):
             tname = name + body.__name__
         else:
             tname = name
@@ -33,6 +39,11 @@ def task(name: str = "") -> TaskFuncDecorator:
 
 
 def depend(*names: str | Task):
+    """
+    Define dependencies of a task.
+
+    names: task names or task instances
+    """
     def decorator(inner: Task) -> Task:
         for name in names:
             inner.deps.append(name if isinstance(name, str) else name.name)
@@ -41,6 +52,13 @@ def depend(*names: str | Task):
 
 
 def group(name: str, inner: Callable[[str], TaskFuncDecorator] | None = None):
+    """
+    Add namespace to task names (prevent from name conflicting).
+
+    name: group name
+    inner: inner task definer (for nested group)
+    """
+
     if inner is None:
         inner = task
 
@@ -50,6 +68,12 @@ def group(name: str, inner: Callable[[str], TaskFuncDecorator] | None = None):
 
 
 def precond(predicate: Callable[..., bool]):
+    """
+    Configure precondition of the task.
+    Decide whether to run the task.
+
+    predicate: condition tester
+    """
     def decorator(inner: Task) -> Task:
         inner.precondition = predicate
         return inner
@@ -57,6 +81,12 @@ def precond(predicate: Callable[..., bool]):
 
 
 def postcond(predicate: Callable[..., bool]):
+    """
+    Configure postcondition of the task.
+    Check the task works well.
+
+    predicate: condition tester
+    """
     def decorator(inner: Task) -> Task:
         inner.postcondition = predicate
         return inner
@@ -64,6 +94,7 @@ def postcond(predicate: Callable[..., bool]):
 
 
 def invoke(name: str | Task, /, *args, **kwds) -> TaskResult:
+    """Invoke a task by name or instance."""
     if isinstance(name, str):
         name = pipeline.tasks[name]
 
@@ -71,6 +102,11 @@ def invoke(name: str | Task, /, *args, **kwds) -> TaskResult:
 
 
 def before(name: str | Task | None = None):
+    """
+    Configure before hook.
+
+    name: task instance or name, None for pipeline hook
+    """
     def decorator(body: Callable[[TaskContext], bool]):
         if name:
             tname = name if isinstance(name, str) else name.name
@@ -91,6 +127,11 @@ def before(name: str | Task | None = None):
 
 
 def after(name: str | Task | None = None):
+    """
+    Configure after hook.
+
+    name: task instance or name, None for pipeline hook
+    """
     def decorator(body: Callable[[TaskContext, TaskResult], None]):
         if name:
             tname = name if isinstance(name, str) else name.name
@@ -111,6 +152,11 @@ def after(name: str | Task | None = None):
 
 
 def setup(name: str | Task | None = None):
+    """
+    Configure setup hook.
+
+    name: task instance or name, None for pipeline hook
+    """
     def decorator(body: Callable[..., None] | Callable[[PipelineContext], bool]):
         if name:
             tname = name if isinstance(name, str) else name.name
@@ -131,6 +177,11 @@ def setup(name: str | Task | None = None):
 
 
 def teardown(name: str | Task | Task | None = None):
+    """
+    Configure teardown hook.
+
+    name: task instance or name, None for pipeline hook
+    """
     def decorator(body: Callable[..., None] | Callable[[PipelineContext, PipelineResult], None]):
         if name:
             tname = name if isinstance(name, str) else name.name
@@ -151,6 +202,15 @@ def teardown(name: str | Task | Task | None = None):
 
 
 def on(event: Callable[[], Awaitable], repeat: int = 0, safe: bool = False, name: str | None = None):
+    """
+    Register event handler.
+
+    event: event generator, when the event occurs, the awaitable return
+    handler: event handler
+    repeat: repeat times, 0 for no-repeat, positive integer for finite repeat, negative integer for infinite repeat
+    safe: prevent exception
+    name: handler name, None to use function name
+    """
     def decorator(handler: Callable[[], None]):
         service.register(EventHandler(event, handler, repeat,
                          safe, name or handler.__name__))
@@ -164,4 +224,17 @@ def run(cmds: list[str], env: dict[str, str] | None = None,
         input: str | None = None,
         shell: bool = False, pipe: bool = False,
         retry: int = 0, fail: bool = False) -> CommandExecutionResult:
+    """
+    Run command.
+
+    cmds: command and argument
+    env: environ
+    cwd: current working directory
+    timeout: maximum execution duration
+    input: text for stdin
+    shell: use system shell
+    pipe: pipe and collect stdout and stderr
+    retry: the number of times to retry when failing
+    fail: do not raise exception when the final result fails
+    """
     return inrun(CommandExecutionArgs(cmds, env, cwd, timeout, input, shell, pipe), retry=retry, fail=fail)

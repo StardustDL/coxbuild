@@ -14,23 +14,31 @@ logger = logging.getLogger("tasks")
 
 @dataclass
 class TaskResult:
+    """Execution result for task."""
     name: str
+    """task name"""
     duration: timedelta
+    """execution duration"""
     exception: CoxbuildException | None
+    """exception when running"""
 
     def __bool__(self):
         return self.exception is None
 
     @property
     def description(self) -> str:
+        """Return result's description string."""
         return "🟢 SUCCESS" if self else "🔴 FAILING"
 
     def ensure(self) -> None:
+        """Ensure the result is success, otherwise re-raise exception."""
         if not self:
             raise self.exception
 
 
 class Task:
+    """Task."""
+
     def __init__(self, name: str = "default",
                  body: Callable[..., None] | None = None,
                  doc: str = "",
@@ -38,6 +46,16 @@ class Task:
                  precondition: Callable[..., bool] | None = None,
                  postcondition: Callable[..., bool] | None = None
                  ) -> None:
+        """
+        Create task.
+
+        name: task name
+        body: task body
+        doc: task document
+        deps: dependency task names
+        precondition: condition to decide whether to run the task
+        postcondition: condition to decide whether the task succeed
+        """
         self.name = name
         self.body = body
         self.doc = doc
@@ -52,16 +70,31 @@ class Task:
         return runner.result
 
     def build(self, *args: Any, setup: Callable[..., None] | None = None, teardown: Callable[..., None] | None = None, **kwds: Any):
+        """
+        Build runner of task.
+
+        args: task arguments
+        kwds: task keyword arguments
+        setup: setup hook
+        teardown: teardown hook
+        """
         return TaskRunner(self, args, kwds, setup, teardown)
 
 
 class TaskRunner(Runner):
+    """Runner for task."""
+
     def __init__(self, task: Task, args: list[Any], kwds: dict[str, Any],  setup: Callable[..., None] | None = None, teardown: Callable[..., None] | None = None) -> None:
         self.task = task
+        """task to run"""
         self.args = args
+        """task arguments"""
         self.kwds = kwds
+        """task keyword arguments"""
         self.setup = setup
+        """setup hook"""
         self.teardown = teardown
+        """teardown hook"""
 
         super().__init__(self._run)
 

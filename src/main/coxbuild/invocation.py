@@ -14,25 +14,40 @@ logger = logging.getLogger("invocation")
 
 @dataclass
 class CommandExecutionArgs:
+    """Arguments for command execution."""
     cmds: list[str]
+    """command and arguments"""
     env: dict[str, str] | None = None
+    """environ"""
     cwd: pathlib.Path | None = None
+    """current working directory"""
     timeout: float | None = None
+    """maximum execution duration"""
     input: str | None = None
+    """text for stdin"""
     shell: bool = False
+    """use system shell"""
     pipe: bool = False
+    """pipe and collect stdout and stderr"""
 
 
 @dataclass
 class CommandExecutionResult:
+    """Result for command execution."""
     args: CommandExecutionArgs
+    """arguments for command execution"""
     duration: timedelta = field(default_factory=timedelta)
+    """execution duration"""
     code: int | None = None
+    """exit code, None for timeout"""
     stdout: str = ""
+    """stdout in text (if pipe)"""
     stderr: str = ""
+    """stderr in text (if pipe)"""
 
     @property
     def timeout(self) -> bool:
+        """Return if execution timeout."""
         return self.code is None
 
     def __bool__(self):
@@ -40,10 +55,12 @@ class CommandExecutionResult:
 
     @property
     def description(self):
+        """Return result's description string."""
         return "🟢 SUCCESS" if self else ("🟡 TIMEOUT" if self.timeout else f"🔴 FAILING({self.code})")
 
 
 def execmd(args: CommandExecutionArgs) -> CommandExecutionResult:
+    """Execute command and get result."""
     logger.debug(f"Execute command: {args}")
 
     result = CommandExecutionResult(args)
@@ -65,6 +82,13 @@ def execmd(args: CommandExecutionArgs) -> CommandExecutionResult:
 
 
 def run(args: CommandExecutionArgs, retry: int = 0, fail: bool = False) -> CommandExecutionResult:
+    """
+    Run command.
+
+    args: execution arguments
+    retry: the number of times to retry when failing
+    fail: do not raise exception when the final result fails
+    """
     result = execmd(args)
     if not result:
         for i in range(retry):

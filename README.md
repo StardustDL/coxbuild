@@ -121,7 +121,7 @@ def default(): pass
 
 ### Group
 
-Use `group` decorator to add namespace to task names (prevent from name conflicting)
+Use `group` decorator to add namespace to task names (prevent from name conflicting).
 
 ```python
 ns1task = group("ns1")
@@ -272,14 +272,6 @@ def do():
 def do_pipeline_at_next_second():
     pipeline("task1", task2)
 ```
-
-`event` parameter is a awaitable builder, i.e. `Callable[[], Awaitable]`, when the event occurs, the awaitable return.
-
-`repeat` parameter is an integer.
-
-- `0` for no-repeat
-- positive integer for finite repeat
-- negative integer for infinite repeat
 
 To start the long-run service, use builtin task `:serve`.
 

@@ -14,11 +14,17 @@ logger = logging.getLogger("services")
 
 @dataclass
 class EventHandler:
+    """Handler for a event."""
     event: Callable[[], Awaitable]
+    """event generator, when the event occurs, the awaitable return"""
     handler: Callable[[], None]
+    """event handler"""
     repeat: int = 0
+    """repeat times, 0 for no-repeat, positive integer for finite repeat, negative integer for infinite repeat"""
     safe: bool = False
+    """prevent exception"""
     name: str = ""
+    """handler name"""
 
     async def handle(self):
         while True:
@@ -56,10 +62,14 @@ class EventHandler:
 
 
 class Service:
+    """Event-based service."""
+
     def __init__(self) -> None:
         self.handlers: list[EventHandler] = []
+        """handlers in the service"""
 
     def register(self, handler: EventHandler):
+        """Register handler."""
         self.handlers.append(handler)
 
     async def _run(self):

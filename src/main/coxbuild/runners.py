@@ -7,6 +7,8 @@ from typing import Any, Callable, Tuple
 
 
 class Runner:
+    """Generic runner."""
+
     def __init__(self, func: Callable[[], None]) -> None:
         self.func = func
         self.duration = timedelta()

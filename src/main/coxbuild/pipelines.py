@@ -18,48 +18,78 @@ logger = logging.getLogger("manager")
 
 @dataclass
 class TaskContext:
+    """Execution context for task."""
     task: Task
+    """running task"""
     args: list[Any] = field(default_factory=list)
+    """arguments"""
     kwds: dict[str, Any] = field(default_factory=dict)
+    """keyword arguments"""
 
 
 @dataclass
 class TaskHook:
+    """Hooks for a task."""
     before: Callable[[TaskContext], bool] | None = None
+    """before task starting"""
     setup: Callable[..., None] | None = None
+    """setup before task running"""
     teardown: Callable[..., None] | None = None
+    """teardown after task running"""
     after: Callable[[TaskContext, TaskResult], None] | None = None
+    """after task finished"""
 
 
 @dataclass
 class PipelineContext:
+    """Execution context for pipeline."""
     tasks: list[TaskResult]
+    """tasks in the pipeline"""
 
 
 @dataclass
 class PipelineResult:
+    """Execution result for pipeline."""
     duration: timedelta
+    """execution duration"""
     tasks: list[TaskResult]
+    """tasks in the pipeline"""
     exception: CoxbuildException | None = None
+    """exception when running"""
 
     def __bool__(self):
         return self.exception is None and all(self.tasks)
 
     @property
     def description(self) -> str:
+        """Return result's description string."""
         return "🟢 SUCCESS" if self else "🔴 FAILING"
 
 
 @dataclass
 class PipelineHook:
+    """Hooks for a pipeline."""
     setup: Callable[[PipelineContext], bool] | None = None
+    """setup before pipeline running"""
     before: Callable[[TaskContext], bool] | None = None
+    """before task starting"""
     after: Callable[[TaskContext, TaskResult], None] | None = None
+    """after task finished"""
     teardown: Callable[[PipelineContext, PipelineResult], None] | None = None
+    """teardown after pipeline running"""
 
 
 class PipelineRunner(Runner):
+    """Runner for pipeline."""
+
     def __init__(self, tasks: list[Task], hooks: dict[str, TaskHook], phook: PipelineHook) -> None:
+        """
+        Create runner.
+
+        tasks: tasks in the pipeline
+        hooks: hooks for tasks
+        phook: hook for pipeline
+        """
         self.tasks = tasks
         self.hooks = hooks
         self.phook = phook
@@ -167,12 +197,22 @@ class PipelineRunner(Runner):
 
 
 class Pipeline:
+    """Pipeline to run tasks."""
+
     def __init__(self) -> None:
         self.tasks: dict[str, Task] = {}
+        """tasks in the pipeline"""
         self.hooks: dict[str, TaskHook] = {}
+        """hooks for tasks"""
         self.phook: PipelineHook = PipelineHook()
+        """hook for pipeline"""
 
     def register(self, task: Task) -> None:
+        """
+        Register a task into pipeline.
+
+        task: task to register
+        """
         if task.name in self.tasks:
             raise CoxbuildException(
                 f"Register multiple task with the same name {task.name}.")
@@ -180,6 +220,13 @@ class Pipeline:
         logger.debug(f"Register task {task.name}")
 
     def hook(self, thook: TaskHook | PipelineHook, name: str | None = None) -> None:
+        """
+        Hook task or pipeline.
+
+        thook: the updated hook
+        name: the hooked task's name, None for pipeline hook
+        """
+
         if isinstance(thook, TaskHook):
             if name:
                 self.hooks[name] = thook
@@ -198,7 +245,12 @@ class Pipeline:
             run()
         return runner.result
 
-    def build(self, *args: str, **kwds: Any):
+    def build(self, *args: str | Task, **kwds: Any):
+        """
+        Build runner of pipeline.
+
+        args: list of tasks or task names
+        """
         tks: set[str] = set()
         q: Queue[str] = Queue()
         for name in args:
