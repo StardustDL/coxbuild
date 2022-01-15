@@ -19,6 +19,6 @@ class CoxbuildException(Exception):
         return str(self)
 
 
-class EventCannotOccur(CoxbuildException):
+class EventNeverOccur(CoxbuildException):
     """Raise when an event cannot occur."""
     pass

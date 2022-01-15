@@ -1,7 +1,7 @@
 import asyncio
 from datetime import datetime, time, timedelta
 
-from coxbuild.events import atdatetime
+from coxbuild.events.datetime import attime
 from coxbuild.schema import on
 
 
@@ -19,7 +19,7 @@ next_secod = datetime.now() + timedelta(seconds=1)
 print(f"schedule attimedo at {next_secod}")
 
 
-@on(atdatetime(next_secod))
+@on(attime(next_secod))
 def attimedo():
     print(f"at time done: {datetime.now()}")
 

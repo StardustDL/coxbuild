@@ -4,7 +4,7 @@ import traceback
 from dataclasses import dataclass
 from typing import Any, Awaitable, Callable
 
-from coxbuild.exceptions import CoxbuildException, EventCannotOccur
+from coxbuild.exceptions import CoxbuildException, EventNeverOccur
 
 logger = logging.getLogger("services")
 
@@ -32,7 +32,7 @@ class EventHandler:
 
                 try:
                     await self.event()
-                except EventCannotOccur:
+                except EventNeverOccur:
                     logger.debug(f"Event never occur: {self.name}.")
                     break
 

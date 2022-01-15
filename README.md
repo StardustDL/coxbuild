@@ -257,7 +257,7 @@ You can schedule some build when event occurs.
 Coxbuild provides some builtin events in `coxbuild.events` module.
 
 ```python
-from coxbuild.events import atdatetime
+from coxbuild.events.datetime import attime
 
 async def e():
     print(datetime.now())
@@ -268,7 +268,7 @@ def do():
     print(datetime.now())
     print("done")
 
-@on(atdatetime(datetime.now() + timedelta(seconds=1)))
+@on(attime(datetime.now() + timedelta(seconds=1)))
 def do_pipeline_at_next_second():
     pipeline("task1", task2)
 ```
