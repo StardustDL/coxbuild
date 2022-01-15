@@ -20,7 +20,7 @@ TaskFuncDecorator = Callable[[Callable[..., None]], Task]
 
 def task(name: str = "") -> TaskFuncDecorator:
     def decorator(body: Callable[..., None]) -> Task:
-        if name == "" or name.endswith(":"):
+        if name == "" or name.endswith(":"): # endswith(":") support empty name with group name
             tname = name + body.__name__
         else:
             tname = name
@@ -150,9 +150,10 @@ def teardown(name: str | Task | Task | None = None):
     return decorator
 
 
-def on(event: Callable[[], Awaitable], repeat: int = 0):
+def on(event: Callable[[], Awaitable], repeat: int = 0, safe: bool = False, name: str | None = None):
     def decorator(handler: Callable[[], None]):
-        service.register(EventHandler(event, handler, repeat))
+        service.register(EventHandler(event, handler, repeat,
+                         safe, name or handler.__name__))
         return handler
 
     return decorator

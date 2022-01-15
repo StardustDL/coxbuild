@@ -340,9 +340,7 @@ result = pipeline.invoke(*tasklist)
 ### Python
 
 ```python
-import coxbuild.extensions.python
-import coxbuild.extensions.python.package
-import coxbuild.extensions.python.format
+import coxbuild.extensions.python.all
 ```
 
 ### Shell

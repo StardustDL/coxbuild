@@ -2,14 +2,14 @@ import os
 import shutil
 from pathlib import Path
 
-from coxbuild.extensions.python import Settings
-from coxbuild.extensions.python import settings as pysettings
-from coxbuild.extensions.python.format import format as pyformat
-from coxbuild.extensions.python.package import build as pybuild
-from coxbuild.extensions.python.package import deploy as pydeploy
-from coxbuild.extensions.python.package import installBuilt as install
-from coxbuild.extensions.python.package import restore as pyrestore
-from coxbuild.extensions.python.package import uninstallBuilt as uninstall
+from coxbuild.extensions.python.all import Settings
+from coxbuild.extensions.python.all import settings as pysettings
+from coxbuild.extensions.python.all import format as pyformat
+from coxbuild.extensions.python.all import build as pybuild
+from coxbuild.extensions.python.all import deploy as pydeploy
+from coxbuild.extensions.python.all import installBuilt as install
+from coxbuild.extensions.python.all import restore as pyrestore
+from coxbuild.extensions.python.all import uninstallBuilt as uninstall
 from coxbuild.schema import depend, run, setup, task, teardown
 
 readmeDst = Path("./src/main/README.md")

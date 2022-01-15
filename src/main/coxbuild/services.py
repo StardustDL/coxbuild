@@ -1,11 +1,15 @@
 import asyncio
 from cgitb import handler
 from dataclasses import dataclass
+import logging
+import traceback
 from typing import Any, Awaitable, Callable, Tuple
 
-from coxbuild.exceptions import EventCannotOccur
+from coxbuild.exceptions import CoxbuildException, EventCannotOccur
 
 from .runners import Runner
+
+logger = logging.getLogger("services")
 
 
 @dataclass
@@ -13,15 +17,37 @@ class EventHandler:
     event: Callable[[], Awaitable]
     handler: Callable[[], None]
     repeat: int = 0
+    safe: bool = False
+    name: str = ""
 
     async def handle(self):
         while True:
             try:
-                await self.event()
-            except EventCannotOccur:
-                break
+                logger.debug(f"Wait for event: {self.name}.")
 
-            self.handler()
+                try:
+                    await self.event()
+                except EventCannotOccur:
+                    logger.debug(f"Event never occur: {self.name}.")
+                    break
+
+                logger.debug(f"Event occurs: {self.name}.")
+
+                logger.debug(f"Event handling: {self.name}.")
+
+                self.handler()
+
+                logger.debug(f"Event handled: {self.name}.")
+            except Exception as ex:
+                logger.error(
+                    f"Event handler '{self.name}' failed.", exc_info=ex)
+
+                if self.safe:
+                    print(f"Exception in event handler {self.name}.")
+                    traceback.print_exception(ex)
+                else:
+                    raise CoxbuildException(
+                        f"Exception in event handler {self.name}", ex)
 
             if self.repeat == 0:
                 break

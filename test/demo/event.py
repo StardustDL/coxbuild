@@ -22,3 +22,8 @@ print(f"schedule attimedo at {next_secod}")
 @on(atdatetime(next_secod))
 def attimedo():
     print(f"at time done: {datetime.now()}")
+
+
+@on(e, repeat=1, safe=True)
+def unsafe_do():
+    raise Exception("Unsafe op")
