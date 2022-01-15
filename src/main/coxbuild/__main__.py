@@ -67,7 +67,7 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
     if not tasks:
         tasks = ["default"]
 
-    result = schema.pipeline.invoke(*tasks)
+    result = schema.pipeline(*tasks)
 
     if result:
         exit(0)

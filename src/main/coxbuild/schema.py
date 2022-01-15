@@ -67,7 +67,7 @@ def invoke(name: str | Task, /, *args, **kwds) -> TaskResult:
     if isinstance(name, str):
         name = pipeline.tasks[name]
 
-    return name.invoke(*args, **kwds)
+    return name(*args, **kwds)
 
 
 def before(name: str | Task | None = None):

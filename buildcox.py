@@ -87,7 +87,7 @@ def test_command():
 @depend(demo, test_build, test_lifecycle, test_command, test_service, test_builtin)
 @task()
 def test():
-    uninstall.invoke()
+    uninstall()
 
 
 @depend(pydeploy)

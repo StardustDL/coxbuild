@@ -109,8 +109,8 @@ class PipelineRunner(Runner):
             setup = hook.setup if hook and hook.setup else None
             teardown = hook.teardown if hook and hook.teardown else None
 
-            res = task.invoke(*tcontext.args, **tcontext.kwds,
-                              setup=setup, teardown=teardown)
+            res = task(*tcontext.args, **tcontext.kwds,
+                       setup=setup, teardown=teardown)
 
             self._results.append(res)
 
@@ -192,7 +192,13 @@ class Pipeline:
             else:
                 self.phook = thook
 
-    def __call__(self, *args: str | Task, **kwds: Any) -> PipelineRunner:
+    def __call__(self, *args: str | Task, **kwds: Any):
+        runner = self.build(*args, **kwds)
+        with runner as run:
+            run()
+        return runner.result
+
+    def build(self, *args: str, **kwds: Any):
         tks: set[str] = set()
         q: Queue[str] = Queue()
         for name in args:
@@ -219,9 +225,3 @@ class Pipeline:
         logger.debug(f"Tasks to run: {', '.join((t.name for t in tasks))}")
 
         return PipelineRunner(tasks, {k: v for k, v in self.hooks.items() if k in tks}, self.phook)
-
-    def invoke(self, *args: str, **kwds: Any) -> PipelineResult:
-        runner = self(*args, **kwds)
-        with runner as run:
-            run()
-        return runner.result

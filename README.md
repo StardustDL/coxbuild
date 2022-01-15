@@ -92,6 +92,10 @@ def use_custom_name():
 def default(): pass
 ```
 
+Task can have parameters, see [Before/After Hook](#beforeafter-hook) section for details.
+
+> Do **NOT** use `setup` and `teardown` as task parameter name. These parameter names are used by coxbuild.
+
 Builtin tasks:
 
 | Name     | Description               |
@@ -266,7 +270,7 @@ def do():
 
 @on(atdatetime(datetime.now() + timedelta(seconds=1)))
 def do_pipeline_at_next_second():
-    pipeline.invoke("task1", task2)
+    pipeline("task1", task2)
 ```
 
 `event` parameter is a awaitable builder, i.e. `Callable[[], Awaitable]`, when the event occurs, the awaitable return.
@@ -294,21 +298,20 @@ task: Task
 
 # execute task individually (no pipeline, without dependencies and registered hooks)
 
-runner: TaskRunner = task(
+result = task(
+    *args, **kwds, 
+    setup=setup_hook,
+    teardown=teardown_hook)
+
+# equivalent to
+
+runner: TaskRunner = task.build(
     *args, **kwds, 
     setup=setup_hook,
     teardown=teardown_hook)
 with runner as run:
     run()
-
 result: TaskResult = runner.result
-
-# equivalent to
-
-result = task.invoke(
-    *args, **kwds, 
-    setup=setup_hook,
-    teardown=teardown_hook)
 ```
 
 ### Pipeline
@@ -324,15 +327,14 @@ tasklist: list[Task|str] = [task1, "task2"]
 
 # execute tasks and their dependencies
 
-runner: PipelineRunner = pipeline(*tasklist)
-with runner as run:
-    run()
-
-result: PipelineResult = runner.result
+result = pipeline(*tasklist)
 
 # equivalent to
 
-result = pipeline.invoke(*tasklist)
+runner: PipelineRunner = pipeline.build(*tasklist)
+with runner as run:
+    run()
+result: PipelineResult = runner.result
 ```
 
 ## Extensions

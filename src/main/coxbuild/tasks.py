@@ -46,13 +46,13 @@ class Task:
         self.postcondition = postcondition
 
     def __call__(self, *args: Any, setup: Callable[..., None] | None = None, teardown: Callable[..., None] | None = None, **kwds: Any):
-        return TaskRunner(self, args, kwds, setup, teardown)
-
-    def invoke(self, *args: Any, setup: Callable[..., None] | None = None, teardown: Callable[..., None] | None = None, **kwds: Any) -> TaskResult:
-        runner = self(*args, setup=setup, teardown=teardown, **kwds)
+        runner = self.build(*args, setup=setup, teardown=teardown, **kwds)
         with runner as run:
             run()
         return runner.result
+
+    def build(self, *args: Any, setup: Callable[..., None] | None = None, teardown: Callable[..., None] | None = None, **kwds: Any):
+        return TaskRunner(self, args, kwds, setup, teardown)
 
 
 class TaskRunner(Runner):
