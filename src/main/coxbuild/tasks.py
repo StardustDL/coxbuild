@@ -1,9 +1,8 @@
 import logging
 import sys
 import traceback
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timedelta
-from timeit import default_timer as timer
 from typing import Any, Callable
 
 from .exceptions import CoxbuildException
@@ -100,6 +99,7 @@ class TaskRunner(Runner):
 
     def _run(self):
         if self.task.precondition is not None:
+            logger.debug(f"Task {self.task.name} check precondition.")
             pre = self.task.precondition(*self.args, **self.kwds)
             if not pre:
                 message = f"Task {self.task.name} ignored: precondition filtered"
@@ -108,16 +108,20 @@ class TaskRunner(Runner):
                 return
 
         if self.setup is not None:
+            logger.debug(f"Task {self.task.name} setup hook.")
             self.setup(*self.args, **self.kwds)
 
         try:
             if self.task.body is not None:
+                logger.debug(f"Task {self.task.name} body execute.")
                 self.task.body(*self.args, **self.kwds)
         finally:
             if self.teardown is not None:
+                logger.debug(f"Task {self.task.name} teardown hook.")
                 self.teardown(*self.args, **self.kwds)
 
         if self.task.postcondition is not None:
+            logger.debug(f"Task {self.task.name} check postcondition.")
             post = self.task.postcondition(*self.args, **self.kwds)
             if not post:
                 raise CoxbuildException(
@@ -140,6 +144,7 @@ class TaskRunner(Runner):
             self.task.name, duration=self.duration, exception=exception)
 
         if self.exc_value is not None:
+            logger.error("Task execute exception.", exc_info=self.exc_value)
             traceback.print_exception(
                 self.exc_type, self.exc_value, self.exc_tb, file=sys.stdout)
 

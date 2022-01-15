@@ -1,7 +1,6 @@
-import functools
 import pathlib
 from dataclasses import asdict
-from typing import Any, Awaitable, Callable
+from typing import Awaitable, Callable
 
 from .configuration import Configuration
 from .invocation import CommandExecutionArgs, CommandExecutionResult

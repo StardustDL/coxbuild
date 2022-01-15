@@ -1,13 +1,10 @@
 import asyncio
-from cgitb import handler
-from dataclasses import dataclass
 import logging
 import traceback
-from typing import Any, Awaitable, Callable, Tuple
+from dataclasses import dataclass
+from typing import Any, Awaitable, Callable
 
 from coxbuild.exceptions import CoxbuildException, EventCannotOccur
-
-from .runners import Runner
 
 logger = logging.getLogger("services")
 
@@ -27,6 +24,8 @@ class EventHandler:
     """handler name"""
 
     async def handle(self):
+        logger.debug(f"Handle for event: {self.name}.")
+
         while True:
             try:
                 logger.debug(f"Wait for event: {self.name}.")
@@ -60,6 +59,8 @@ class EventHandler:
             elif self.repeat > 0:
                 self.repeat -= 1
 
+        logger.debug(f"Finish handle for event: {self.name}.")
+
 
 class Service:
     """Event-based service."""
@@ -70,10 +71,13 @@ class Service:
 
     def register(self, handler: EventHandler):
         """Register handler."""
+        logger.debug(f"Register event handler: {handler}")
         self.handlers.append(handler)
 
     async def _run(self):
+        logger.debug("Run service.")
         await asyncio.gather(*[e.handle() for e in self.handlers])
+        logger.debug("Finish service.")
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         asyncio.run(self._run())

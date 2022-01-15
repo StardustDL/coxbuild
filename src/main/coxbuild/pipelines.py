@@ -3,11 +3,9 @@ import sys
 import traceback
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from enum import Enum
 from graphlib import TopologicalSorter
 from queue import Queue
-from timeit import default_timer as timer
-from typing import Any, Callable, Tuple
+from typing import Any, Callable
 
 from .exceptions import CoxbuildException
 from .runners import Runner
@@ -158,7 +156,7 @@ class PipelineRunner(Runner):
                 break
 
     def __enter__(self) -> Callable[[], None]:
-        logger.debug("Running")
+        logger.debug(f"Running pipeline: {self.tasks}")
         print(f"{'-'*20} ⌛ Running 🕰️ {datetime.now()} {'-'*20}")
 
         self.result = None
@@ -175,13 +173,15 @@ class PipelineRunner(Runner):
             duration=self.duration, tasks=self._results, exception=exception)
 
         if self.exc_value is not None:
+            logger.error("Task execute exception.", exc_info=self.exc_value)
             traceback.print_exception(
                 self.exc_type, self.exc_value, self.exc_tb, file=sys.stdout)
 
         if self.phook.teardown is not None:
+            logger.debug(f"Pipeline teardown hook.")
             self.phook.teardown(self.context, self.result)
 
-        logger.info(f"Finish: {self.result}")
+        logger.info(f"Finish pipeline: {self.result}")
 
         print(
             f"{'-'*20} 📋 Done {self.result.description} (⏱️ {self.result.duration}) {'-'*20}")
@@ -251,6 +251,9 @@ class Pipeline:
 
         args: list of tasks or task names
         """
+
+        logger.debug(f"Build pipeline by {args}.")
+
         tks: set[str] = set()
         q: Queue[str] = Queue()
         for name in args:
@@ -259,12 +262,15 @@ class Pipeline:
             if name in self.tasks and name not in tks:
                 tks.add(name)
                 q.put(name)
+
         while not q.empty():
             t = q.get()
             for d in self.tasks[t].deps:
                 if d in self.tasks and d not in tks:
                     tks.add(d)
                     q.put(d)
+
+        logger.debug(f"Build pipeline for tasks: {tks}.")
 
         graph = {}
 

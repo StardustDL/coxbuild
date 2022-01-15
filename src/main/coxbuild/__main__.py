@@ -43,9 +43,8 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
 
     src = schemafile.read_text(encoding="utf-8")
 
-    from coxbuild import schema
-
     import coxbuild.extensions.builtin
+    from coxbuild import schema
 
     code = compile(src, schemafile, "exec")
 

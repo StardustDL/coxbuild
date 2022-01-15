@@ -1,10 +1,8 @@
-import functools
 import logging
 import pathlib
 import subprocess
 from dataclasses import dataclass, field
 from datetime import timedelta
-from socket import timeout
 from timeit import default_timer as timer
 
 from .exceptions import CoxbuildException

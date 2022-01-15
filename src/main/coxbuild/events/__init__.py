@@ -1,7 +1,7 @@
 import asyncio
 import functools
 from datetime import date, datetime, time, timedelta
-from typing import Awaitable, Callable, ParamSpec, TypeVar
+from typing import Awaitable, Callable, ParamSpec
 
 from ..exceptions import EventCannotOccur
 
