@@ -9,9 +9,9 @@ from queue import Queue
 from timeit import default_timer as timer
 from typing import Any, Callable, Tuple
 
-from coxbuild.exceptions import CoxbuildException
-from coxbuild.runners import Runner
-from coxbuild.tasks import Task, TaskResult
+from .exceptions import CoxbuildException
+from .runners import Runner
+from .tasks import Task, TaskResult
 
 logger = logging.getLogger("manager")
 
@@ -192,10 +192,12 @@ class Pipeline:
             else:
                 self.phook = thook
 
-    def __call__(self, *args: str, **kwds: Any) -> PipelineRunner:
+    def __call__(self, *args: str | Task, **kwds: Any) -> PipelineRunner:
         tks: set[str] = set()
         q: Queue[str] = Queue()
         for name in args:
+            if isinstance(name, Task):
+                name = name.name
             if name in self.tasks and name not in tks:
                 tks.add(name)
                 q.put(name)

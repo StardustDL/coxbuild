@@ -14,6 +14,7 @@ Supported features:
 - Lifecycle hooks
   - Setup / Teardown
   - Before / After
+- Event-based build as a long-run service
 
 Extensions:
 
@@ -21,6 +22,7 @@ Extensions:
 - Shell
 - Git
 - Node.js
+- .NET
 
 ## Install
 
@@ -32,7 +34,7 @@ pip install coxbuild
 
 Coxbuild build itself by itself, see [here](https://github.com/StardustDL/coxbuild/blob/master/buildcox.py) for details.
 
-### Write Schema
+### Write Schema (buildcox.py)
 
 ```python
 from coxbuild.schema import task, depend # this line can be omitted
@@ -53,6 +55,8 @@ def default():
 coxbuild
     [-D <working directory = '.'>]
     [-f <file name = 'buildcox.py'>]
+    [-l/--list]
+    [-s/--serve]
     [task names = 'default']
 
 # Run default schema and default task
@@ -233,11 +237,123 @@ Go [here](test/demo/lifecycle.py) to see how to hook these events and how they w
 coxbuild -D test/demo -f lifecycle.py
 ```
 
-## Languages
+### Event
+
+You can schedule some build when event occurs.
+
+Coxbuild provides some builtin events in `coxbuild.events` module.
+
+```python
+async def e():
+    print(datetime.now())
+    await asyncio.sleep(1)
+
+@on(event=e, repeat=1)
+def do():
+    print(datetime.now())
+    print("done")
+  
+@on(e)
+def do_pipeline():
+    pipeline.invoke("task1", task2)
+```
+
+`event` parameter is a awaitable builder, i.e. `Callable[[], Awaitable]`.
+
+`repeat` parameter is an integer.
+
+- `0` for no-repeat
+- positive integer for finite repeat
+- negative integer for infinite repeat
+
+To start the long-run service, use `-s` flag.
+
+```sh
+coxbuild -s
+```
+
+## Library
+
+### Task
+
+Use **Task** to do something and get result with running metadata (exception, duration, and so on).
+
+```python
+task: Task
+
+# execute task individually (no pipeline, without dependencies and registered hooks)
+
+runner: TaskRunner = task(
+    *args, **kwds, 
+    setup=setup_hook,
+    teardown=teardown_hook)
+with runner as run:
+    run()
+
+result: TaskResult = runner.result
+
+# equivalent to
+
+result = task.invoke(
+    *args, **kwds, 
+    setup=setup_hook,
+    teardown=teardown_hook)
+```
+
+### Pipeline
+
+Use **Pipeline** to run managed tasks with dependencies and hooks.
+
+You can access the default pipeline by variable `pipeline` in schema.
+
+```python
+pipeline: Pipeline
+
+tasklist: list[Task|str] = [task1, "task2"]
+
+# execute tasks and their dependencies
+
+runner: PipelineRunner = pipeline(*tasklist)
+with runner as run:
+    run()
+
+result: PipelineResult = runner.result
+
+# equivalent to
+
+result = pipeline.invoke(*tasklist)
+```
+
+## Extensions
 
 ### Python
 
 ```python
 import coxbuild.extensions.python
 import coxbuild.extensions.python.package
+import coxbuild.extensions.python.format
+```
+
+### Shell
+
+```python
+import coxbuild.extensions.shell
+```
+
+### Node.js
+
+```python
+import coxbuild.extensions.nodejs
+```
+
+### .NET
+
+```python
+import coxbuild.extensions.dotnet
+```
+
+### Git
+
+```python
+import coxbuild.extensions.git
 ```

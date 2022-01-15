@@ -1,15 +1,17 @@
 import functools
 import pathlib
 from dataclasses import asdict
-from typing import Any, Callable
+from typing import Any, Awaitable, Callable
 
-from coxbuild.configuration import Configuration
-from coxbuild.invocation import CommandExecutionArgs, CommandExecutionResult
-from coxbuild.invocation import run as inrun
-from coxbuild.pipelines import (Pipeline, PipelineContext, PipelineHook,
-                                PipelineResult, TaskContext, TaskHook)
-from coxbuild.tasks import Task, TaskResult
+from .configuration import Configuration
+from .invocation import CommandExecutionArgs, CommandExecutionResult
+from .invocation import run as inrun
+from .pipelines import (Pipeline, PipelineContext, PipelineHook,
+                        PipelineResult, TaskContext, TaskHook)
+from .services import EventHandler, Service
+from .tasks import Task, TaskResult
 
+service = Service()
 pipeline = Pipeline()
 config = Configuration()
 
@@ -145,6 +147,14 @@ def teardown(name: str | Task | Task | None = None):
             hk = PipelineHook(**old)
             pipeline.hook(hk)
         return body
+    return decorator
+
+
+def on(event: Callable[[], Awaitable], repeat: int = 0):
+    def decorator(handler: Callable[[], None]):
+        service.register(EventHandler(event, handler, repeat))
+        return handler
+
     return decorator
 
 

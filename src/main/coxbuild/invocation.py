@@ -7,7 +7,7 @@ from datetime import timedelta
 from socket import timeout
 from timeit import default_timer as timer
 
-from coxbuild.exceptions import CoxbuildException
+from .exceptions import CoxbuildException
 
 logger = logging.getLogger("invocation")
 

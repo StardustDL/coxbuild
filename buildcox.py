@@ -1,11 +1,16 @@
 import os
-from pathlib import Path
 import shutil
+from pathlib import Path
 
-from coxbuild.schema import task, depend, setup, teardown, run
-from coxbuild.extensions.python import Settings, settings as pysettings
-from coxbuild.extensions.python.package import build as pybuild, restore as pyrestore, deploy as pydeploy, installBuilt as install, uninstallBuilt as uninstall
+from coxbuild.extensions.python import Settings
+from coxbuild.extensions.python import settings as pysettings
 from coxbuild.extensions.python.format import format as pyformat
+from coxbuild.extensions.python.package import build as pybuild
+from coxbuild.extensions.python.package import deploy as pydeploy
+from coxbuild.extensions.python.package import installBuilt as install
+from coxbuild.extensions.python.package import restore as pyrestore
+from coxbuild.extensions.python.package import uninstallBuilt as uninstall
+from coxbuild.schema import depend, run, setup, task, teardown
 
 readmeDst = Path("./src/main/README.md")
 
@@ -58,6 +63,12 @@ def test_lifecycle():
 
 @depend(install)
 @task()
+def test_service():
+    run([*demoCmdPre, "-f", "event.py", "-s"])
+
+
+@depend(install)
+@task()
 def test_command():
     run([*demoCmdPre, "-f", "command.py"])
     res = run([*demoCmdPre,
@@ -66,7 +77,7 @@ def test_command():
         raise Exception("Unexpected success for failing command.")
 
 
-@depend(demo, test_build, test_lifecycle, test_command)
+@depend(demo, test_build, test_lifecycle, test_command, test_service)
 @task()
 def test():
     uninstall.invoke()

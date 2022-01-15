@@ -1,6 +1,5 @@
-from coxbuild.schema import depend, group, precond, run
-
 from coxbuild import get_working_directory
+from coxbuild.schema import depend, group, precond, run
 
 from . import Settings, task
 from .package import hasPackages, upgradePackages

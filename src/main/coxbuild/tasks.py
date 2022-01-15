@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 from timeit import default_timer as timer
 from typing import Any, Callable
 
-from coxbuild.exceptions import CoxbuildException
-from coxbuild.runners import Runner
+from .exceptions import CoxbuildException
+from .runners import Runner
 
 logger = logging.getLogger("tasks")
 

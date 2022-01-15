@@ -3,7 +3,6 @@ import traceback
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from timeit import default_timer as timer
-from tracemalloc import Traceback
 from typing import Any, Callable, Tuple
 
 

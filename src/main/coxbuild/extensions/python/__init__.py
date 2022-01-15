@@ -1,8 +1,7 @@
 from pathlib import Path
 
-from coxbuild.schema import config, group, run
-
 import coxbuild
+from coxbuild.schema import config, group, run
 
 task = group("python")
 

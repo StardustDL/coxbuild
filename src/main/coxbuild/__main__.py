@@ -12,9 +12,10 @@ from coxbuild import __version__
 @click.option('-D', '--directory', type=click.Path(exists=True, file_okay=False, resolve_path=True, path_type=Path), default=".", help="Path to working directory.")
 @click.option('-f', '--file', default="buildcox.py", help="Schema file name.")
 @click.option("-l", "--list", is_flag=True, default=False, help="List all defined tasks.")
+@click.option("-s", "--serve", is_flag=True, default=False, help="Serve event handlers.")
 @click.version_option(__version__, package_name="coxbuild", prog_name="coxbuild", message="%(prog)s v%(version)s, written by StardustDL.")
 @click.option('-v', '--verbose', count=True, default=0, type=click.IntRange(0, 5))
-def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: str = "buildcox.py", verbose: int = 0, list: bool = False) -> None:
+def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: str = "buildcox.py", verbose: int = 0, list: bool = False, serve: bool = False) -> None:
     """Coxbuild (https://github.com/StardustDL/coxbuild)"""
     click.echo(f"Welcome to Coxbuild v{__version__}!")
 
@@ -44,31 +45,35 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
 
     src = schemafile.read_text(encoding="utf-8")
 
-    import coxbuild.schema
+    from coxbuild import schema
 
     exec(src, {
-        "task": coxbuild.schema.task,
-        "depend": coxbuild.schema.depend,
-        "run": coxbuild.schema.run,
-        "group": coxbuild.schema.group,
-        "precond": coxbuild.schema.precond,
-        "postcond": coxbuild.schema.postcond,
-        "invoke": coxbuild.schema.invoke,
-        "before": coxbuild.schema.before,
-        "after": coxbuild.schema.after,
-        "setup": coxbuild.schema.setup,
-        "teardown": coxbuild.schema.teardown,
+        "task": schema.task,
+        "depend": schema.depend,
+        "run": schema.run,
+        "group": schema.group,
+        "precond": schema.precond,
+        "postcond": schema.postcond,
+        "invoke": schema.invoke,
+        "before": schema.before,
+        "after": schema.after,
+        "setup": schema.setup,
+        "teardown": schema.teardown,
     })
 
     if list:
-        for item in coxbuild.schema.pipeline.tasks:
+        for item in schema.pipeline.tasks:
             print(item)
+        exit(0)
+
+    if serve:
+        schema.service()
         exit(0)
 
     if not tasks:
         tasks = ["default"]
 
-    result = coxbuild.schema.pipeline.invoke(*tasks)
+    result = schema.pipeline.invoke(*tasks)
 
     if result:
         exit(0)
