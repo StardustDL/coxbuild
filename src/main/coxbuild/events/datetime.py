@@ -7,17 +7,17 @@ from . import delay, event
 @event
 async def attime(dt: datetime | date | time):
     now = datetime.now()
-    now.microsecond = 0
 
     if isinstance(dt, date):
-        dt = datetime(dt.year, dt.month, dt.day)
+        dt = datetime(dt.year, dt.month, dt.day,
+                      now.hour, now.minute, now.second)
     elif isinstance(dt, time):
         dt = datetime(now.year, now.month, now.day,
                       dt.hour, dt.minute, dt.second)
         if dt < now:
             dt = dt + timedelta(days=1)
 
-    if dt == now:
+    if dt.date() == now.date() and dt.hour == now.hour and dt.minute == now.minute and dt.second == now.second:
         return
     elif now < dt:
         await delay(dt - now)()
