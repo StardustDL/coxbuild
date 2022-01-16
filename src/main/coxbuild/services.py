@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import sys
 import traceback
 from dataclasses import dataclass, field
 from typing import Any, AsyncIterator, Callable
@@ -55,7 +56,7 @@ class EventHandler:
                     if self.safe:
                         print(
                             f"Exception when event handler handling {self.name}({context}).")
-                        traceback.print_exception(ex)
+                        traceback.print_exception(ex, file=sys.stdout)
                     else:
                         raise CoxbuildException(
                             f"Exception when event handler handling {self.name}({context})", ex)
@@ -67,7 +68,7 @@ class EventHandler:
 
             if self.safe:
                 print(f"Exception in event handler {self.name}.")
-                traceback.print_exception(ex)
+                traceback.print_exception(ex, file=sys.stdout)
             else:
                 raise CoxbuildException(
                     f"Exception in event handler {self.name}", ex)

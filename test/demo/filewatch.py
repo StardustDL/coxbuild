@@ -1,12 +1,14 @@
+import os
 from datetime import timedelta
 from pathlib import Path
-from time import sleep
-import os
+
 from coxbuild.events import delay, once
-from coxbuild.events.filesystems import FileSystemChangeType, FileSystemEntry, create, delete
+from coxbuild.events.filesystems import (FileSystemChangeType, FileSystemEntry,
+                                         create, delete)
 from coxbuild.schema import on
 
-test_file = "test/watch_temp.txt"
+test_file = "watch_temp.txt"
+
 
 @on(once(create(glob=test_file, period=timedelta(seconds=0.5))))
 def change(type: FileSystemChangeType, entry: FileSystemEntry):
