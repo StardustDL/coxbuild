@@ -1,3 +1,4 @@
+import asyncio
 import os
 from datetime import timedelta
 from pathlib import Path
@@ -10,26 +11,23 @@ from coxbuild.schema import on
 test_file = "watch_temp.txt"
 
 
-@on(once(create(glob=test_file, period=timedelta(seconds=0.5))))
+@on(once(create(glob=test_file, period=timedelta(seconds=0.3))))
 def change(type: FileSystemChangeType, entry: FileSystemEntry):
     print(f"{type}: {entry}")
 
 
-@on(once(delete(glob=test_file, period=timedelta(seconds=0.5))))
+@on(once(delete(glob=test_file, period=timedelta(seconds=0.3))))
 def change(type: FileSystemChangeType, entry: FileSystemEntry):
     print(f"{type}: {entry}")
 
 
 @on(delay(timedelta(seconds=1)))
-def createfile():
+async def createfile():
     print(f"Creating {test_file}")
     p = Path(test_file)
     p.write_text("demo text")
     print(f"Created {test_file}")
-
-
-@on(delay(timedelta(seconds=2)))
-def removefile():
+    await asyncio.sleep(1)
     print(f"Removing {test_file}")
     p = Path(test_file)
     os.remove(p)

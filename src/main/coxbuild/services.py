@@ -3,7 +3,8 @@ import logging
 import sys
 import traceback
 from dataclasses import dataclass, field
-from typing import Any, AsyncIterator, Callable
+from typing import Any, AsyncIterator, Awaitable, Callable
+import inspect
 
 from coxbuild.exceptions import CoxbuildException
 
@@ -31,7 +32,7 @@ class EventHandler:
     """Handler for a event."""
     event: EventType
     """event generator, when the event occurs, the awaitable return"""
-    handler: Callable[..., None]
+    handler: Callable[..., Awaitable | None]
     """event handler"""
     safe: bool = False
     """prevent exception"""
@@ -48,10 +49,10 @@ class EventHandler:
                 logger.debug(f"Event handling: {self.name}({context}).")
 
                 try:
-                    if context:
-                        self.handler(*context.args, **context.kwds)
-                    else:
-                        self.handler()
+                    result = self.handler(
+                        *context.args, **context.kwds) if context else self.handler()
+                    if inspect.isawaitable(result):
+                        result = await result
                 except Exception as ex:
                     if self.safe:
                         print(
