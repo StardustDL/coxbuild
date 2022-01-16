@@ -65,4 +65,8 @@ jobs:
         PYTHONUTF8: 1
       run: |
         ./build.ps1 test
-    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-cov-{{ matrix.os }}
+        path: ./htmlcov

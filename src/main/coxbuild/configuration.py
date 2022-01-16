@@ -13,7 +13,7 @@ class Configuration:
         data: data source
         """
         self.name = name
-        self.data: dict[str, Any] = data or {}
+        self.data: dict[str, Any] = data if data is not None else {}
         self.cache: dict[str, Configuration] = {}
         if not self.name:
             self.loadenv()

@@ -5,3 +5,4 @@ dist
 selfdist
 temp
 **/*.egg-info/*
+.coverage

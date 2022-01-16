@@ -7,7 +7,9 @@ async def attime(dt: datetime | date | time):
     while True:
         now = datetime.now()
 
-        if isinstance(dt, date):
+        if isinstance(dt, datetime):
+            cdt = dt
+        elif isinstance(dt, date):
             cdt = datetime(dt.year, dt.month, dt.day,
                            now.hour, now.minute, now.second)
         elif isinstance(dt, time):
@@ -24,12 +26,14 @@ async def attime(dt: datetime | date | time):
         else:
             break
 
-        now = datetime.now()
+        print(dt, cdt, datetime.now())
 
         # go to next time span
 
         if isinstance(dt, time):
             await occur(delay(timedelta(hours=1)))
+        elif isinstance(dt, datetime):
+            await occur(delay(timedelta(seconds=1)))
 
 
 def tomorrow():
