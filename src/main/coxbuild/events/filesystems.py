@@ -75,7 +75,7 @@ def diff(old: FileSystemSnapshot, new: FileSystemSnapshot):
             yield (FileSystemChangeType.Create, newe)
 
 
-async def changed(path: Path | None = None, glob: str | None = None, type: FileSystemChangeType | None = None, period: timedelta | None = None):
+async def changed(path: Path | None = None, glob: str | None = None, type: set[FileSystemChangeType] | None = None, period: timedelta | None = None):
     """
     Detect file or directory change (create, delete, modify, access).
 
@@ -96,23 +96,23 @@ async def changed(path: Path | None = None, glob: str | None = None, type: FileS
         newsnap = FileSystemSnapshot(path, glob)
 
         for ctype, entry in diff(snap, newsnap):
-            if type is None or ctype == type:
+            if type is None or ctype in type:
                 yield EventContext.build(type=ctype, entry=entry)
 
         snap = newsnap
 
 
 def access(path: Path | None = None, glob: str | None = None, period: timedelta | None = None):
-    return changed(path, glob, FileSystemChangeType.Access, period)
+    return changed(path, glob, {FileSystemChangeType.Access}, period)
 
 
 def create(path: Path | None = None, glob: str | None = None, period: timedelta | None = None):
-    return changed(path, glob, FileSystemChangeType.Create, period)
+    return changed(path, glob, {FileSystemChangeType.Create}, period)
 
 
 def modify(path: Path | None = None, glob: str | None = None, period: timedelta | None = None):
-    return changed(path, glob, FileSystemChangeType.Modify, period)
+    return changed(path, glob, {FileSystemChangeType.Modify}, period)
 
 
 def delete(path: Path | None = None, glob: str | None = None, period: timedelta | None = None):
-    return changed(path, glob, FileSystemChangeType.Delete, period)
+    return changed(path, glob, {FileSystemChangeType.Delete}, period)

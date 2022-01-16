@@ -13,7 +13,7 @@ async def test_changed():
 
     async def change():
         types = []
-        async for context in limit(changed(glob="test_temp.txt", period=timedelta(seconds=0.1)), 2):
+        async for context in limit(changed(glob="test_temp.txt", type={FileSystemChangeType.Create, FileSystemChangeType.Delete}, period=timedelta(seconds=0.1)), 2):
             entry: FileSystemEntry = context.kwds["entry"]
             assert entry.path.resolve() == file.resolve()
             types.append(context.kwds["type"])
