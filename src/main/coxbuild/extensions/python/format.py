@@ -14,12 +14,14 @@ def restore():
     upgradePackages("autopep8", "isort")
 
 
+@depend(restore)
 @task()
 def autopep8():
     """Use autopep8 to format Python code."""
     run(["autopep8", "-r", "--in-place", str(get_working_directory())])
 
 
+@depend(restore)
 @task()
 def isort():
     """Use isort to format Python imports."""

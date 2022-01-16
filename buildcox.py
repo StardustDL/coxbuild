@@ -11,6 +11,7 @@ from coxbuild.extensions.python.all import installBuilt as install
 from coxbuild.extensions.python.all import restore as pyrestore
 from coxbuild.extensions.python.all import settings as pysettings
 from coxbuild.extensions.python.all import uninstallBuilt as uninstall
+from coxbuild.extensions.python.all import test as pytest
 from coxbuild.schema import depend, run, setup, task, teardown
 
 readmeDst = Path("./src/main/README.md")
@@ -92,7 +93,7 @@ def test_command():
         raise Exception("Unexpected success for failing command.")
 
 
-@depend(demo, test_build, test_lifecycle, test_command, test_service, test_builtin, test_event_fs)
+@depend(demo, test_build, test_lifecycle, test_command, test_service, test_builtin, test_event_fs, pytest)
 @task()
 def test():
     uninstall()
