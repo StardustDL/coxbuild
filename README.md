@@ -83,9 +83,14 @@ Use `task` decorator to define a (named) task.
 def use_function_name_as_task_name(): pass
 
 @task("custom-task-name")
-def use_custom_name():
+async def use_custom_name():
     """task document"""
     pass
+
+@task()
+async def cost_time():
+    print("cost time")
+    await asyncio.sleep(0.5)
 
 # default task
 @task()
@@ -256,6 +261,8 @@ You can schedule some build when event occurs.
 
 Coxbuild provides some builtin events in `coxbuild.events` module, each event return an awaitable iterator, i.e. event generator.
 
+The event handlers are running asynchronously, so use async function and `asyncio.sleep()` instead of sync `time.sleep()`.
+
 ```python
 from coxbuild.events import repeat, onceevent, once
 from coxbuild.events.datetime import attime
@@ -273,6 +280,13 @@ def do():
 @on(once(attime(datetime.now() + timedelta(seconds=1))))
 def do_pipeline_at_next_second():
     pipeline("task1", task2)
+
+
+@on(delay(timedelta(seconds=1)))
+async def async_handler():
+    print("before")
+    await asyncio.sleep(1)
+    print("after")
 ```
 
 Example for watching filesystem changes, see [here](https://github.com/StardustDL/coxbuild/blob/master/test/demo/filewatch.py).
@@ -294,20 +308,10 @@ task: Task
 
 # execute task individually (no pipeline, without dependencies and registered hooks)
 
-result = task(
+result = await task(
     *args, **kwds, 
     setup=setup_hook,
     teardown=teardown_hook)
-
-# equivalent to
-
-runner: TaskRunner = task.build(
-    *args, **kwds, 
-    setup=setup_hook,
-    teardown=teardown_hook)
-with runner as run:
-    run()
-result: TaskResult = runner.result
 ```
 
 ### Pipeline
@@ -323,14 +327,7 @@ tasklist: list[Task|str] = [task1, "task2"]
 
 # execute tasks and their dependencies
 
-result = pipeline(*tasklist)
-
-# equivalent to
-
-runner: PipelineRunner = pipeline.build(*tasklist)
-with runner as run:
-    run()
-result: PipelineResult = runner.result
+result = await pipeline(*tasklist)
 ```
 
 ## Extensions

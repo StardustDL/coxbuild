@@ -1,3 +1,4 @@
+import inspect
 import logging
 import sys
 import traceback
@@ -5,7 +6,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from graphlib import TopologicalSorter
 from queue import Queue
-from typing import Any, Callable
+from typing import Any, Awaitable, Callable
 
 from .exceptions import CoxbuildException
 from .runners import Runner
@@ -28,13 +29,13 @@ class TaskContext:
 @dataclass
 class TaskHook:
     """Hooks for a task."""
-    before: Callable[[TaskContext], bool] | None = None
+    before: Callable[[TaskContext], Awaitable[bool] | bool] | None = None
     """before task starting"""
-    setup: Callable[..., None] | None = None
+    setup: Callable[..., Awaitable | None] | None = None
     """setup before task running"""
-    teardown: Callable[..., None] | None = None
+    teardown: Callable[..., Awaitable | None] | None = None
     """teardown after task running"""
-    after: Callable[[TaskContext, TaskResult], None] | None = None
+    after: Callable[[TaskContext, TaskResult], Awaitable | None] | None = None
     """after task finished"""
 
 
@@ -67,13 +68,14 @@ class PipelineResult:
 @dataclass
 class PipelineHook:
     """Hooks for a pipeline."""
-    setup: Callable[[PipelineContext], bool] | None = None
+    setup: Callable[[PipelineContext], Awaitable[bool] | bool] | None = None
     """setup before pipeline running"""
-    before: Callable[[TaskContext], bool] | None = None
+    before: Callable[[TaskContext], Awaitable[bool] | bool] | None = None
     """before task starting"""
-    after: Callable[[TaskContext, TaskResult], None] | None = None
+    after: Callable[[TaskContext, TaskResult], Awaitable | None] | None = None
     """after task finished"""
-    teardown: Callable[[PipelineContext, PipelineResult], None] | None = None
+    teardown: Callable[[PipelineContext, PipelineResult],
+                       Awaitable | None] | None = None
     """teardown after pipeline running"""
 
 
@@ -96,12 +98,15 @@ class PipelineRunner(Runner):
 
         super().__init__(self._run)
 
-    def _run(self):
+    async def _run(self):
         n = len(self.tasks)
 
         if self.phook.setup:
             logger.debug(f"Run pipeline setup hook")
-            if self.phook.setup(self.context) == False:
+            pre = self.phook.setup(self.context)
+            if inspect.isawaitable(pre):
+                pre: bool = await pre
+            if pre == False:
                 message = "Stop pipeline running by pipeline setup hook"
                 logger.info(message)
                 print(message)
@@ -120,7 +125,10 @@ class PipelineRunner(Runner):
 
             if self.phook.before:
                 logger.debug(f"Run pipeline before hook for {task.name}")
-                if self.phook.before(tcontext) == False:
+                pre = self.phook.before(tcontext)
+                if inspect.isawaitable(pre):
+                    pre: bool = await pre
+                if pre == False:
                     message = f"Stop task {task.name} running by pipeline before hook"
                     logger.info(message)
                     print(message)
@@ -128,7 +136,10 @@ class PipelineRunner(Runner):
 
             if hook and hook.before:
                 logger.debug(f"Run task before hook for {task.name}")
-                if hook.before(tcontext) == False:
+                pre = hook.before(tcontext)
+                if inspect.isawaitable(pre):
+                    pre: bool = await pre
+                if pre == False:
                     message = f"Stop task {task.name} running by task before hook"
                     logger.info(message)
                     print(message)
@@ -137,35 +148,39 @@ class PipelineRunner(Runner):
             setup = hook.setup if hook and hook.setup else None
             teardown = hook.teardown if hook and hook.teardown else None
 
-            res = task(*tcontext.args, **tcontext.kwds,
-                       setup=setup, teardown=teardown)
+            res = await task(*tcontext.args, **tcontext.kwds,
+                             setup=setup, teardown=teardown)
 
             self._results.append(res)
 
             if hook and hook.after:
                 logger.debug(f"Run task after hook for {task.name}")
-                hook.after(tcontext, res)
+                post = hook.after(tcontext, res)
+                if inspect.isawaitable(post):
+                    await post
 
             if self.phook.after:
                 logger.debug(f"Run pipeline after hook for {task.name}")
-                self.phook.after(tcontext, res)
+                post = self.phook.after(tcontext, res)
+                if inspect.isawaitable(post):
+                    await post
 
             print("")
 
             if not res:
                 break
 
-    def __enter__(self) -> Callable[[], None]:
+    async def __aenter__(self) -> Callable[[], Awaitable | None]:
         logger.debug(f"Running pipeline: {self.tasks}")
         print(f"{'-'*20} ⌛ Running 🕰️ {datetime.now()} {'-'*20}")
 
         self.result = None
         self._results: list[TaskResult] = []
 
-        return super().__enter__()
+        return await super().__aenter__()
 
-    def __exit__(self, exc_type, exc_value, exc_tb) -> bool:
-        super().__exit__(exc_type, exc_value, exc_tb)
+    async def __aexit__(self, exc_type, exc_value, exc_tb) -> bool:
+        await super().__aexit__(exc_type, exc_value, exc_tb)
 
         exception = None if self.exc_value is None else CoxbuildException(
             f"Failed to run runner", cause=self.exc_value)
@@ -194,6 +209,10 @@ class PipelineRunner(Runner):
         del self._results
 
         return True
+
+    def __await__(self):
+        yield from super().__await__()
+        return self.result
 
 
 class Pipeline:
@@ -240,12 +259,6 @@ class Pipeline:
                 self.phook = thook
 
     def __call__(self, *args: str | Task, **kwds: Any):
-        runner = self.build(*args, **kwds)
-        with runner as run:
-            run()
-        return runner.result
-
-    def build(self, *args: str | Task, **kwds: Any):
         """
         Build runner of pipeline.
 

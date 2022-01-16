@@ -1,9 +1,11 @@
+import asyncio
+import inspect
 import logging
 import sys
 import traceback
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Any, Callable
+from typing import Any, Awaitable, Callable
 
 from .exceptions import CoxbuildException
 from .runners import Runner
@@ -39,11 +41,13 @@ class Task:
     """Task."""
 
     def __init__(self, name: str = "default",
-                 body: Callable[..., None] | None = None,
+                 body: Callable[..., Awaitable | None] | None = None,
                  doc: str = "",
                  deps: list[str] | None = None,
-                 precondition: Callable[..., bool] | None = None,
-                 postcondition: Callable[..., bool] | None = None
+                 precondition: Callable[...,
+                                        Awaitable[bool] | bool] | None = None,
+                 postcondition: Callable[...,
+                                         Awaitable[bool] | bool] | None = None
                  ) -> None:
         """
         Create task.
@@ -62,13 +66,7 @@ class Task:
         self.precondition = precondition
         self.postcondition = postcondition
 
-    def __call__(self, *args: Any, setup: Callable[..., None] | None = None, teardown: Callable[..., None] | None = None, **kwds: Any):
-        runner = self.build(*args, setup=setup, teardown=teardown, **kwds)
-        with runner as run:
-            run()
-        return runner.result
-
-    def build(self, *args: Any, setup: Callable[..., None] | None = None, teardown: Callable[..., None] | None = None, **kwds: Any):
+    def __call__(self, *args: Any, setup: Callable[..., Awaitable | None] | None = None, teardown: Callable[..., Awaitable | None] | None = None, **kwds: Any) -> TaskResult:
         """
         Build runner of task.
 
@@ -83,7 +81,7 @@ class Task:
 class TaskRunner(Runner):
     """Runner for task."""
 
-    def __init__(self, task: Task, args: list[Any], kwds: dict[str, Any],  setup: Callable[..., None] | None = None, teardown: Callable[..., None] | None = None) -> None:
+    def __init__(self, task: Task, args: list[Any], kwds: dict[str, Any], setup: Callable[..., Awaitable | None] | None = None, teardown: Callable[..., Awaitable | None] | None = None) -> None:
         self.task = task
         """task to run"""
         self.args = args
@@ -97,10 +95,13 @@ class TaskRunner(Runner):
 
         super().__init__(self._run)
 
-    def _run(self):
+    async def _run(self):
         if self.task.precondition is not None:
             logger.debug(f"Task {self.task.name} check precondition.")
             pre = self.task.precondition(*self.args, **self.kwds)
+            if inspect.isawaitable(pre):
+                pre: bool = await pre
+
             if not pre:
                 message = f"Task {self.task.name} ignored: precondition filtered"
                 logger.info(message)
@@ -109,34 +110,43 @@ class TaskRunner(Runner):
 
         if self.setup is not None:
             logger.debug(f"Task {self.task.name} setup hook.")
-            self.setup(*self.args, **self.kwds)
+            af = self.setup(*self.args, **self.kwds)
+            if inspect.isawaitable(af):
+                af = await af
 
         try:
             if self.task.body is not None:
                 logger.debug(f"Task {self.task.name} body execute.")
-                self.task.body(*self.args, **self.kwds)
+                af = self.task.body(*self.args, **self.kwds)
+                if inspect.isawaitable(af):
+                    af = await af
         finally:
             if self.teardown is not None:
                 logger.debug(f"Task {self.task.name} teardown hook.")
-                self.teardown(*self.args, **self.kwds)
+                af = self.teardown(*self.args, **self.kwds)
+                if inspect.isawaitable(af):
+                    af = await af
 
         if self.task.postcondition is not None:
             logger.debug(f"Task {self.task.name} check postcondition.")
             post = self.task.postcondition(*self.args, **self.kwds)
+            if inspect.isawaitable(post):
+                post: bool = await post
+
             if not post:
                 raise CoxbuildException(
                     f"Task {self.task.name} failed: postcondition checking broken")
 
-    def __enter__(self) -> Callable[[], None]:
+    async def __aenter__(self) -> Callable[[], Awaitable | None]:
         logger.debug(f"Start task {self.task.name}.")
         print(f"{'-'*3} 🔻 {self.task.name} 🕰️ {datetime.now()} {'-'*3}")
 
         self.result = None
 
-        return super().__enter__()
+        return await super().__aenter__()
 
-    def __exit__(self, exc_type, exc_value, exc_tb) -> bool:
-        super().__exit__(exc_type, exc_value, exc_tb)
+    async def __aexit__(self, exc_type, exc_value, exc_tb) -> bool:
+        await super().__aexit__(exc_type, exc_value, exc_tb)
 
         exception = None if self.exc_value is None else CoxbuildException(
             f"Failed to run task: {self.task.name}", cause=self.exc_value)
@@ -154,3 +164,7 @@ class TaskRunner(Runner):
             f"{'-'*3} 🔺 {self.task.name} {self.result.description} ⏱️ {self.result.duration} {'-'*3}")
 
         return True
+
+    def __await__(self):
+        yield from super().__await__()
+        return self.result

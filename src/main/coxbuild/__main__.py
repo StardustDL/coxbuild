@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 from pathlib import Path
@@ -66,7 +67,10 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
     if not tasks:
         tasks = ["default"]
 
-    result = schema.pipeline(*tasks)
+    async def wrapper():
+        return await schema.pipeline(*tasks)
+
+    result = asyncio.run(wrapper())
 
     if result:
         exit(0)

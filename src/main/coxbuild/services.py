@@ -7,6 +7,7 @@ from typing import Any, AsyncIterator, Awaitable, Callable
 import inspect
 
 from coxbuild.exceptions import CoxbuildException
+from coxbuild.runners import Runner
 
 logger = logging.getLogger("services")
 
@@ -89,10 +90,16 @@ class Service:
         logger.debug(f"Register event handler: {handler}")
         self.handlers.append(handler)
 
+    def __call__(self, *args: Any, **kwds: Any) -> Any:
+        return ServiceRunner(self)
+
+
+class ServiceRunner(Runner):
+    def __init__(self, service: Service) -> None:
+        self.service = service
+        super().__init__(self._run)
+
     async def _run(self):
         logger.debug("Run service.")
-        await asyncio.gather(*[e.handle() for e in self.handlers])
+        await asyncio.gather(*[e.handle() for e in self.service.handlers])
         logger.debug("Finish service.")
-
-    def __call__(self, *args: Any, **kwds: Any) -> Any:
-        asyncio.run(self._run())

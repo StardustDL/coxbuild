@@ -1,24 +1,26 @@
+import asyncio
 from datetime import timedelta
+import inspect
 from timeit import default_timer as timer
-from typing import Callable
+from typing import Awaitable, Callable
 
 
 class Runner:
-    """Generic runner."""
+    """Generic async runner."""
 
-    def __init__(self, func: Callable[[], None]) -> None:
+    def __init__(self, func: Callable[[], Awaitable | None]) -> None:
         self.func = func
         self.duration = timedelta()
         self.exc_type = None
         self.exc_value = None
         self.exc_tb = None
 
-    def __enter__(self) -> Callable[[], None]:
+    async def __aenter__(self) -> Callable[[], Awaitable | None]:
         self._tic = timer()
 
         return self.func
 
-    def __exit__(self, exc_type, exc_value, exc_tb) -> bool:
+    async def __aexit__(self, exc_type, exc_value, exc_tb) -> bool:
         self.exc_type = exc_type
         self.exc_value = exc_value
         self.exc_tb = exc_tb
@@ -27,3 +29,11 @@ class Runner:
 
         del self._tic
         return True
+
+    def __await__(self):
+        async def wrapper():
+            async with self as run:
+                res = run()
+                if inspect.isawaitable(res):
+                    res = await res
+        yield from wrapper().__await__()

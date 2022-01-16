@@ -12,6 +12,6 @@ def list():
 
 
 @task()
-def serve():
+async def serve():
     """Start event-based service."""
-    schema.service()
+    await schema.service()
