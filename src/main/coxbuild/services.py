@@ -17,6 +17,10 @@ class EventContext:
     kwds: dict[str, Any] = field(default_factory=dict)
     """keyword arguments"""
 
+    @classmethod
+    def build(cls, *args: Any, **kwds: Any) -> "EventContext":
+        return EventContext(args, kwds)
+
 
 EventType = AsyncIterator[EventContext | None]
 

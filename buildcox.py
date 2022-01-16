@@ -1,3 +1,4 @@
+from datetime import timedelta
 import os
 import shutil
 from pathlib import Path
@@ -76,6 +77,13 @@ def test_service():
 
 @depend(install)
 @task()
+def test_event_fs():
+    run([*demoCmdPre, "-f", "filewatch.py", ":serve"],
+        timeout=timedelta(seconds=3))
+
+
+@depend(install)
+@task()
 def test_command():
     run([*demoCmdPre, "-f", "command.py"])
     res = run([*demoCmdPre,
@@ -84,7 +92,7 @@ def test_command():
         raise Exception("Unexpected success for failing command.")
 
 
-@depend(demo, test_build, test_lifecycle, test_command, test_service, test_builtin)
+@depend(demo, test_build, test_lifecycle, test_command, test_service, test_builtin, test_event_fs)
 @task()
 def test():
     uninstall()

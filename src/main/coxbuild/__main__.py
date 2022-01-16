@@ -32,7 +32,7 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
 
     logger.debug(f"Logging level: {loggingLevel}")
 
-    os.chdir(str(Path(str(directory)).absolute()))
+    os.chdir(str(Path(str(directory)).resolve()))
 
     schemafile = Path(file)
 

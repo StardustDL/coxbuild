@@ -243,7 +243,7 @@ def teardown_pipeline(context: PipelineContext, result: PipelineResult):
     - ... (as same as Task 1)
 - Pipeline Teardown (Pipeline)
 
-Go [here](test/demo/lifecycle.py) to see how to hook these events and how they work.
+Go [here](https://github.com/StardustDL/coxbuild/blob/master/test/demo/lifecycle.py) to see how to hook these events and how they work.
 
 ```sh
 # See how lifecycle events occur
@@ -274,6 +274,8 @@ def do():
 def do_pipeline_at_next_second():
     pipeline("task1", task2)
 ```
+
+Example for watching filesystem changes, see [here](https://github.com/StardustDL/coxbuild/blob/master/test/demo/filewatch.py).
 
 To start the long-run service, use builtin task `:serve`.
 

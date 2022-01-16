@@ -1,3 +1,4 @@
+from datetime import timedelta
 import pathlib
 from dataclasses import asdict
 from typing import Awaitable, Callable
@@ -219,7 +220,7 @@ def on(event: Callable[[], Awaitable], safe: bool = False, name: str | None = No
 
 
 def run(cmds: list[str], env: dict[str, str] | None = None,
-        cwd: pathlib.Path | None = None, timeout: float | None = None,
+        cwd: pathlib.Path | None = None, timeout: timedelta | None = None,
         input: str | None = None,
         shell: bool = False, pipe: bool = False,
         retry: int = 0, fail: bool = False) -> CommandExecutionResult:

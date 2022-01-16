@@ -46,9 +46,9 @@ def settings(requirements: Path | None = None, buildSrc: Path | None = None, bui
     requirements = requirements or buildSrc.joinpath(
         "requirements.txt")
 
-    Settings.buildSrc = buildSrc.absolute()
-    Settings.buildDist = buildDist.absolute()
-    Settings.requirements = requirements.absolute()
+    Settings.buildSrc = buildSrc.resolve()
+    Settings.buildDist = buildDist.resolve()
+    Settings.requirements = requirements.resolve()
 
 
 settings()

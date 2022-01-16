@@ -43,7 +43,7 @@ class Settings:
 def settings(src: Path | None = None):
     src = src or coxbuild.get_working_directory()
 
-    Settings.src = src.absolute()
+    Settings.src = src.resolve()
 
 
 settings()

@@ -64,9 +64,9 @@ def forever(eventBuilder: Callable[[], EventType]):
     return repeat(eventBuilder, -1)
 
 
-def interval(duration: timedelta):
+def periodic(period: timedelta):
     """Occur forever in an interval."""
-    return forever(lambda: delay(duration))
+    return forever(lambda: delay(period))
 
 
 async def limit(event: EventType, number: int = 1):
