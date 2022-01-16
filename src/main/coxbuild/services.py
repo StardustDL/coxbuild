@@ -1,23 +1,33 @@
 import asyncio
 import logging
 import traceback
-from dataclasses import dataclass
-from typing import Any, Awaitable, Callable
+from dataclasses import dataclass, field
+from typing import Any, AsyncIterator, Callable
 
-from coxbuild.exceptions import CoxbuildException, EventNeverOccur
+from coxbuild.exceptions import CoxbuildException
 
 logger = logging.getLogger("services")
 
 
 @dataclass
+class EventContext:
+    """Event occur information."""
+    args: list[Any] = field(default_factory=list)
+    """arguments"""
+    kwds: dict[str, Any] = field(default_factory=dict)
+    """keyword arguments"""
+
+
+EventType = AsyncIterator[EventContext | None]
+
+
+@dataclass
 class EventHandler:
     """Handler for a event."""
-    event: Callable[[], Awaitable]
+    event: EventType
     """event generator, when the event occurs, the awaitable return"""
-    handler: Callable[[], None]
+    handler: Callable[..., None]
     """event handler"""
-    repeat: int = 0
-    """repeat times, 0 for no-repeat, positive integer for finite repeat, negative integer for infinite repeat"""
     safe: bool = False
     """prevent exception"""
     name: str = ""
@@ -26,38 +36,37 @@ class EventHandler:
     async def handle(self):
         logger.debug(f"Handle for event: {self.name}.")
 
-        while True:
-            try:
-                logger.debug(f"Wait for event: {self.name}.")
+        try:
+            async for context in self.event:
+                logger.debug(f"Event occurs: {self.name}({context}).")
+
+                logger.debug(f"Event handling: {self.name}({context}).")
 
                 try:
-                    await self.event()
-                except EventNeverOccur:
-                    logger.debug(f"Event never occur: {self.name}.")
-                    break
+                    if context:
+                        self.handler(*context.args, **context.kwds)
+                    else:
+                        self.handler()
+                except Exception as ex:
+                    if self.safe:
+                        print(
+                            f"Exception when event handler handling {self.name}({context}).")
+                        traceback.print_exception(ex)
+                    else:
+                        raise CoxbuildException(
+                            f"Exception when event handler handling {self.name}({context})", ex)
 
-                logger.debug(f"Event occurs: {self.name}.")
+                logger.debug(f"Event handled: {self.name}({context}).")
+        except Exception as ex:
+            logger.error(
+                f"Event handler '{self.name}' failed.", exc_info=ex)
 
-                logger.debug(f"Event handling: {self.name}.")
-
-                self.handler()
-
-                logger.debug(f"Event handled: {self.name}.")
-            except Exception as ex:
-                logger.error(
-                    f"Event handler '{self.name}' failed.", exc_info=ex)
-
-                if self.safe:
-                    print(f"Exception in event handler {self.name}.")
-                    traceback.print_exception(ex)
-                else:
-                    raise CoxbuildException(
-                        f"Exception in event handler {self.name}", ex)
-
-            if self.repeat == 0:
-                break
-            elif self.repeat > 0:
-                self.repeat -= 1
+            if self.safe:
+                print(f"Exception in event handler {self.name}.")
+                traceback.print_exception(ex)
+            else:
+                raise CoxbuildException(
+                    f"Exception in event handler {self.name}", ex)
 
         logger.debug(f"Finish handle for event: {self.name}.")
 

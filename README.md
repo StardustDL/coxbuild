@@ -254,21 +254,23 @@ coxbuild -D test/demo -f lifecycle.py
 
 You can schedule some build when event occurs.
 
-Coxbuild provides some builtin events in `coxbuild.events` module.
+Coxbuild provides some builtin events in `coxbuild.events` module, each event return an awaitable iterator, i.e. event generator.
 
 ```python
+from coxbuild.events import repeat, onceevent, once
 from coxbuild.events.datetime import attime
 
+@onceevent
 async def e():
     print(datetime.now())
     await asyncio.sleep(0.5)
 
-@on(event=e, repeat=1)
+@on(repeat(e, 2))
 def do():
     print(datetime.now())
     print("done")
 
-@on(attime(datetime.now() + timedelta(seconds=1)))
+@on(once(attime(datetime.now() + timedelta(seconds=1))))
 def do_pipeline_at_next_second():
     pipeline("task1", task2)
 ```

@@ -1,59 +1,61 @@
 from datetime import date, datetime, time, timedelta
 
-from ..exceptions import EventNeverOccur
-from . import delay, event
+from . import delay, occur, once, onceevent, limit
 
 
-@event
 async def attime(dt: datetime | date | time):
-    now = datetime.now()
+    while True:
+        now = datetime.now()
 
-    if isinstance(dt, date):
-        dt = datetime(dt.year, dt.month, dt.day,
-                      now.hour, now.minute, now.second)
-    elif isinstance(dt, time):
-        dt = datetime(now.year, now.month, now.day,
-                      dt.hour, dt.minute, dt.second)
-        if dt < now:
-            dt = dt + timedelta(days=1)
+        if isinstance(dt, date):
+            cdt = datetime(dt.year, dt.month, dt.day,
+                           now.hour, now.minute, now.second)
+        elif isinstance(dt, time):
+            cdt = datetime(now.year, now.month, now.day,
+                           dt.hour, dt.minute, dt.second)
+            if cdt < now:
+                cdt = cdt + timedelta(days=1)
 
-    if dt.date() == now.date() and dt.hour == now.hour and dt.minute == now.minute and dt.second == now.second:
-        return
-    elif now < dt:
-        await delay(dt - now)()
-    else:
-        raise EventNeverOccur()
+        if cdt.date() == now.date() and cdt.hour == now.hour and cdt.minute == now.minute and cdt.second == now.second:
+            yield
+        elif now < cdt:
+            await occur(delay(cdt - now))
+            yield
+        else:
+            break
 
+        now = datetime.now()
 
-@event
-async def tomorrow():
-    await attime(date.today() + timedelta(days=1))
+        # go to next time span
 
-
-@event
-async def nextWeek():
-    await attime(date.today() + timedelta(days=7))
-
-
-@event
-async def nextWeekdays(*weekdays: int):
-    today = date.today()
-    cur = today.weekday()
-    for i in range(1, 8):
-        if (cur + i) % 7 in weekdays:
-            await attime(today+timedelta(days=i))
-            return
-    raise EventNeverOccur()
+        if isinstance(dt, time):
+            await occur(delay(timedelta(hours=1)))
 
 
-@event
+def tomorrow():
+    return attime(date.today() + timedelta(days=1))
+
+
+def nextWeek():
+    return attime(date.today() + timedelta(days=7))
+
+
 async def weekdays(*weekdays: int):
-    today = date.today()
-    if today.weekday() in weekdays:
-        return
-    else:
-        await nextWeekdays(weekdays)
-
+    while True:
+        today = date.today()
+        cur = today.weekday()
+        if cur in weekdays:
+            yield
+        else:
+            done = False
+            for i in range(1, 8):
+                if (cur + i) % 7 in weekdays:
+                    done = True
+                    await occur(attime(today+timedelta(days=i)))
+                    yield
+                    await occur(tomorrow())
+            if not done:
+                break
 
 monday = weekdays(0)
 tuesday = weekdays(1)
@@ -63,16 +65,5 @@ friday = weekdays(4)
 saturday = weekdays(5)
 sunday = weekdays(6)
 
-nextMonday = nextWeekdays(0)
-nextTuesday = nextWeekdays(1)
-nextWednesday = nextWeekdays(2)
-nextThursday = nextWeekdays(3)
-nextFriday = nextWeekdays(4)
-nextSaturday = nextWeekdays(5)
-nextSunday = nextWeekdays(6)
-
 weekday = weekdays(0, 1, 2, 3, 4)
 weekend = weekdays(5, 6)
-
-nextWeekday = nextWeekdays(0, 1, 2, 3, 4)
-nextWeekend = nextWeekdays(5, 6)

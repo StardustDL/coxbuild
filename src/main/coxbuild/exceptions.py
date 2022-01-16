@@ -17,8 +17,3 @@ class CoxbuildException(Exception):
 
     def __repr__(self) -> str:
         return str(self)
-
-
-class EventNeverOccur(CoxbuildException):
-    """Raise when an event cannot occur."""
-    pass

@@ -200,7 +200,7 @@ def teardown(name: str | Task | Task | None = None):
     return decorator
 
 
-def on(event: Callable[[], Awaitable], repeat: int = 0, safe: bool = False, name: str | None = None):
+def on(event: Callable[[], Awaitable], safe: bool = False, name: str | None = None):
     """
     Register event handler.
 
@@ -211,7 +211,7 @@ def on(event: Callable[[], Awaitable], repeat: int = 0, safe: bool = False, name
     name: handler name, None to use function name
     """
     def decorator(handler: Callable[[], None]):
-        service.register(EventHandler(event, handler, repeat,
+        service.register(EventHandler(event, handler,
                          safe, name or handler.__name__))
         return handler
 
