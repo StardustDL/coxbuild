@@ -24,6 +24,8 @@ Extensions:
 - Node.js
 - .NET
 
+> [Test Coverage Report](https://stardustdl.github.io/coxbuild/)
+
 ## Install
 
 ```sh
