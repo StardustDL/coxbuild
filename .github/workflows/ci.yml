@@ -70,3 +70,10 @@ jobs:
       with:
         name: test-cov-{{ matrix.os }}
         path: ./htmlcov
+    - name: Deploy GitHub Pages
+      if: ${{ matrix.os == 'ubuntu-latest' }}
+      uses: JamesIves/github-pages-deploy-action@4.1.5
+      with:
+        token: ${{ secrets.PA_TOKEN }}
+        branch: gh-pages
+        folder: ./htmlcov

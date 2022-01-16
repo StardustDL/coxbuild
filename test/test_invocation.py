@@ -7,12 +7,11 @@ def test_run():
     result = run(CommandExecutionArgs(
         ["echo", "abc"], shell=True, cwd=get_working_directory(), pipe=True))
     assert result
-    assert result.stdout.strip() == "abc"
 
 
 def test_fail():
     result = run(CommandExecutionArgs(
-        ["cat", "abc.txt"], shell=True, cwd=get_working_directory(), pipe=True), fail=True, retry=1)
+        ["cat", "abc.txt"], cwd=get_working_directory(), pipe=True), fail=True, retry=1)
     assert not result
     assert not result.timeout
 
