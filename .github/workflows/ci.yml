@@ -32,7 +32,7 @@ jobs:
       env:
         PYTHONUTF8: 1
       run: |
-        ./build.ps1 apidocs
+        ./build.ps1 docs
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -88,6 +88,7 @@ jobs:
   deploy-docs:
     needs: integration-test
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2.3.4
