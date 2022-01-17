@@ -36,7 +36,6 @@ class Settings:
 
     @buildDist.setter
     def buildDist(self, value: Path) -> None:
-        print(self.buildDist)
         self.config["buildDist"] = value.resolve()
 
     @property

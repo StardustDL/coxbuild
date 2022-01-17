@@ -69,7 +69,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: test-cov-${{ matrix.os }}
-        path: ./htmlcov
+        path: ./test/htmlcov
   deploy-docs:
     needs: integration-test
     runs-on: ubuntu-latest

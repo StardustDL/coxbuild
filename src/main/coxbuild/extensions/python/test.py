@@ -19,7 +19,7 @@ def restore():
 def pytest():
     """Use pytest to test Python code."""
     run(["pytest", "--cov-report=term-missing",
-        "--cov-report=html", f"--cov={str(settings.buildSrc)}", str(settings.test)])
+        "--cov-report=html", f"--cov={str(settings.buildSrc)}"], cwd=str(settings.test))
 
 
 @depend(pytest)
