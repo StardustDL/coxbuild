@@ -4,7 +4,7 @@
 
 Coxbuild is a tiny python-script-based build automation tool, an alternative to make, psake and so on.
 
-![](https://raw.githubusercontent.com/StardustDL/coxbuild/master/docs/assets/images/demo.gif)
+![](https://raw.githubusercontent.com/StardustDL/coxbuild/master/docs/demo.gif)
 
 Supported features:
 
@@ -24,35 +24,4 @@ Extensions:
 - Node.js
 - .NET
 
-> [Documents](https://stardustdl.github.io/coxbuild/)
-
-> [Test Coverage Report](https://stardustdl.github.io/coxbuild/cov/)
-
-## Getting Started
-
-> Coxbuild build itself by itself, see [here](https://github.com/StardustDL/coxbuild/blob/master/buildcox.py) for details.
-
-1. Install
-
-```sh
-pip install coxbuild
-```
-
-2. Write Schema (buildcox.py)
-
-```python
-@task()
-def pre():
-    print("pre task")
-
-@depend(pre)
-@task()
-def default():
-    pass
-```
-
-3. Run
-
-```sh
-coxbuild
-```
+> [Test Coverage Report](https://stardustdl.github.io/coxbuild/cov)

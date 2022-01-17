@@ -70,7 +70,7 @@ jobs:
       with:
         name: test-cov-${{ matrix.os }}
         path: ./htmlcov
-  deploy-testcov:
+  deploy-docs:
     needs: integration-test
     runs-on: ubuntu-latest
     steps:
@@ -82,13 +82,13 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: test-cov-ubuntu-latest
-        path: ./htmlcov
+        path: ./docs/cov
     - name: Remove gitignore
       run: |
-        rm ./htmlcov/.gitignore
+        rm ./docs/cov/.gitignore
     - name: Deploy GitHub Pages
       uses: JamesIves/github-pages-deploy-action@4.1.5
       with:
         token: ${{ secrets.PA_TOKEN }}
         branch: gh-pages
-        folder: ./htmlcov
+        folder: ./docs
