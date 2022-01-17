@@ -177,11 +177,11 @@ def teardown_pipeline(context: PipelineContext, result: PipelineResult):
     - ... (as same as Task 1)
 - Pipeline Teardown (Pipeline)
 
-Go [here](https://github.com/StardustDL/coxbuild/blob/master/test/demo/lifecycle.py) to see how to hook these events and how they work.
+Go [here](https://github.com/StardustDL/coxbuild/blob/master/demo/lifecycle.py) to see how to hook these events and how they work.
 
 ```sh
 # See how lifecycle events occur
-coxbuild -D test/demo -f lifecycle.py
+coxbuild -D demo -f lifecycle.py
 ```
 
 ## Event
@@ -218,7 +218,7 @@ async def async_handler():
     print("after")
 ```
 
-Example for watching filesystem changes, see [here](https://github.com/StardustDL/coxbuild/blob/master/test/demo/filewatch.py).
+Example for watching filesystem changes, see [here](https://github.com/StardustDL/coxbuild/blob/master/demo/filewatch.py).
 
 To start the long-run service, use builtin task `:serve`.
 
