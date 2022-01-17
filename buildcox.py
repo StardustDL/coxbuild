@@ -40,13 +40,13 @@ def demo():
     run(["coxbuild", "--help"])
 
 
-demoCmdPre = ["coxbuild", "-vvv", "-D", "./test/demo"]
+demoCmdPre = ["coxbuild", "-vvv", "-D", "./demo"]
 
 
 @depend(install)
 @task()
 def test_build():
-    run(["coxbuild", "-vvvvv", "-D", "./test/demo"])
+    run(["coxbuild", "-vvvvv", "-D", "./demo"])
     res = run([*demoCmdPre, "-f", "fail.py"], fail=True)
     if res:
         raise Exception("Unexpected success for failing build.")
@@ -93,7 +93,17 @@ def test_command():
         raise Exception("Unexpected success for failing command.")
 
 
-@depend(demo, test_build, test_lifecycle, test_command, test_service, test_builtin, test_event_fs, pytest)
+@depend(test_build, test_lifecycle, test_command, test_service, test_builtin, test_event_fs)
+@task()
+def integrate_test(): pass
+
+
+@depend(pytest)
+@task()
+def unittest(): pass
+
+
+@depend(demo, integrate_test, pytest)
 @task()
 def test():
     uninstall()
@@ -101,23 +111,19 @@ def test():
 
 @depend(pydeploy)
 @task()
-def deploy():
-    pass
+def deploy(): pass
 
 
 @depend(pyrestore, pybuild)
 @task()
-def build():
-    pass
+def build(): pass
 
 
 @depend(pyformat)
 @task()
-def format():
-    pass
+def format(): pass
 
 
 @depend(build)
 @task()
-def default():
-    pass
+def default(): pass
