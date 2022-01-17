@@ -1,0 +1,86 @@
+coxbuild package
+================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   coxbuild.events
+   coxbuild.extensions
+
+Submodules
+----------
+
+coxbuild.configuration module
+-----------------------------
+
+.. automodule:: coxbuild.configuration
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+coxbuild.exceptions module
+--------------------------
+
+.. automodule:: coxbuild.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+coxbuild.invocation module
+--------------------------
+
+.. automodule:: coxbuild.invocation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+coxbuild.pipelines module
+-------------------------
+
+.. automodule:: coxbuild.pipelines
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+coxbuild.runners module
+-----------------------
+
+.. automodule:: coxbuild.runners
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+coxbuild.schema module
+----------------------
+
+.. automodule:: coxbuild.schema
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+coxbuild.services module
+------------------------
+
+.. automodule:: coxbuild.services
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+coxbuild.tasks module
+---------------------
+
+.. automodule:: coxbuild.tasks
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: coxbuild
+   :members:
+   :undoc-members:
+   :show-inheritance:

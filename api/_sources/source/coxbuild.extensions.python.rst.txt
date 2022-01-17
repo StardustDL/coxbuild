@@ -1,0 +1,53 @@
+coxbuild.extensions.python package
+==================================
+
+Submodules
+----------
+
+coxbuild.extensions.python.all module
+-------------------------------------
+
+.. automodule:: coxbuild.extensions.python.all
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+coxbuild.extensions.python.docs module
+--------------------------------------
+
+.. automodule:: coxbuild.extensions.python.docs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+coxbuild.extensions.python.format module
+----------------------------------------
+
+.. automodule:: coxbuild.extensions.python.format
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+coxbuild.extensions.python.package module
+-----------------------------------------
+
+.. automodule:: coxbuild.extensions.python.package
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+coxbuild.extensions.python.test module
+--------------------------------------
+
+.. automodule:: coxbuild.extensions.python.test
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: coxbuild.extensions.python
+   :members:
+   :undoc-members:
+   :show-inheritance:

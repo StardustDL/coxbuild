@@ -1,0 +1,10 @@
+coxbuild.extensions.nodejs package
+==================================
+
+Module contents
+---------------
+
+.. automodule:: coxbuild.extensions.nodejs
+   :members:
+   :undoc-members:
+   :show-inheritance:

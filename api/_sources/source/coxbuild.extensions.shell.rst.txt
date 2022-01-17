@@ -1,0 +1,10 @@
+coxbuild.extensions.shell package
+=================================
+
+Module contents
+---------------
+
+.. automodule:: coxbuild.extensions.shell
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,29 @@
+coxbuild.events package
+=======================
+
+Submodules
+----------
+
+coxbuild.events.datetime module
+-------------------------------
+
+.. automodule:: coxbuild.events.datetime
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+coxbuild.events.filesystems module
+----------------------------------
+
+.. automodule:: coxbuild.events.filesystems
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: coxbuild.events
+   :members:
+   :undoc-members:
+   :show-inheritance:

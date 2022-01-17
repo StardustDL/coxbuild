@@ -1,0 +1,10 @@
+coxbuild.extensions.git package
+===============================
+
+Module contents
+---------------
+
+.. automodule:: coxbuild.extensions.git
+   :members:
+   :undoc-members:
+   :show-inheritance:

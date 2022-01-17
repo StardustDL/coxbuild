@@ -1,0 +1,10 @@
+coxbuild.extensions.dotnet package
+==================================
+
+Module contents
+---------------
+
+.. automodule:: coxbuild.extensions.dotnet
+   :members:
+   :undoc-members:
+   :show-inheritance:
