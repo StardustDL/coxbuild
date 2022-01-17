@@ -21,31 +21,40 @@ class Settings:
         self.config["test"] = value.resolve()
 
     @property
-    def buildSrc(self) -> Path:
+    def src(self) -> Path:
         """Source code path to build."""
-        return self.config.get("buildSrc") or coxbuild.get_working_directory().resolve()
+        return self.config.get("src") or coxbuild.get_working_directory().resolve()
 
-    @buildSrc.setter
-    def buildSrc(self, value: Path) -> None:
-        self.config["buildSrc"] = value.resolve()
+    @src.setter
+    def src(self, value: Path) -> None:
+        self.config["src"] = value.resolve()
 
     @property
-    def buildDist(self) -> Path:
+    def package(self) -> Path:
         """Distribution path for building."""
-        return self.config.get("buildDist") or self.buildSrc.joinpath("dist").resolve()
+        return self.config.get("package") or self.src.joinpath("dist").resolve()
 
-    @buildDist.setter
-    def buildDist(self, value: Path) -> None:
-        self.config["buildDist"] = value.resolve()
+    @package.setter
+    def package(self, value: Path) -> None:
+        self.config["package"] = value.resolve()
 
     @property
     def requirements(self) -> Path:
         """Path to requirements.txt."""
-        return self.config.get("requirements") or self.buildSrc.joinpath("requirements.txt").resolve()
+        return self.config.get("requirements") or self.src.joinpath("requirements.txt").resolve()
 
     @requirements.setter
     def requirements(self, value: Path) -> None:
         self.config["requirements"] = value.resolve()
+    
+    @property
+    def apidocs(self) -> Path:
+        """Path to apidocs source."""
+        return self.config.get("apidocs") or coxbuild.get_working_directory().resolve()
+
+    @apidocs.setter
+    def apidocs(self, value: Path) -> None:
+        self.config["apidocs"] = value.resolve()
 
 
 settings = Settings(config.section("python"))

@@ -4,7 +4,11 @@
 
 Coxbuild is a tiny python-script-based build automation tool, an alternative to make, psake and so on.
 
-![](https://raw.githubusercontent.com/StardustDL/coxbuild/master/docs/demo.gif)
+> [References](https://stardustdl.github.io/coxbuild/api/)
+
+> [Test Coverage Report](https://stardustdl.github.io/coxbuild/cov/)
+
+![](./assets/images/demo.gif)
 
 Supported features:
 
@@ -23,5 +27,3 @@ Extensions:
 - Git
 - Node.js
 - .NET
-
-> [Test Coverage Report](https://stardustdl.github.io/coxbuild/cov)

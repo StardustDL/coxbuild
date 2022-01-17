@@ -11,14 +11,16 @@ from coxbuild.extensions.python.all import installBuilt as install
 from coxbuild.extensions.python.all import restore as pyrestore
 from coxbuild.extensions.python.all import uninstallBuilt as uninstall
 from coxbuild.extensions.python.all import test as pytest
+from coxbuild.extensions.python.all import apidoc as pyapidoc
 from coxbuild.schema import depend, run, setup, task, teardown
 
 readmeDst = Path("./src/main/README.md")
 
 settings.requirements = Path("./requirements.txt")
-settings.buildSrc = Path("./src/main")
-settings.buildDist = Path("./dist")
+settings.src = Path("./src/main")
+settings.package = Path("./dist")
 settings.test = Path("./test")
+settings.apidocs = Path("./docs/gen/ref")
 
 
 @setup(pybuild)
@@ -105,6 +107,11 @@ def unittest(): pass
 @task()
 def test():
     uninstall()
+
+
+@depend(pyapidoc)
+@task()
+def docs(): pass
 
 
 @depend(pydeploy)

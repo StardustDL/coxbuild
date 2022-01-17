@@ -64,9 +64,9 @@ def prebuild():
 @task()
 def build():
     """Build Python package."""
-    run(["python", "-m", "build", "-o", str(settings.buildDist)],
-        cwd=settings.buildSrc)
-    for item in settings.buildSrc.glob("*.egg-info"):
+    run(["python", "-m", "build", "-o", str(settings.package)],
+        cwd=settings.src)
+    for item in settings.src.glob("*.egg-info"):
         if not item.is_dir():
             continue
         shutil.rmtree(item)
@@ -76,14 +76,14 @@ def build():
 def installBuilt():
     """Install the built package."""
     run(["python", "-m", "pip", "install",
-        str(list(settings.buildDist.glob("*.whl"))[0])])
+        str(list(settings.package.glob("*.whl"))[0])])
 
 
 @task()
 def uninstallBuilt():
     """Uninstall the built package."""
     run(["python", "-m", "pip", "uninstall",
-        str(list(settings.buildDist.glob("*.whl"))[0]), "-y"])
+        str(list(settings.package.glob("*.whl"))[0]), "-y"])
 
 
 @depend(build)
@@ -91,4 +91,4 @@ def uninstallBuilt():
 def deploy():
     """Upload the package to PYPI."""
     run(["python", "-m", "twine", "upload",
-        "--skip-existing", "--repository", "pypi", str(settings.buildDist) + "/*"])
+        "--skip-existing", "--repository", "pypi", str(settings.package) + "/*"])

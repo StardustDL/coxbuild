@@ -10,7 +10,9 @@ pip install coxbuild
 
 Coxbuild build itself by itself, see [here](https://github.com/StardustDL/coxbuild/blob/master/buildcox.py) for details.
 
-### Write Schema (buildcox.py)
+### Write Schema
+
+Write in `buildcox.py`.
 
 ```python
 from coxbuild.schema import task, depend # this line can be omitted
