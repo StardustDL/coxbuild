@@ -16,6 +16,13 @@ def restore():
 
 @depend(restore)
 @task()
+def sphinx_init():
+    """Initialize sphinx to generate API documents."""
+    run(["sphinx-quickstart"], cwd=settings.apidocs)
+
+
+@depend(restore)
+@task()
 def sphinx_api():
     """Use sphinx to generate API documents."""
     run(["sphinx-apidoc", "-o", "source", str(settings.src)], cwd=settings.apidocs)
