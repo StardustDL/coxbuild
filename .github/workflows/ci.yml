@@ -60,16 +60,21 @@ jobs:
       with:
         name: dist
         path: ./dist
-    - name: Test
+    - name: Unit Test
       env:
         PYTHONUTF8: 1
       run: |
-        ./build.ps1 test
+        ./build.ps1 unittest
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: test-cov-${{ matrix.os }}
         path: ./test/htmlcov
+    - name: Integration Test
+      env:
+        PYTHONUTF8: 1
+      run: |
+        ./build.ps1 integrationtest
   deploy-docs:
     needs: integration-test
     runs-on: ubuntu-latest

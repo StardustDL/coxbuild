@@ -93,7 +93,7 @@ def test_command():
 
 @depend(test_build, test_lifecycle, test_command, test_service, test_builtin, test_event_fs)
 @task()
-def integrate_test(): pass
+def integrationtest(): pass
 
 
 @depend(pytest)
@@ -101,7 +101,7 @@ def integrate_test(): pass
 def unittest(): pass
 
 
-@depend(demo, integrate_test, pytest)
+@depend(demo, integrationtest, unittest)
 @task()
 def test():
     uninstall()
