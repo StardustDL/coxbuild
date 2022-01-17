@@ -1,53 +1,48 @@
 from pathlib import Path
 
 import coxbuild
+from coxbuild.configuration import Configuration
 from coxbuild.schema import config, group, run
 
 task = group("nodejs")
 
 
 class Settings:
-    mconfig = config.section("nodejs")
+    def __init__(self, config: Configuration) -> None:
+        self.config = config
 
     @property
-    @classmethod
-    def src(cls) -> Path:
-        return cls.mconfig["src"]
+    def src(self) -> Path:
+        """Path to source code."""
+        return self.config.get("src") or coxbuild.get_working_directory().resolve()
 
     @src.setter
-    @classmethod
-    def src(cls, value: Path) -> None:
-        cls.mconfig["src"] = value
+    def src(self, value: Path) -> None:
+        self.config["src"] = value.resolve()
 
 
-def settings(src: Path | None = None):
-    src = src or coxbuild.get_working_directory()
-
-    Settings.src = src.resolve()
-
-
-settings()
+settings = Settings(config.section("nodejs"))
 
 
 @task()
 def restore():
     """Restore npm packages (ci)."""
-    run(["npm", "ci"], cwd=Settings.src, retry=3)
+    run(["npm", "ci"], cwd=settings.src, retry=3)
 
 
 @task()
 def build():
     """Build npm project."""
-    run(["npm", "run", "build"], cwd=Settings.src)
+    run(["npm", "run", "build"], cwd=settings.src)
 
 
 @task()
 def dev():
     """Run dev script."""
-    run(["npm", "run", "dev"], cwd=Settings.src)
+    run(["npm", "run", "dev"], cwd=settings.src)
 
 
 @task()
 def serve():
     """Run serve script."""
-    run(["npm", "run", "serve"], cwd=Settings.src)
+    run(["npm", "run", "serve"], cwd=settings.src)

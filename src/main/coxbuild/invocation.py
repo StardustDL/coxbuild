@@ -74,7 +74,7 @@ def execmd(args: CommandExecutionArgs) -> CommandExecutionResult:
         result.stdout = te.stdout or ""
         result.stderr = te.stderr or ""
 
-    result.duration = timedelta(timer()-tic)
+    result.duration = timedelta(seconds=timer()-tic)
     logger.info(f"Executed command: {args} -> {result}")
     return result
 

@@ -1,7 +1,7 @@
 from coxbuild import get_working_directory
 from coxbuild.schema import depend, group, precond, run
 
-from . import Settings, task
+from . import settings, task
 from .package import hasPackages, upgradePackages
 
 task = group("format", task)

@@ -1,54 +1,52 @@
 from pathlib import Path
 
 import coxbuild
+from coxbuild.configuration import Configuration
 from coxbuild.schema import config, group, run
 
 task = group("python")
 
 
 class Settings:
-    mconfig = config.section("python")
+    def __init__(self, config: Configuration) -> None:
+        self.config = config
 
     @property
-    @classmethod
-    def buildSrc(cls) -> Path:
-        return cls.mconfig["buildSrc"]
+    def test(self) -> Path:
+        """Path to test code."""
+        return self.config.get("test") or coxbuild.get_working_directory().resolve()
+
+    @test.setter
+    def test(self, value: Path) -> None:
+        self.config["test"] = value.resolve()
+
+    @property
+    def buildSrc(self) -> Path:
+        """Source code path to build."""
+        return self.config.get("buildSrc") or coxbuild.get_working_directory().resolve()
 
     @buildSrc.setter
-    @classmethod
-    def buildSrc(cls, value: Path) -> None:
-        cls.mconfig["buildSrc"] = value
+    def buildSrc(self, value: Path) -> None:
+        self.config["buildSrc"] = value.resolve()
 
     @property
-    @classmethod
-    def buildDist(cls) -> Path:
-        return cls.mconfig["buildDist"]
+    def buildDist(self) -> Path:
+        """Distribution path for building."""
+        return self.config.get("buildDist") or self.buildSrc.joinpath("dist").resolve()
 
     @buildDist.setter
-    @classmethod
-    def buildDist(cls, value: Path) -> None:
-        cls.mconfig["buildDist"] = value
+    def buildDist(self, value: Path) -> None:
+        print(self.buildDist)
+        self.config["buildDist"] = value.resolve()
 
     @property
-    @classmethod
-    def requirements(cls) -> Path:
-        return cls.mconfig["requirements"]
+    def requirements(self) -> Path:
+        """Path to requirements.txt."""
+        return self.config.get("requirements") or self.buildSrc.joinpath("requirements.txt").resolve()
 
     @requirements.setter
-    @classmethod
-    def requirements(cls, value: Path) -> None:
-        cls.mconfig["requirements"] = value
+    def requirements(self, value: Path) -> None:
+        self.config["requirements"] = value.resolve()
 
 
-def settings(requirements: Path | None = None, buildSrc: Path | None = None, buildDist: Path | None = None):
-    buildSrc = buildSrc or coxbuild.get_working_directory()
-    buildDist = buildDist or buildSrc.joinpath("dist")
-    requirements = requirements or buildSrc.joinpath(
-        "requirements.txt")
-
-    Settings.buildSrc = buildSrc.resolve()
-    Settings.buildDist = buildDist.resolve()
-    Settings.requirements = requirements.resolve()
-
-
-settings()
+settings = Settings(config.section("python"))

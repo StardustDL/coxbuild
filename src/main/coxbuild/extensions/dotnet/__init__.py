@@ -1,72 +1,97 @@
 from pathlib import Path
 
 import coxbuild
+from coxbuild.configuration import Configuration
 from coxbuild.schema import config, group, run
 
 task = group("dotnet")
 
 
 class Settings:
-    mconfig = config.section("dotnet")
+    def __init__(self, config: Configuration) -> None:
+        self.config = config
 
     @property
-    @classmethod
-    def src(cls) -> Path:
-        return cls.mconfig["src"]
+    def src(self) -> Path:
+        """Path to source code."""
+        return self.config.get("src") or coxbuild.get_working_directory().resolve()
 
     @src.setter
-    @classmethod
-    def src(cls, value: Path) -> None:
-        cls.mconfig["src"] = value
+    def src(self, value: Path) -> None:
+        self.config["src"] = value.resolve()
 
     @property
-    @classmethod
-    def buildVersion(cls) -> Path:
-        return cls.mconfig["buildVersion"]
+    def version(self) -> str | None:
+        """Build version."""
+        return self.config.get("version") or None
 
-    @buildVersion.setter
-    @classmethod
-    def buildVersion(cls, value: Path) -> None:
-        cls.mconfig["buildVersion"] = value
+    @version.setter
+    def version(self, value: str | None) -> None:
+        self.config["version"] = value
 
     @property
-    @classmethod
-    def buildConfig(cls) -> Path:
-        return cls.mconfig["buildConfig"]
+    def buildConfig(self) -> str:
+        """Build configuration."""
+        return self.config.get("buildConfig") or "Release"
 
     @buildConfig.setter
-    @classmethod
-    def buildConfig(cls, value: Path) -> None:
-        cls.mconfig["buildConfig"] = value
+    def buildConfig(self, value: str) -> None:
+        self.config["buildConfig"] = value
+
+    @property
+    def packDist(self) -> Path:
+        """Path to packed ditribution."""
+        return self.config.get("packDist") or self.src.joinpath("dist").resolve()
+
+    @packDist.setter
+    def packDist(self, value: Path) -> None:
+        self.config["packDist"] = value.resolve()
+
+    @property
+    def nugetSource(self) -> str:
+        """Url to NuGet source."""
+        return self.config.get("nugetSource") or "https://api.nuget.org/v3/index.json"
+
+    @nugetSource.setter
+    def nugetSource(self, value: str) -> None:
+        self.config["nugetSource"] = value
+
+    @property
+    def nugetToken(self) -> str:
+        """Token to NuGet source."""
+        return self.config.get("nugetToken") or ""
+
+    @nugetToken.setter
+    def nugetToken(self, value: str) -> None:
+        self.config["nugetToken"] = value
 
 
-def settings(src: Path | None = None):
-    src = src or coxbuild.get_working_directory()
-
-    Settings.src = src.resolve()
-
-
-settings()
+settings = Settings(config.section("dotnet"))
 
 
 @task()
 def restore():
-    run(["dotnet", "restore"], cwd=Settings.src, retry=3)
+    run(["dotnet", "restore"], cwd=settings.src, retry=3)
 
 
 @task()
 def build():
-    run(["dotnet", "build", "-c", "Release",
-        "/p:Version=$build_version"], cwd=Settings.src)
+    args = ["dotnet", "build", "-c", settings.buildConfig]
+    if settings.version:
+        args.append(f"/p:Version={settings.version}")
+    run(args, cwd=settings.src)
 
 
 @task()
 def pack():
-    run(["dotnet", "pack", "-c", "Release",
-        "/p:Version=$build_version", "-o", "dist"], cwd=Settings.src)
+    args = ["dotnet", "pack", "-c", settings.buildConfig]
+    if settings.version:
+        args.append(f"/p:Version={settings.version}")
+    args.extend(["-o", str(settings.packDist)])
+    run(args, cwd=settings.src)
 
 
 @task()
 def push():
-    run(["dotnet", "nuget", "push", "dist/*.nupkg", "-s",
-        "https://api.nuget.org/v3/index.json", "-k", "token"])
+    run(["dotnet", "nuget", "push", f"{str(settings.packDist)}/*",
+        "-s", settings.nugetSource, "-k", settings.nugetToken])

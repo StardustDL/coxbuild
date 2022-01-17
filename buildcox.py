@@ -3,24 +3,22 @@ import shutil
 from datetime import timedelta
 from pathlib import Path
 
-from coxbuild.extensions.python.all import Settings
+from coxbuild.extensions.python.all import settings
 from coxbuild.extensions.python.all import build as pybuild
 from coxbuild.extensions.python.all import deploy as pydeploy
 from coxbuild.extensions.python.all import format as pyformat
 from coxbuild.extensions.python.all import installBuilt as install
 from coxbuild.extensions.python.all import restore as pyrestore
-from coxbuild.extensions.python.all import settings as pysettings
 from coxbuild.extensions.python.all import uninstallBuilt as uninstall
 from coxbuild.extensions.python.all import test as pytest
 from coxbuild.schema import depend, run, setup, task, teardown
 
 readmeDst = Path("./src/main/README.md")
 
-pysettings(
-    requirements=Path("./requirements.txt"),
-    buildSrc=Path("./src/main"),
-    buildDist=Path("./dist")
-)
+settings.requirements = Path("./requirements.txt")
+settings.buildSrc = Path("./src/main")
+settings.buildDist = Path("./dist")
+settings.test = Path("./test")
 
 
 @setup(pybuild)

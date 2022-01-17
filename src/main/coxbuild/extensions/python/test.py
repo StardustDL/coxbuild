@@ -1,7 +1,7 @@
 from coxbuild import get_working_directory
 from coxbuild.schema import depend, group, precond, run
 
-from . import Settings, task
+from . import settings, task
 from .package import hasPackages, upgradePackages
 
 task = group("test", task)
@@ -19,7 +19,7 @@ def restore():
 def pytest():
     """Use pytest to test Python code."""
     run(["pytest", "--cov-report=term-missing",
-        "--cov-report=html", f"--cov={str(Settings.buildSrc)}"])
+        "--cov-report=html", f"--cov={str(settings.buildSrc)}", str(settings.test)])
 
 
 @depend(pytest)

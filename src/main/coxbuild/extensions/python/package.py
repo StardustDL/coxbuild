@@ -4,7 +4,7 @@ from typing import Tuple
 
 from coxbuild.schema import depend, group, precond, run
 
-from . import Settings, task
+from . import settings, task
 
 task = group("package", task)
 
@@ -38,7 +38,7 @@ def upgradePackages(*packages: str):
 
 
 def needRestore():
-    req: Path = Settings.requirements
+    req: Path = settings.requirements
     if not req.exists():
         return False
     reqs = loadFromRequirements(req.read_text("utf-8").splitlines())
@@ -50,7 +50,7 @@ def needRestore():
 def restore():
     """Restore Python packages from requirements.txt."""
     run(["python", "-m", "pip", "install", "-r",
-        str(Settings.requirements)], retry=3)
+        str(settings.requirements)], retry=3)
 
 
 @precond(lambda: not hasPackages({"build": "*", "twine": "*"}))
@@ -64,9 +64,9 @@ def prebuild():
 @task()
 def build():
     """Build Python package."""
-    run(["python", "-m", "build", "-o", str(Settings.buildDist)],
-        cwd=Settings.buildSrc)
-    for item in Settings.buildSrc.glob("*.egg-info"):
+    run(["python", "-m", "build", "-o", str(settings.buildDist)],
+        cwd=settings.buildSrc)
+    for item in settings.buildSrc.glob("*.egg-info"):
         if not item.is_dir():
             continue
         shutil.rmtree(item)
@@ -76,14 +76,14 @@ def build():
 def installBuilt():
     """Install the built package."""
     run(["python", "-m", "pip", "install",
-        str(list(Settings.buildDist.glob("*.whl"))[0])])
+        str(list(settings.buildDist.glob("*.whl"))[0])])
 
 
 @task()
 def uninstallBuilt():
     """Uninstall the built package."""
     run(["python", "-m", "pip", "uninstall",
-        str(list(Settings.buildDist.glob("*.whl"))[0]), "-y"])
+        str(list(settings.buildDist.glob("*.whl"))[0]), "-y"])
 
 
 @depend(build)
@@ -91,4 +91,4 @@ def uninstallBuilt():
 def deploy():
     """Upload the package to PYPI."""
     run(["python", "-m", "twine", "upload",
-        "--skip-existing", "--repository", "pypi", str(Settings.buildDist) + "/*"])
+        "--skip-existing", "--repository", "pypi", str(settings.buildDist) + "/*"])

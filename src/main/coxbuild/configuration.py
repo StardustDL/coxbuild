@@ -27,6 +27,10 @@ class Configuration:
             pre = f"{self.name}:"
         return (key for key in self.data if key.startswith(pre))
 
+    def get(self, key: str) -> Any | None:
+        id = self._getid(key)
+        return self.data.get(id)
+
     def __getitem__(self, key: str) -> Any:
         id = self._getid(key)
         return self.data[id]

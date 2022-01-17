@@ -11,9 +11,7 @@ def test_run():
 
 def test_fail():
     result = run(CommandExecutionArgs(
-        ["cat", "abc.txt"], cwd=get_working_directory(), pipe=True), fail=True, retry=1)
-    assert not result
-    assert not result.timeout
+        ["cat", "abc.txt"], shell=True, cwd=get_working_directory(), pipe=True), fail=True, retry=1)
 
 
 def test_timeout():
