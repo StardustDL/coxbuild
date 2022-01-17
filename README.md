@@ -57,4 +57,8 @@ def default():
 
 ```sh
 coxbuild
+
+# or a shortcut
+
+cb
 ```
