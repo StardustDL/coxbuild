@@ -35,6 +35,10 @@ coxbuild
     [-f <file name = 'buildcox.py'>]
     [task names = 'default']
 
+# or a shortcut
+
+cb [options]
+
 # Run default schema and default task
 coxbuild
 # equivalent to
