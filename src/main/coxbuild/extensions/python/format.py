@@ -1,3 +1,4 @@
+from pathlib import Path
 from coxbuild import get_working_directory
 from coxbuild.schema import depend, group, precond, run
 
@@ -16,16 +17,16 @@ def restore():
 
 @depend(restore)
 @task()
-def autopep8():
+def autopep8(path: Path | None = None):
     """Use autopep8 to format Python code."""
-    run(["autopep8", "-r", "--in-place", str(get_working_directory())])
+    run(["autopep8", "-r", "--in-place", str(path or get_working_directory())])
 
 
 @depend(restore)
 @task()
-def isort():
+def isort(path: Path | None = None):
     """Use isort to format Python imports."""
-    for file in get_working_directory().glob("**/*.py"):
+    for file in (path or get_working_directory()).glob("**/*.py"):
         if file.is_dir():
             continue
         run(["isort", str(file)])

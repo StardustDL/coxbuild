@@ -47,10 +47,10 @@ def needRestore():
 
 @precond(needRestore)
 @task()
-def restore():
+def restore(requirements: Path | None = None):
     """Restore Python packages from requirements.txt."""
     run(["python", "-m", "pip", "install", "-r",
-        str(settings.requirements)], retry=3)
+        str(requirements or settings.requirements)], retry=3)
 
 
 @precond(lambda: not hasPackages({"build": "*", "twine": "*"}))
@@ -62,33 +62,34 @@ def prebuild():
 
 @depend(prebuild)
 @task()
-def build():
+def build(src: Path | None = None, dist: Path | None = None):
     """Build Python package."""
-    run(["python", "-m", "build", "-o", str(settings.package)],
-        cwd=settings.src)
-    for item in settings.src.glob("*.egg-info"):
+    src = src or settings.src
+    run(["python", "-m", "build", "-o", str(dist or settings.package)],
+        cwd=src)
+    for item in src.glob("*.egg-info"):
         if not item.is_dir():
             continue
         shutil.rmtree(item)
 
 
 @task()
-def installBuilt():
+def installBuilt(dist: Path | None = None):
     """Install the built package."""
     run(["python", "-m", "pip", "install",
-        str(list(settings.package.glob("*.whl"))[0])])
+        str(list((dist or settings.package).glob("*.whl"))[0])])
 
 
 @task()
-def uninstallBuilt():
+def uninstallBuilt(dist: Path | None = None):
     """Uninstall the built package."""
     run(["python", "-m", "pip", "uninstall",
-        str(list(settings.package.glob("*.whl"))[0]), "-y"])
+        str(list((dist or settings.package).glob("*.whl"))[0]), "-y"])
 
 
 @depend(build)
 @task()
-def deploy():
+def deploy(dist: Path | None = None):
     """Upload the package to PYPI."""
     run(["python", "-m", "twine", "upload",
-        "--skip-existing", "--repository", "pypi", str(settings.package) + "/*"])
+        "--skip-existing", "--repository", "pypi", str(dist or settings.package) + "/*"])

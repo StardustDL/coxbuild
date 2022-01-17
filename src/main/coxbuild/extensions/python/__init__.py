@@ -14,7 +14,7 @@ class Settings:
     @property
     def test(self) -> Path:
         """Path to test code."""
-        return self.config.get("test") or coxbuild.get_working_directory().resolve()
+        return self.config.get("test") or coxbuild.get_working_directory().joinpath("test").resolve()
 
     @test.setter
     def test(self, value: Path) -> None:
@@ -23,7 +23,7 @@ class Settings:
     @property
     def src(self) -> Path:
         """Source code path to build."""
-        return self.config.get("src") or coxbuild.get_working_directory().resolve()
+        return self.config.get("src") or coxbuild.get_working_directory().joinpath("src").resolve()
 
     @src.setter
     def src(self, value: Path) -> None:
@@ -32,7 +32,7 @@ class Settings:
     @property
     def package(self) -> Path:
         """Distribution path for building."""
-        return self.config.get("package") or self.src.joinpath("dist").resolve()
+        return self.config.get("package") or coxbuild.get_working_directory().joinpath("dist").resolve()
 
     @package.setter
     def package(self, value: Path) -> None:
@@ -46,11 +46,11 @@ class Settings:
     @requirements.setter
     def requirements(self, value: Path) -> None:
         self.config["requirements"] = value.resolve()
-    
+
     @property
     def apidocs(self) -> Path:
         """Path to apidocs source."""
-        return self.config.get("apidocs") or coxbuild.get_working_directory().resolve()
+        return self.config.get("apidocs") or coxbuild.get_working_directory().joinpath("docs").resolve()
 
     @apidocs.setter
     def apidocs(self, value: Path) -> None:
