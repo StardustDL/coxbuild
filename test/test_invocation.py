@@ -1,6 +1,7 @@
 from datetime import timedelta
-from coxbuild.invocation import CommandExecutionArgs, run
+
 from coxbuild import get_working_directory
+from coxbuild.invocation import CommandExecutionArgs, run
 
 
 def test_run():

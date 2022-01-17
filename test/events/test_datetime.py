@@ -1,12 +1,14 @@
-from coxbuild.events.datetime import attime, weekdays
-
 import asyncio
-from datetime import datetime, timedelta
-from coxbuild.events import limit, once
-from coxbuild.events.filesystems import FileSystemChangeType, FileSystemEntry, changed
-import pytest
 import os
+from datetime import datetime, timedelta
 from pathlib import Path
+
+import pytest
+
+from coxbuild.events import limit, once
+from coxbuild.events.datetime import attime, weekdays
+from coxbuild.events.filesystems import (FileSystemChangeType, FileSystemEntry,
+                                         changed)
 
 
 @pytest.mark.asyncio

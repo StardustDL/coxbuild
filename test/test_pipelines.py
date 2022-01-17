@@ -1,8 +1,9 @@
 import asyncio
-from coxbuild.tasks import Task
-from coxbuild.pipelines import Pipeline, PipelineHook, TaskHook
 
 import pytest
+
+from coxbuild.pipelines import Pipeline, PipelineHook, TaskHook
+from coxbuild.tasks import Task
 
 
 def taskpre(l: list):

@@ -1,6 +1,6 @@
 import asyncio
-from datetime import timedelta
 import inspect
+from datetime import timedelta
 from timeit import default_timer as timer
 from typing import Awaitable, Callable
 

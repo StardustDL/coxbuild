@@ -1,7 +1,8 @@
 import asyncio
-from coxbuild.tasks import Task
 
 import pytest
+
+from coxbuild.tasks import Task
 
 
 @pytest.mark.asyncio

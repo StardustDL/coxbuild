@@ -48,13 +48,13 @@ class Settings:
         self.config["requirements"] = value.resolve()
 
     @property
-    def apidocs(self) -> Path:
-        """Path to apidocs source."""
-        return self.config.get("apidocs") or coxbuild.get_working_directory().joinpath("docs").resolve()
+    def docs(self) -> Path:
+        """Path to docs source."""
+        return self.config.get("docs") or coxbuild.get_working_directory().joinpath("docs").resolve()
 
-    @apidocs.setter
-    def apidocs(self, value: Path) -> None:
-        self.config["apidocs"] = value.resolve()
+    @docs.setter
+    def docs(self, value: Path) -> None:
+        self.config["docs"] = value.resolve()
 
 
 settings = Settings(config.section("python"))

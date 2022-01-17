@@ -1,8 +1,10 @@
 import asyncio
 from datetime import timedelta
-from coxbuild.services import EventHandler, Service
-from coxbuild.events import delay, onceevent
+
 import pytest
+
+from coxbuild.events import delay, onceevent
+from coxbuild.services import EventHandler, Service
 
 
 @pytest.mark.asyncio

@@ -1,6 +1,8 @@
 from datetime import timedelta
-from coxbuild.events import delay, limit, occur, once, periodic
+
 import pytest
+
+from coxbuild.events import delay, limit, occur, once, periodic
 
 
 @pytest.mark.asyncio

@@ -1,7 +1,8 @@
 import asyncio
-from coxbuild.runners import Runner
 
 import pytest
+
+from coxbuild.runners import Runner
 
 
 @pytest.mark.asyncio

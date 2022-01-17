@@ -1,10 +1,10 @@
 import asyncio
+import inspect
 import logging
 import sys
 import traceback
 from dataclasses import dataclass, field
 from typing import Any, AsyncIterator, Awaitable, Callable
-import inspect
 
 from coxbuild.exceptions import CoxbuildException
 from coxbuild.runners import Runner
