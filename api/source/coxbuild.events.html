@@ -182,7 +182,8 @@ type: change type to watch</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="coxbuild.events.delay">
 <span class="sig-prename descclassname"><span class="pre">coxbuild.events.</span></span><span class="sig-name descname"><span class="pre">delay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.timedelta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.events.delay" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Delay occur.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="coxbuild.events.forever">
@@ -195,6 +196,12 @@ type: change type to watch</p>
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.events.</span></span><span class="sig-name descname"><span class="pre">limit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncIterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="coxbuild.html#coxbuild.services.EventContext" title="coxbuild.services.EventContext"><span class="pre">coxbuild.services.EventContext</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.events.limit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Limit event occur times.</p>
 <p>number: limit times, 0 for no-occur, positive integer for finite occur, negative integer for infinite occur</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coxbuild.events.now">
+<span class="sig-prename descclassname"><span class="pre">coxbuild.events.</span></span><span class="sig-name descname"><span class="pre">now</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.events.now" title="Permalink to this definition">¶</a></dt>
+<dd><p>Occur immediately.</p>
 </dd></dl>
 
 <dl class="py function">

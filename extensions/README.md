@@ -29,3 +29,9 @@ import coxbuild.extensions.dotnet
 ```python
 import coxbuild.extensions.git
 ```
+
+## Gradle
+
+```python
+import coxbuild.extensions.gradle
+```

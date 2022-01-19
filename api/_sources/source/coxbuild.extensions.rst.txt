@@ -10,6 +10,7 @@ Subpackages
    coxbuild.extensions.builtin
    coxbuild.extensions.dotnet
    coxbuild.extensions.git
+   coxbuild.extensions.gradle
    coxbuild.extensions.nodejs
    coxbuild.extensions.python
    coxbuild.extensions.shell

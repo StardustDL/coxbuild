@@ -1,0 +1,10 @@
+coxbuild.extensions.gradle package
+==================================
+
+Module contents
+---------------
+
+.. automodule:: coxbuild.extensions.gradle
+   :members:
+   :undoc-members:
+   :show-inheritance:

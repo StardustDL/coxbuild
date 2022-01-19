@@ -27,3 +27,4 @@ Extensions:
 - Git
 - Node.js
 - .NET
+- Gradle
