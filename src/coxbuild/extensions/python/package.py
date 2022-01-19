@@ -5,6 +5,7 @@ from typing import Tuple
 from coxbuild.schema import depend, group, precond, run
 
 from . import settings, task
+from .. import projectSettings
 
 task = group("package", task)
 
@@ -64,8 +65,8 @@ def prebuild():
 @task()
 def build(src: Path | None = None, dist: Path | None = None):
     """Build Python package."""
-    src = src or settings.src
-    run(["python", "-m", "build", "-o", str(dist or settings.package)],
+    src = src or projectSettings.src
+    run(["python", "-m", "build", "-o", str(dist or projectSettings.package)],
         cwd=src)
     for item in src.glob("*.egg-info"):
         if not item.is_dir():
@@ -77,14 +78,14 @@ def build(src: Path | None = None, dist: Path | None = None):
 def installBuilt(dist: Path | None = None):
     """Install the built package."""
     run(["python", "-m", "pip", "install",
-        str(list((dist or settings.package).glob("*.whl"))[0])])
+        str(list((dist or projectSettings.package).glob("*.whl"))[0])])
 
 
 @task()
 def uninstallBuilt(dist: Path | None = None):
     """Uninstall the built package."""
     run(["python", "-m", "pip", "uninstall",
-        str(list((dist or settings.package).glob("*.whl"))[0]), "-y"])
+        str(list((dist or projectSettings.package).glob("*.whl"))[0]), "-y"])
 
 
 @depend(build)
@@ -92,4 +93,4 @@ def uninstallBuilt(dist: Path | None = None):
 def deploy(dist: Path | None = None):
     """Upload the package to PYPI."""
     run(["python", "-m", "twine", "upload",
-        "--skip-existing", "--repository", "pypi", str(dist or settings.package) + "/*"])
+        "--skip-existing", "--repository", "pypi", str(dist or projectSettings.package) + "/*"])

@@ -3,6 +3,7 @@ from pathlib import Path
 from coxbuild import get_working_directory
 from coxbuild.schema import depend, group, precond, run
 
+from .. import projectSettings
 from . import settings, task
 from .package import hasPackages, upgradePackages
 
@@ -20,15 +21,15 @@ def restore():
 @task()
 def sphinx_init(docs: Path | None = None):
     """Initialize sphinx to generate API documents."""
-    run(["sphinx-quickstart"], cwd=docs or settings.docs)
+    run(["sphinx-quickstart"], cwd=docs or projectSettings.docs)
 
 
 @depend(restore)
 @task()
 def sphinx_api(src: Path | None = None, docs: Path | None = None):
     """Use sphinx to generate API documents."""
-    run(["sphinx-apidoc", "-o", "source", str(src or settings.src)],
-        cwd=docs or settings.docs)
+    run(["sphinx-apidoc", "-o", "source", str(src or projectSettings.src)],
+        cwd=docs or projectSettings.docs)
 
 
 @depend(sphinx_api)
@@ -36,11 +37,11 @@ def sphinx_api(src: Path | None = None, docs: Path | None = None):
 def sphinx_html(docs: Path | None = None):
     """Use sphinx to generate API documents in HTML."""
     run(["sphinx-build", "-b", "html", ".", "_build"],
-        cwd=docs or settings.docs)
+        cwd=docs or projectSettings.docs)
 
 
 @depend(sphinx_html)
 @task()
 def apidoc():
-    """Generate API documents to {settings.docs}/_build."""
+    """Generate API documents to {projectSettings.docs}/_build."""
     pass

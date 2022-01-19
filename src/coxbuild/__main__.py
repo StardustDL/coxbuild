@@ -45,24 +45,12 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
     src = schemafile.read_text(encoding="utf-8")
 
     import coxbuild.extensions.builtin
+
     from coxbuild import schema
 
     code = compile(src, schemafile, "exec")
 
-    exec(code, {
-        "task": schema.task,
-        "depend": schema.depend,
-        "run": schema.run,
-        "group": schema.group,
-        "precond": schema.precond,
-        "postcond": schema.postcond,
-        "invoke": schema.invoke,
-        "before": schema.before,
-        "after": schema.after,
-        "setup": schema.setup,
-        "teardown": schema.teardown,
-        "on": schema.on,
-    })
+    exec(code, {attr: getattr(schema, attr) for attr in dir(schema)})
 
     if not tasks:
         tasks = ["default"]

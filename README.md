@@ -29,6 +29,7 @@ Extensions:
 - Git
 - Node.js
 - .NET
+- Gradle
 
 ## Getting Started
 

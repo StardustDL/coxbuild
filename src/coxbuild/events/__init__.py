@@ -26,7 +26,13 @@ def onceevent(f: Callable[P, Awaitable[EventContext | None]]) -> Callable[P, Eve
 
 @onceevent
 async def delay(duration: timedelta):
+    """Delay occur."""
     await asyncio.sleep(duration.total_seconds())
+
+
+def now():
+    """Occur immediately."""
+    return delay(timedelta(seconds=0))
 
 
 async def repeat(eventBuilder: Callable[[], EventType], repeat: int = 0, continueOnError: bool = False):

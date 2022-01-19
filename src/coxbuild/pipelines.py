@@ -267,14 +267,27 @@ class Pipeline:
 
         logger.debug(f"Build pipeline by {args}.")
 
+        unmatchedNames = []
+
         tks: set[str] = set()
         q: Queue[str] = Queue()
         for name in args:
             if isinstance(name, Task):
                 name = name.name
-            if name in self.tasks and name not in tks:
-                tks.add(name)
-                q.put(name)
+            if name in self.tasks:
+                if name not in tks:
+                    tks.add(name)
+                    q.put(name)
+            else:
+                unmatchedNames.append(name)
+
+        from .schema import executionState
+        executionState.unmatchedTasks = unmatchedNames
+
+        if len(unmatchedNames) > 0:
+            message = f"Not found task names: {unmatchedNames}"
+            logger.warning(message)
+            print(message)
 
         while not q.empty():
             t = q.get()

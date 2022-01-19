@@ -58,3 +58,17 @@ class Configuration:
         env = self.env()
         for key in os.environ:
             env[key] = os.getenv(key)
+
+
+class ExecutionState:
+    def __init__(self, config: Configuration) -> None:
+        self.config = config
+
+    @property
+    def unmatchedTasks(self) -> list[str]:
+        """Unmatched task names."""
+        return self.config.get("unmatchedTasks") or []
+
+    @unmatchedTasks.setter
+    def unmatchedTasks(self, value: list[str]) -> None:
+        self.config["unmatchedTasks"] = value

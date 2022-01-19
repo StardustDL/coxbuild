@@ -12,11 +12,12 @@ from coxbuild.extensions.python.all import restore as pyrestore
 from coxbuild.extensions.python.all import settings
 from coxbuild.extensions.python.all import test as pytest
 from coxbuild.extensions.python.all import uninstallBuilt as uninstall
+from coxbuild.extensions import projectSettings
 from coxbuild.schema import depend, run, setup, task, teardown
 
 readmeDst = Path("./src/README.md")
 
-settings.docs = Path("./docs/gen/ref")
+projectSettings.docs = Path("./docs/gen/ref")
 
 
 @setup(pybuild)
@@ -101,8 +102,8 @@ def unittest(): pass
 
 @depend(demo, integrationtest, unittest)
 @task()
-def test():
-    uninstall()
+async def test():
+    await uninstall()
 
 
 @depend(pyapidoc)
@@ -128,3 +129,8 @@ def format(): pass
 @depend(build)
 @task()
 def default(): pass
+
+
+@task()
+def serdoc():
+    run(["docsify", "serve", "docs"], shell=True, fail=True)

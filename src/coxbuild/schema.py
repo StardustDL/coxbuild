@@ -3,7 +3,7 @@ from dataclasses import asdict
 from datetime import timedelta
 from typing import Awaitable, Callable
 
-from .configuration import Configuration
+from .configuration import Configuration, ExecutionState
 from .invocation import CommandExecutionArgs, CommandExecutionResult
 from .invocation import run as inrun
 from .pipelines import (Pipeline, PipelineContext, PipelineHook,
@@ -14,6 +14,9 @@ from .tasks import Task, TaskResult
 service = Service()
 pipeline = Pipeline()
 config = Configuration()
+
+executionState = ExecutionState(config.section("execution"))
+
 
 TaskFuncDecorator = Callable[[Callable[..., None]], Task]
 
