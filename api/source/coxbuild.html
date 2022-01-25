@@ -287,21 +287,21 @@ fail: do not raise exception when the final result fails</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.pipelines.Pipeline.after">
 <span class="sig-name descname"><span class="pre">after</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.pipelines.Pipeline.after" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configure after hook.</p>
+<dd><p>Decorator to configure after hook.</p>
 <p>name: task instance or name, None for pipeline hook</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.pipelines.Pipeline.before">
 <span class="sig-name descname"><span class="pre">before</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.pipelines.Pipeline.before" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configure before hook.</p>
+<dd><p>Decorator to configure before hook.</p>
 <p>name: task instance or name, None for pipeline hook</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.pipelines.Pipeline.group">
 <span class="sig-name descname"><span class="pre">group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.pipelines.Pipeline.group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add namespace to task names (prevent from name conflicting).</p>
+<dd><p>Decorator to add namespace to task names (prevent from name conflicting).</p>
 <p>name: group name
 inner: inner task definer (for nested group)</p>
 </dd></dl>
@@ -336,14 +336,14 @@ name: the hooked task’s name, None for pipeline hook</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.pipelines.Pipeline.setup">
 <span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.pipelines.Pipeline.setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configure setup hook.</p>
+<dd><p>Decorator to configure setup hook.</p>
 <p>name: task instance or name, None for pipeline hook</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.pipelines.Pipeline.task">
 <span class="sig-name descname"><span class="pre">task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#coxbuild.pipelines.Pipeline.task" title="Permalink to this definition">¶</a></dt>
-<dd><p>Define a task.</p>
+<dd><p>Decorator to define a task.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -355,7 +355,7 @@ name: the hooked task’s name, None for pipeline hook</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.pipelines.Pipeline.teardown">
 <span class="sig-name descname"><span class="pre">teardown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.pipelines.Pipeline.teardown" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configure teardown hook.</p>
+<dd><p>Decorator to configure teardown hook.</p>
 <p>name: task instance or name, None for pipeline hook</p>
 </dd></dl>
 
@@ -589,7 +589,7 @@ name: the hooked task’s name, None for pipeline hook</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.services.Service.on">
 <span class="sig-name descname"><span class="pre">on</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Awaitable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.services.Service.on" title="Permalink to this definition">¶</a></dt>
-<dd><p>Register event handler.</p>
+<dd><p>Decorator to register event handler.</p>
 <p>event: event generator, when the event occurs, the awaitable return
 handler: event handler
 repeat: repeat times, 0 for no-repeat, positive integer for finite repeat, negative integer for infinite repeat
@@ -698,14 +698,14 @@ name: handler name, None to use function name</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="coxbuild.tasks.depend">
 <span class="sig-prename descclassname"><span class="pre">coxbuild.tasks.</span></span><span class="sig-name descname"><span class="pre">depend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.tasks.depend" title="Permalink to this definition">¶</a></dt>
-<dd><p>Define dependencies of a task.</p>
+<dd><p>Decorator to define dependencies of a task.</p>
 <p>names: task names or task instances</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="coxbuild.tasks.group">
 <span class="sig-prename descclassname"><span class="pre">coxbuild.tasks.</span></span><span class="sig-name descname"><span class="pre">group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.tasks.group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add namespace to task names (prevent from name conflicting).</p>
+<dd><p>Decorator to add namespace to task names (prevent from name conflicting).</p>
 <p>name: group name
 inner: inner task definer (for nested group)</p>
 </dd></dl>
@@ -721,7 +721,7 @@ Check the task works well.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="coxbuild.tasks.precond">
 <span class="sig-prename descclassname"><span class="pre">coxbuild.tasks.</span></span><span class="sig-name descname"><span class="pre">precond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.tasks.precond" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configure precondition of the task.
+<dd><p>Decorator to configure precondition of the task.
 Decide whether to run the task.</p>
 <p>predicate: condition tester</p>
 </dd></dl>
@@ -729,7 +729,7 @@ Decide whether to run the task.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="coxbuild.tasks.task">
 <span class="sig-prename descclassname"><span class="pre">coxbuild.tasks.</span></span><span class="sig-name descname"><span class="pre">task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#coxbuild.tasks.task" title="Permalink to this definition">¶</a></dt>
-<dd><p>Define a task.</p>
+<dd><p>Decorator to define a task.</p>
 <p>name: use custom task name, empty to use function name.</p>
 </dd></dl>
 
