@@ -3,6 +3,7 @@ from pathlib import Path
 import coxbuild
 from coxbuild.configuration import Configuration
 from coxbuild.schema import config, group, run
+
 from .. import projectSettings
 
 task = group("gradle")

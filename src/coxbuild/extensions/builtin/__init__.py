@@ -1,8 +1,7 @@
-from coxbuild import schema
 import coxbuild
-from coxbuild.schema import group, config
+from coxbuild import schema
 from coxbuild.configuration import Configuration
-
+from coxbuild.schema import config, group
 
 task = group("")
 

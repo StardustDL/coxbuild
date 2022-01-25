@@ -95,7 +95,7 @@ class Service:
 
     def on(self, event: Callable[[], Awaitable], safe: bool = False, name: str | None = None):
         """
-        Register event handler.
+        Decorator to register event handler.
 
         event: event generator, when the event occurs, the awaitable return
         handler: event handler

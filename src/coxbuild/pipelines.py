@@ -2,17 +2,17 @@ import inspect
 import logging
 import sys
 import traceback
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
 from graphlib import TopologicalSorter
 from queue import Queue
 from typing import Any, Awaitable, Callable
 
-from dataclasses import asdict
-
 from .exceptions import CoxbuildException
 from .runners import Runner
-from .tasks import Task, TaskResult, task as astask, group as taskgroup, TaskFuncDecorator
+from .tasks import Task, TaskFuncDecorator, TaskResult
+from .tasks import group as taskgroup
+from .tasks import task as astask
 
 logger = logging.getLogger("manager")
 
@@ -314,7 +314,7 @@ class Pipeline:
 
     def before(self, name: str | Task | None = None):
         """
-        Configure before hook.
+        Decorator to configure before hook.
 
         name: task instance or name, None for pipeline hook
         """
@@ -338,7 +338,7 @@ class Pipeline:
 
     def after(self, name: str | Task | None = None):
         """
-        Configure after hook.
+        Decorator to configure after hook.
 
         name: task instance or name, None for pipeline hook
         """
@@ -362,7 +362,7 @@ class Pipeline:
 
     def setup(self, name: str | Task | None = None):
         """
-        Configure setup hook.
+        Decorator to configure setup hook.
 
         name: task instance or name, None for pipeline hook
         """
@@ -384,9 +384,9 @@ class Pipeline:
             return body
         return decorator
 
-    def teardown(self, name: str | Task | Task | None = None):
+    def teardown(self, name: str | Task | None = None):
         """
-        Configure teardown hook.
+        Decorator to configure teardown hook.
 
         name: task instance or name, None for pipeline hook
         """
@@ -410,7 +410,7 @@ class Pipeline:
 
     def task(self, name: str = "") -> TaskFuncDecorator:
         """
-        Define a task.
+        Decorator to define a task.
         """
         def decorator(body: Callable[..., None]) -> Task:
             tk = astask(name)(body)
@@ -420,7 +420,7 @@ class Pipeline:
 
     def group(self, name: str, inner: Callable[[str], TaskFuncDecorator] | None = None):
         """
-        Add namespace to task names (prevent from name conflicting).
+        Decorator to add namespace to task names (prevent from name conflicting).
 
         name: group name
         inner: inner task definer (for nested group)

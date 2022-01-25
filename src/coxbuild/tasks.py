@@ -175,7 +175,7 @@ TaskFuncDecorator = Callable[[Callable[..., None]], Task]
 
 def task(name: str = "") -> TaskFuncDecorator:
     """
-    Define a task.
+    Decorator to define a task.
 
     name: use custom task name, empty to use function name.
     """
@@ -193,7 +193,7 @@ def task(name: str = "") -> TaskFuncDecorator:
 
 def depend(*names: str | Task):
     """
-    Define dependencies of a task.
+    Decorator to define dependencies of a task.
 
     names: task names or task instances
     """
@@ -206,7 +206,7 @@ def depend(*names: str | Task):
 
 def group(name: str, inner: Callable[[str], TaskFuncDecorator] | None = None):
     """
-    Add namespace to task names (prevent from name conflicting).
+    Decorator to add namespace to task names (prevent from name conflicting).
 
     name: group name
     inner: inner task definer (for nested group)
@@ -222,7 +222,7 @@ def group(name: str, inner: Callable[[str], TaskFuncDecorator] | None = None):
 
 def precond(predicate: Callable[..., bool]):
     """
-    Configure precondition of the task.
+    Decorator to configure precondition of the task.
     Decide whether to run the task.
 
     predicate: condition tester

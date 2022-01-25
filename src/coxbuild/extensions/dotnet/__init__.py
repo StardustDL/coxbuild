@@ -1,9 +1,10 @@
 from pathlib import Path
 
 import coxbuild
-from .. import projectSettings
 from coxbuild.configuration import Configuration
 from coxbuild.schema import config, group, run
+
+from .. import projectSettings
 
 task = group("dotnet")
 

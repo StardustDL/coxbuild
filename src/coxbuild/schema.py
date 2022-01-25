@@ -6,12 +6,11 @@ from typing import Awaitable, Callable
 import pip
 
 from .configuration import Configuration, ExecutionState
-from .invocation import CommandExecutionArgs, CommandExecutionResult
-from .invocation import run
+from .invocation import CommandExecutionArgs, CommandExecutionResult, run
 from .pipelines import (Pipeline, PipelineContext, PipelineHook,
                         PipelineResult, TaskContext, TaskHook)
 from .services import EventHandler, Service
-from .tasks import Task, TaskResult, depend, precond, postcond
+from .tasks import Task, TaskResult, depend, postcond, precond
 
 service = Service()
 pipeline = Pipeline()
