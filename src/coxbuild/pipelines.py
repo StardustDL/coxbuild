@@ -8,9 +8,11 @@ from graphlib import TopologicalSorter
 from queue import Queue
 from typing import Any, Awaitable, Callable
 
+from dataclasses import asdict
+
 from .exceptions import CoxbuildException
 from .runners import Runner
-from .tasks import Task, TaskResult
+from .tasks import Task, TaskResult, task as astask, group as taskgroup, TaskFuncDecorator
 
 logger = logging.getLogger("manager")
 
@@ -309,3 +311,119 @@ class Pipeline:
         logger.debug(f"Tasks to run: {', '.join((t.name for t in tasks))}")
 
         return PipelineRunner(tasks, {k: v for k, v in self.hooks.items() if k in tks}, self.phook)
+
+    def before(self, name: str | Task | None = None):
+        """
+        Configure before hook.
+
+        name: task instance or name, None for pipeline hook
+        """
+        def decorator(body: Callable[[TaskContext], bool]):
+            if name:
+                tname = name if isinstance(name, str) else name.name
+                if tname in self.hooks:
+                    old = asdict(self.hooks[tname])
+                    old.update(before=body)
+                    hk = TaskHook(**old)
+                else:
+                    hk = TaskHook(before=body)
+                self.hook(hk, tname)
+            else:
+                old = asdict(self.phook)
+                old.update(before=body)
+                hk = PipelineHook(**old)
+                self.hook(hk)
+            return body
+        return decorator
+
+    def after(self, name: str | Task | None = None):
+        """
+        Configure after hook.
+
+        name: task instance or name, None for pipeline hook
+        """
+        def decorator(body: Callable[[TaskContext, TaskResult], None]):
+            if name:
+                tname = name if isinstance(name, str) else name.name
+                if tname in self.hooks:
+                    old = asdict(self.hooks[tname])
+                    old.update(after=body)
+                    hk = TaskHook(**old)
+                else:
+                    hk = TaskHook(after=body)
+                self.hook(hk, tname)
+            else:
+                old = asdict(self.phook)
+                old.update(after=body)
+                hk = PipelineHook(**old)
+                self.hook(hk)
+            return body
+        return decorator
+
+    def setup(self, name: str | Task | None = None):
+        """
+        Configure setup hook.
+
+        name: task instance or name, None for pipeline hook
+        """
+        def decorator(body: Callable[..., None] | Callable[[PipelineContext], bool]):
+            if name:
+                tname = name if isinstance(name, str) else name.name
+                if tname in self.hooks:
+                    old = asdict(self.hooks[tname])
+                    old.update(setup=body)
+                    hk = TaskHook(**old)
+                else:
+                    hk = TaskHook(setup=body)
+                self.hook(hk, tname)
+            else:
+                old = asdict(self.phook)
+                old.update(setup=body)
+                hk = PipelineHook(**old)
+                self.hook(hk)
+            return body
+        return decorator
+
+    def teardown(self, name: str | Task | Task | None = None):
+        """
+        Configure teardown hook.
+
+        name: task instance or name, None for pipeline hook
+        """
+        def decorator(body: Callable[..., None] | Callable[[PipelineContext, PipelineResult], None]):
+            if name:
+                tname = name if isinstance(name, str) else name.name
+                if tname in self.hooks:
+                    old = asdict(self.hooks[tname])
+                    old.update(teardown=body)
+                    hk = TaskHook(**old)
+                else:
+                    hk = TaskHook(teardown=body)
+                self.hook(hk, tname)
+            else:
+                old = asdict(self.phook)
+                old.update(teardown=body)
+                hk = PipelineHook(**old)
+                self.hook(hk)
+            return body
+        return decorator
+
+    def task(self, name: str = "") -> TaskFuncDecorator:
+        """
+        Define a task.
+        """
+        def decorator(body: Callable[..., None]) -> Task:
+            tk = astask(name)(body)
+            self.register(tk)
+            return tk
+        return decorator
+
+    def group(self, name: str, inner: Callable[[str], TaskFuncDecorator] | None = None):
+        """
+        Add namespace to task names (prevent from name conflicting).
+
+        name: group name
+        inner: inner task definer (for nested group)
+        """
+
+        return taskgroup(name, inner or self.task)

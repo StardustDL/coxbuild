@@ -11,28 +11,9 @@ logger = logging.getLogger("invocation")
 
 
 @dataclass
-class CommandExecutionArgs:
-    """Arguments for command execution."""
-    cmds: list[str]
-    """command and arguments"""
-    env: dict[str, str] | None = None
-    """environ"""
-    cwd: pathlib.Path | None = None
-    """current working directory"""
-    timeout: timedelta | None = None
-    """maximum execution duration"""
-    input: str | None = None
-    """text for stdin"""
-    shell: bool = False
-    """use system shell"""
-    pipe: bool = False
-    """pipe and collect stdout and stderr"""
-
-
-@dataclass
 class CommandExecutionResult:
     """Result for command execution."""
-    args: CommandExecutionArgs
+    args: "CommandExecutionArgs"
     """arguments for command execution"""
     duration: timedelta = field(default_factory=timedelta)
     """execution duration"""
@@ -57,7 +38,7 @@ class CommandExecutionResult:
         return "🟢 SUCCESS" if self else ("🟡 TIMEOUT" if self.timeout else f"🔴 FAILING({self.code})")
 
 
-def execmd(args: CommandExecutionArgs) -> CommandExecutionResult:
+def execmd(args: "CommandExecutionArgs"):
     """Execute command and get result."""
     logger.debug(f"Execute command: {args}")
 
@@ -79,34 +60,73 @@ def execmd(args: CommandExecutionArgs) -> CommandExecutionResult:
     return result
 
 
-def run(args: CommandExecutionArgs, retry: int = 0, fail: bool = False) -> CommandExecutionResult:
+@dataclass
+class CommandExecutionArgs:
+    """Arguments for command execution."""
+    cmds: list[str]
+    """command and arguments"""
+    env: dict[str, str] | None = None
+    """environ"""
+    cwd: pathlib.Path | None = None
+    """current working directory"""
+    timeout: timedelta | None = None
+    """maximum execution duration"""
+    input: str | None = None
+    """text for stdin"""
+    shell: bool = False
+    """use system shell"""
+    pipe: bool = False
+    """pipe and collect stdout and stderr"""
+
+    def run(self, retry: int = 0, fail: bool = False) -> CommandExecutionResult:
+        """
+        Run command.
+
+        retry: the number of times to retry when failing
+        fail: do not raise exception when the final result fails
+        """
+
+        result = execmd(self)
+        if not result:
+            for i in range(retry):
+                logger.info(f"Retry ({i+1}/{retry}) execute command: {self}")
+                result = execmd(self)
+                if result:
+                    break
+        if not fail and not result:
+            if result.timeout:
+                raise CoxbuildException("\n".join([
+                    f"Timeout to execute command ({result.duration}).",
+                    "Standard Output:",
+                    result.stdout,
+                    "Standard Error:",
+                    result.stderr]))
+            else:
+                raise CoxbuildException("\n".join([
+                    f"Fail to execute command ({result.duration}): exitcode {result.code}.",
+                    "Standard Output:",
+                    result.stdout,
+                    "Standard Error:",
+                    result.stderr]))
+        return result
+
+
+def run(cmds: list[str], env: dict[str, str] | None = None,
+        cwd: pathlib.Path | None = None, timeout: timedelta | None = None,
+        input: str | None = None,
+        shell: bool = False, pipe: bool = False,
+        retry: int = 0, fail: bool = False) -> CommandExecutionResult:
     """
     Run command.
 
-    args: execution arguments
+    cmds: command and argument
+    env: environ
+    cwd: current working directory
+    timeout: maximum execution duration
+    input: text for stdin
+    shell: use system shell
+    pipe: pipe and collect stdout and stderr
     retry: the number of times to retry when failing
     fail: do not raise exception when the final result fails
     """
-    result = execmd(args)
-    if not result:
-        for i in range(retry):
-            logger.info(f"Retry ({i+1}/{retry}) execute command: {args}")
-            result = execmd(args)
-            if result:
-                break
-    if not fail and not result:
-        if result.timeout:
-            raise CoxbuildException("\n".join([
-                f"Timeout to execute command ({result.duration}).",
-                "Standard Output:",
-                result.stdout,
-                "Standard Error:",
-                result.stderr]))
-        else:
-            raise CoxbuildException("\n".join([
-                f"Fail to execute command ({result.duration}): exitcode {result.code}.",
-                "Standard Output:",
-                result.stdout,
-                "Standard Error:",
-                result.stderr]))
-    return result
+    return CommandExecutionArgs(cmds, env, cwd, timeout, input, shell, pipe).run(retry=retry, fail=fail)

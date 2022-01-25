@@ -168,3 +168,79 @@ class TaskRunner(Runner):
     def __await__(self):
         yield from super().__await__()
         return self.result
+
+
+TaskFuncDecorator = Callable[[Callable[..., None]], Task]
+
+
+def task(name: str = "") -> TaskFuncDecorator:
+    """
+    Define a task.
+
+    name: use custom task name, empty to use function name.
+    """
+    def decorator(body: Callable[..., None]) -> Task:
+        # endswith(":") support empty name with group name
+        if name == "" or name.endswith(":"):
+            tname = name + body.__name__
+        else:
+            tname = name
+
+        tk = Task(tname, body, body.__doc__ or "")
+        return tk
+    return decorator
+
+
+def depend(*names: str | Task):
+    """
+    Define dependencies of a task.
+
+    names: task names or task instances
+    """
+    def decorator(inner: Task) -> Task:
+        for name in names:
+            inner.deps.append(name if isinstance(name, str) else name.name)
+        return inner
+    return decorator
+
+
+def group(name: str, inner: Callable[[str], TaskFuncDecorator] | None = None):
+    """
+    Add namespace to task names (prevent from name conflicting).
+
+    name: group name
+    inner: inner task definer (for nested group)
+    """
+
+    if inner is None:
+        inner = task
+
+    def wrapper(subname: str = "") -> TaskFuncDecorator:
+        return inner(f"{name}:{subname}")
+    return wrapper
+
+
+def precond(predicate: Callable[..., bool]):
+    """
+    Configure precondition of the task.
+    Decide whether to run the task.
+
+    predicate: condition tester
+    """
+    def decorator(inner: Task) -> Task:
+        inner.precondition = predicate
+        return inner
+    return decorator
+
+
+def postcond(predicate: Callable[..., bool]):
+    """
+    Configure postcondition of the task.
+    Check the task works well.
+
+    predicate: condition tester
+    """
+    def decorator(inner: Task) -> Task:
+        inner.postcondition = predicate
+        return inner
+    return decorator
