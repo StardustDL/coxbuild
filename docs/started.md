@@ -27,6 +27,8 @@ def default():
     pass
 ```
 
+> Actually, the schema file is also treated as an extension, visit [How It Works](./how-it-works.md) for details.
+
 ### Run
 
 ```sh

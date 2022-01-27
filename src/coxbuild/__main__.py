@@ -6,7 +6,6 @@ from pathlib import Path
 import click
 
 from coxbuild import __version__
-from coxbuild.pipelines import Pipeline
 
 
 @click.command()
@@ -16,7 +15,11 @@ from coxbuild.pipelines import Pipeline
 @click.version_option(__version__, package_name="coxbuild", prog_name="coxbuild", message="%(prog)s v%(version)s, written by StardustDL.")
 @click.option('-v', '--verbose', count=True, default=0, type=click.IntRange(0, 5))
 def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: str = "buildcox.py", verbose: int = 0) -> None:
-    """Coxbuild (https://github.com/StardustDL/coxbuild)"""
+    """
+    Coxbuild is a tiny python-script-based build automation tool, an alternative to make, psake and so on.
+
+    Source Project: https://github.com/StardustDL/coxbuild
+    """
     click.echo(f"Welcome to Coxbuild v{__version__}!")
 
     logger = logging.getLogger("Cli-Main")
@@ -44,12 +47,10 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
         raise click.ClickException("Coxbuild schema NOT FOUND.")
 
     from coxbuild import schema
-    from coxbuild import builder
-    from coxbuild.extensions import builtin
+    from coxbuild import managers
 
-    schema.loadext(builtin)
-
-    schema.loadext(builder.loadModule(schemafile))
+    schema.manager.loadBuiltin()
+    schema.manager.load(managers.loadModule(schemafile))
 
     if not tasks:
         tasks = ["default"]

@@ -1,4 +1,5 @@
 - [Getting Started](started.md "Getting Started")
 - [Schema](schema.md "Schema Specification")
+- [How It Works](how-it-works.md "How It Works")
 - [Library](library.md "Library")
 - [Extensions](extensions/README.md "Extensions")

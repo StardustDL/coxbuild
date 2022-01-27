@@ -4,8 +4,7 @@ from datetime import timedelta
 from types import ModuleType
 from typing import Awaitable, Callable
 
-import pip
-
+from .managers import Manager
 from .configuration import Configuration, ExecutionState
 from .invocation import CommandExecutionArgs, CommandExecutionResult, run
 from .pipelines import (Pipeline, PipelineContext, PipelineHook,
@@ -14,14 +13,13 @@ from .services import EventHandler, Service, on
 from .tasks import task, group, named, depend, setup, teardown, before, after, precond, postcond, asprecond, assetup, aspostcond, asteardown, asbefore, asafter
 from .pipelines import beforePipeline, beforeTask, afterPipeline, afterTask
 
-service = Service()
-pipeline = Pipeline()
-config = Configuration()
+manager = Manager()
 
-executionState = ExecutionState(config.section("execution"))
+service = manager.service
+pipeline = manager.pipeline
+config = manager.config
+executionState = manager.executionState
 
 
 def loadext(module: ModuleType):
-    from .builder import loadFromModule
-
-    loadFromModule(module, pipeline, service)
+    manager.load(module)
