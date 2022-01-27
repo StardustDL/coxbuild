@@ -1,9 +1,20 @@
 # Extensions
 
+Use `loadext` function.
+
+```python
+import extension_module
+
+loadext(extension_module)
+```
+
 ## Python
 
 ```python
-import coxbuild.extensions.python.all
+import coxbuild.extensions.python.docs
+import coxbuild.extensions.python.format
+import coxbuild.extensions.python.package
+import coxbuild.extensions.python.test
 ```
 
 ## Shell

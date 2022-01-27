@@ -4,14 +4,6 @@ coxbuild.extensions.python package
 Submodules
 ----------
 
-coxbuild.extensions.python.all module
--------------------------------------
-
-.. automodule:: coxbuild.extensions.python.all
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 coxbuild.extensions.python.docs module
 --------------------------------------
 
