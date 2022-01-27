@@ -4,10 +4,11 @@ from coxbuild import get_working_directory
 from coxbuild.schema import depend, group, precond, run, task
 
 from .. import projectSettings
-from . import settings, grouped
+from . import grouped, settings
 from .package import hasPackages, upgradePackages
 
 grouped = group("test", grouped)
+
 
 @grouped
 @precond(lambda: not hasPackages({"pytest": "*",  "pytest-asyncio": "*", "pytest-cov": "*", "coverage": "*"}))

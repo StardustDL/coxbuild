@@ -1,7 +1,7 @@
 import coxbuild
 from coxbuild import schema
 from coxbuild.configuration import Configuration
-from coxbuild.tasks import task, group
+from coxbuild.tasks import group, task
 
 
 @group("")

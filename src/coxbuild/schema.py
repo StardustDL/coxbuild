@@ -4,14 +4,16 @@ from datetime import timedelta
 from types import ModuleType
 from typing import Awaitable, Callable
 
-from .managers import Manager
 from .configuration import Configuration, ExecutionState
 from .invocation import CommandExecutionArgs, CommandExecutionResult, run
+from .managers import Manager
 from .pipelines import (Pipeline, PipelineContext, PipelineHook,
-                        PipelineResult, TaskContext, TaskHook)
+                        PipelineResult, TaskContext, TaskHook, afterPipeline,
+                        afterTask, beforePipeline, beforeTask)
 from .services import EventHandler, Service, on
-from .tasks import task, group, named, depend, setup, teardown, before, after, precond, postcond, asprecond, assetup, aspostcond, asteardown, asbefore, asafter
-from .pipelines import beforePipeline, beforeTask, afterPipeline, afterTask
+from .tasks import (after, asafter, asbefore, aspostcond, asprecond, assetup,
+                    asteardown, before, depend, group, named, postcond,
+                    precond, setup, task, teardown)
 
 manager = Manager()
 

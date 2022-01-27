@@ -2,7 +2,8 @@ import asyncio
 
 import pytest
 
-from coxbuild.pipelines import Pipeline, PipelineBeforeTaskHook, PipelineHook, TaskHook
+from coxbuild.pipelines import (Pipeline, PipelineBeforeTaskHook, PipelineHook,
+                                TaskHook)
 from coxbuild.tasks import Task
 
 

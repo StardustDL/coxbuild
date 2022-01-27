@@ -1,14 +1,13 @@
-from importlib.util import module_from_spec, spec_from_loader
 import inspect
+import logging
 import pathlib
+from importlib.util import module_from_spec, spec_from_loader
 from types import ModuleType
 
-import logging
 from coxbuild.configuration import Configuration, ExecutionState
 from coxbuild.pipelines import Pipeline, PipelineHook
 from coxbuild.services import EventHandler, Service
 from coxbuild.tasks import Task
-
 
 logger = logging.getLogger("managers")
 

@@ -5,7 +5,7 @@ from typing import Tuple
 from coxbuild.schema import depend, group, precond, run, task
 
 from .. import projectSettings
-from . import settings, grouped
+from . import grouped, settings
 
 grouped = group("package", grouped)
 

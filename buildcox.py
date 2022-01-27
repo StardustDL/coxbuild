@@ -3,21 +3,21 @@ import shutil
 from datetime import timedelta
 from pathlib import Path
 
-from coxbuild.extensions import projectSettings
-from coxbuild.extensions.python.docs import apidoc as pyapidoc
-from coxbuild.extensions.python.package import build as pybuild
-from coxbuild.extensions.python.package import deploy as pydeploy
-from coxbuild.extensions.python.format import format as pyformat
-from coxbuild.extensions.python.package import installBuilt as install
-from coxbuild.extensions.python.package import restore as pyrestore
-from coxbuild.extensions.python import settings
-from coxbuild.extensions.python.test import test as pytest
-from coxbuild.extensions.python.package import uninstallBuilt as uninstall
-from coxbuild.schema import depend, loadext, run, setup, task, teardown
 import coxbuild.extensions.python.docs
 import coxbuild.extensions.python.format
 import coxbuild.extensions.python.package
 import coxbuild.extensions.python.test
+from coxbuild.extensions import projectSettings
+from coxbuild.extensions.python import settings
+from coxbuild.extensions.python.docs import apidoc as pyapidoc
+from coxbuild.extensions.python.format import format as pyformat
+from coxbuild.extensions.python.package import build as pybuild
+from coxbuild.extensions.python.package import deploy as pydeploy
+from coxbuild.extensions.python.package import installBuilt as install
+from coxbuild.extensions.python.package import restore as pyrestore
+from coxbuild.extensions.python.package import uninstallBuilt as uninstall
+from coxbuild.extensions.python.test import test as pytest
+from coxbuild.schema import depend, loadext, run, setup, task, teardown
 
 loadext(coxbuild.extensions.python.docs)
 loadext(coxbuild.extensions.python.format)
