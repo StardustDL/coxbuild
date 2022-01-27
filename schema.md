@@ -35,7 +35,7 @@ async def cost_time():
 def default(): pass
 ```
 
-Task can have parameters, see [Before/After Hook](#beforeafter-hook) section for details.
+Task can have parameters, see [Before/After Hook](#before-after) section for details.
 
 Builtin tasks:
 
