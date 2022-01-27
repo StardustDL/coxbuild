@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import os
 from pathlib import Path
@@ -22,8 +21,6 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
     """
     click.echo(f"Welcome to Coxbuild v{__version__}!")
 
-    logger = logging.getLogger("Cli-Main")
-
     loggingLevel = {
         0: logging.CRITICAL,
         1: logging.ERROR,
@@ -32,22 +29,17 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
         4: logging.DEBUG,
         5: logging.NOTSET
     }[verbose]
-
     logging.basicConfig(level=loggingLevel)
-
+    logger = logging.getLogger("Cli-Main")
     logger.debug(f"Logging level: {loggingLevel}")
 
     os.chdir(str(Path(str(directory)).resolve()))
-
     schemafile = Path(file)
-
     logger.debug(f"Schema file: {click.format_filename(schemafile)}")
-
     if not schemafile.exists():
         raise click.ClickException("Coxbuild schema NOT FOUND.")
 
     from coxbuild import managers, schema
-
     schema.manager.load(managers.loadModuleFromFile(schemafile))
 
     exit(0 if schema.manager.execute(*(tasks or [])) else 1)

@@ -1,6 +1,9 @@
 import asyncio
+from typing import Any
 
-from coxbuild.schema import depend, precond, task
+task: Any
+depend: Any
+precond: Any
 
 
 @task

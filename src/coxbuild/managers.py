@@ -7,7 +7,7 @@ from importlib.util import module_from_spec, spec_from_loader
 from types import ModuleType
 
 from coxbuild.configuration import Configuration, ExecutionState
-from coxbuild.pipelines import Pipeline, PipelineHook
+from coxbuild.pipelines import Pipeline, PipelineHook, PipelineResult
 from coxbuild.services import EventHandler, Service
 from coxbuild.tasks import Task
 
@@ -20,6 +20,7 @@ def loadModuleFromSource(src: str, filename: str, modname: str):
 
     code = compile(src, filename, "exec")
 
+    exec("from coxbuild.schema import *", mod.__dict__)
     exec(code, mod.__dict__)
 
     return mod
@@ -78,12 +79,9 @@ class Manager:
                         f"Registering pipeline hook: in {module.__name__}.",)
                     self.pipeline.hook(ph)
 
-    def execute(self, *tasks: str) -> bool:
+    async def executeAsync(self, *tasks: str):
         self.loadBuiltin()
+        return await self.pipeline(*(tasks or ["default"]))
 
-        async def wrapper():
-            return await self.pipeline(*(tasks or ["default"]))
-
-        result = asyncio.run(wrapper())
-
-        return bool(result)
+    def execute(self, *tasks: str) -> PipelineResult:
+        return asyncio.run(self.executeAsync(*tasks))
