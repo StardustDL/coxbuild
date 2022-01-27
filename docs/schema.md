@@ -91,7 +91,12 @@ def name(): pass
 
 ```python
 # task name: 'par:sub:name'
-@group("sub", group("par"))
+@group("par")
+@group("sub")
+def name(): pass
+
+# task name: 'par:sub:name'
+@group("par", "sub")
 def name(): pass
 ```
 

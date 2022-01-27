@@ -375,14 +375,12 @@ def named(name: str):
     return decorator
 
 
-def group(name: str, parent: Callable[[Task], Task] | None = None):
+def group(*names: str):
     """
     Decorator to set task group.
     """
     def decorator(inner: Task) -> Task:
-        inner.name = f"{name}:{inner.name}"
-        if parent:
-            inner = parent(inner)
+        inner.name = f"{':'.join(names)}:{inner.name}"
         return inner
     return decorator
 

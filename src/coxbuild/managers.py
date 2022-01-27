@@ -1,3 +1,4 @@
+import asyncio
 import inspect
 import logging
 import pathlib
@@ -12,15 +13,19 @@ from coxbuild.tasks import Task
 logger = logging.getLogger("managers")
 
 
-def loadModule(file: pathlib.Path):
-    spec = spec_from_loader(file.stem, loader=None)
+def loadModuleFromSource(src: str, filename: str, modname: str):
+    spec = spec_from_loader(modname, loader=None)
     mod = module_from_spec(spec)
 
-    code = compile(file.read_text(encoding="utf-8"), file, "exec")
+    code = compile(src, filename, "exec")
 
     exec(code, mod.__dict__)
 
     return mod
+
+
+def loadModuleFromFile(file: pathlib.Path):
+    return loadModuleFromSource(file.read_text(encoding="utf-8"), str(file), file.stem)
 
 
 class Manager:
@@ -58,3 +63,16 @@ class Manager:
                             f"Ignored registered event handler: {eh.name} in {module.__name__}.",)
                 case PipelineHook() as ph:
                     self.pipeline.hook(ph)
+
+    def execute(self, *tasks: str) -> bool:
+        self.loadBuiltin()
+
+        if not tasks:
+            tasks = ["default"]
+
+        async def wrapper():
+            return await self.pipeline(*tasks)
+
+        result = asyncio.run(wrapper())
+
+        return bool(result)

@@ -7,10 +7,11 @@ from .. import projectSettings
 from . import grouped, settings
 from .package import hasPackages, upgradePackages
 
-grouped = group("test", grouped)
+subgrouped = group("test")
 
 
 @grouped
+@subgrouped
 @precond(lambda: not hasPackages({"pytest": "*",  "pytest-asyncio": "*", "pytest-cov": "*", "coverage": "*"}))
 @task
 def restore():
@@ -19,6 +20,7 @@ def restore():
 
 
 @grouped
+@subgrouped
 @depend(restore)
 @task
 def pytest(src: Path | None = None, test: Path | None = None):
@@ -28,6 +30,7 @@ def pytest(src: Path | None = None, test: Path | None = None):
 
 
 @grouped
+@subgrouped
 @depend(pytest)
 @task
 def test():

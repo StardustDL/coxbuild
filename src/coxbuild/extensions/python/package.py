@@ -7,7 +7,7 @@ from coxbuild.schema import depend, group, precond, run, task
 from .. import projectSettings
 from . import grouped, settings
 
-grouped = group("package", grouped)
+subgrouped = group("package")
 
 
 def loadFromRequirements(lines: list[str]) -> dict[str, str]:
@@ -39,6 +39,7 @@ def upgradePackages(*packages: str):
 
 
 @grouped
+@subgrouped
 @task
 def restore(requirements: Path | None = None):
     """Restore Python packages from requirements.txt."""
@@ -56,6 +57,7 @@ def needRestore():
 
 
 @grouped
+@subgrouped
 @precond(lambda: not hasPackages({"build": "*", "twine": "*"}))
 @task
 def prebuild():
@@ -64,6 +66,7 @@ def prebuild():
 
 
 @grouped
+@subgrouped
 @depend(prebuild)
 @task
 def build(src: Path | None = None, dist: Path | None = None):
@@ -78,6 +81,7 @@ def build(src: Path | None = None, dist: Path | None = None):
 
 
 @grouped
+@subgrouped
 @task
 def installBuilt(dist: Path | None = None):
     """Install the built package."""
@@ -86,6 +90,7 @@ def installBuilt(dist: Path | None = None):
 
 
 @grouped
+@subgrouped
 @task
 def uninstallBuilt(dist: Path | None = None):
     """Uninstall the built package."""
@@ -94,6 +99,7 @@ def uninstallBuilt(dist: Path | None = None):
 
 
 @grouped
+@subgrouped
 @depend(build)
 @task
 def deploy(dist: Path | None = None):

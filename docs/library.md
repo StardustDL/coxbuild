@@ -2,6 +2,20 @@
 
 > [References](https://stardustdl.github.io/coxbuild/api/)
 
+## Manager
+
+Use **Manager** to manage extensions.
+
+```python
+from coxbuild.managers import loadModuleFromFile, loadModuleFromSource, Manager
+
+manager: Manager
+
+manager.load(loadModuleFromFile(Path("path/to/extension.py")))
+
+manager.load(loadModuleFromSource("# module source code ..."))
+```
+
 ## Task
 
 Use **Task** to do something and get result with running metadata (exception, duration, and so on).

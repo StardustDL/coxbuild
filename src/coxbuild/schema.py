@@ -1,3 +1,4 @@
+import importlib
 import pathlib
 from dataclasses import asdict
 from datetime import timedelta
@@ -23,5 +24,7 @@ config = manager.config
 executionState = manager.executionState
 
 
-def loadext(module: ModuleType):
+def loadext(module: ModuleType | str):
+    if isinstance(module, str):
+        module = importlib.import_module(module)
     manager.load(module)

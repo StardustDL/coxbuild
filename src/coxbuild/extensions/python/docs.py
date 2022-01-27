@@ -7,10 +7,11 @@ from .. import projectSettings
 from . import grouped, settings
 from .package import hasPackages, upgradePackages
 
-grouped = group("docs", grouped)
+subgrouped = group("docs")
 
 
 @grouped
+@subgrouped
 @precond(lambda: not hasPackages({"Sphinx": "*"}))
 @task
 def restore():
@@ -19,6 +20,7 @@ def restore():
 
 
 @grouped
+@subgrouped
 @depend(restore)
 @task
 def sphinx_init(docs: Path | None = None):
@@ -27,6 +29,7 @@ def sphinx_init(docs: Path | None = None):
 
 
 @grouped
+@subgrouped
 @depend(restore)
 @task
 def sphinx_api(src: Path | None = None, docs: Path | None = None):
@@ -36,6 +39,7 @@ def sphinx_api(src: Path | None = None, docs: Path | None = None):
 
 
 @grouped
+@subgrouped
 @depend(sphinx_api)
 @task
 def sphinx_html(docs: Path | None = None):
@@ -45,6 +49,7 @@ def sphinx_html(docs: Path | None = None):
 
 
 @grouped
+@subgrouped
 @depend(sphinx_html)
 @task
 def apidoc():

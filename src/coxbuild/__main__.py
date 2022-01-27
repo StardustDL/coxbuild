@@ -48,21 +48,9 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
 
     from coxbuild import managers, schema
 
-    schema.manager.loadBuiltin()
-    schema.manager.load(managers.loadModule(schemafile))
+    schema.manager.load(managers.loadModuleFromFile(schemafile))
 
-    if not tasks:
-        tasks = ["default"]
-
-    async def wrapper():
-        return await schema.pipeline(*tasks)
-
-    result = asyncio.run(wrapper())
-
-    if result:
-        exit(0)
-    else:
-        exit(1)
+    exit(0 if schema.manager.execute(*(tasks or [])) else 1)
 
 
 if __name__ == '__main__':

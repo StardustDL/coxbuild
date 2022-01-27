@@ -6,10 +6,11 @@ from coxbuild.schema import depend, group, precond, run, task
 from . import grouped, settings
 from .package import hasPackages, upgradePackages
 
-grouped = group("format", grouped)
+subgrouped = group("format")
 
 
 @grouped
+@subgrouped
 @precond(lambda: not hasPackages({"autopep8": "*", "isort": "*"}))
 @task
 def restore():
@@ -18,6 +19,7 @@ def restore():
 
 
 @grouped
+@subgrouped
 @depend(restore)
 @task
 def autopep8(path: Path | None = None):
@@ -26,6 +28,7 @@ def autopep8(path: Path | None = None):
 
 
 @grouped
+@subgrouped
 @depend(restore)
 @task
 def isort(path: Path | None = None):
@@ -37,6 +40,7 @@ def isort(path: Path | None = None):
 
 
 @grouped
+@subgrouped
 @depend(autopep8, isort)
 @task
 def format():
