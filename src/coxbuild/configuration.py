@@ -18,6 +18,10 @@ class Configuration:
         if not self.name:
             self.loadenv()
 
+    def copy(self) -> "Configuration":
+        """Copy configuration."""
+        return Configuration(self.name, self.data.copy())
+
     def _getid(self, attr: str) -> str:
         return self.name + ":" + attr if self.name else attr
 

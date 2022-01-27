@@ -78,12 +78,16 @@ class EventHandler:
         logger.debug(f"Finish handle for event: {self.name}.")
 
 
+@dataclass
 class Service:
     """Event-based service."""
 
-    def __init__(self) -> None:
-        self.handlers: dict[str, EventHandler] = {}
-        """handlers in the service"""
+    handlers: dict[str, EventHandler] = field(default_factory=dict)
+    """handlers in the service"""
+
+    def copy(self) -> "Service":
+        """Copy the service."""
+        return Service(self.handlers.copy())
 
     def register(self, handler: EventHandler):
         """Register handler."""

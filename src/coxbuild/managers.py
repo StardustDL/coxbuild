@@ -2,6 +2,7 @@ import asyncio
 import inspect
 import logging
 import pathlib
+from dataclasses import dataclass, field
 from importlib.util import module_from_spec, spec_from_loader
 from types import ModuleType
 
@@ -28,12 +29,23 @@ def loadModuleFromFile(file: pathlib.Path):
     return loadModuleFromSource(file.read_text(encoding="utf-8"), str(file), file.stem)
 
 
+@dataclass
 class Manager:
-    def __init__(self) -> None:
-        self.pipeline = Pipeline()
-        self.service = Service()
-        self.config = Configuration()
+    pipeline: Pipeline = field(default_factory=Pipeline)
+    service: Service = field(default_factory=Service)
+    config: Configuration = field(default_factory=Configuration)
+
+    executionState: ExecutionState = field(init=False)
+
+    def __post_init__(self):
         self.executionState = ExecutionState(self.config.section("execution"))
+
+    def copy(self) -> "Manager":
+        return Manager(
+            pipeline=self.pipeline.copy(),
+            service=self.service.copy(),
+            config=self.config.copy()
+        )
 
     def loadBuiltin(self):
         from coxbuild.extensions import builtin
@@ -62,16 +74,15 @@ class Manager:
                         logger.debug(
                             f"Ignored registered event handler: {eh.name} in {module.__name__}.",)
                 case PipelineHook() as ph:
+                    logger.debug(
+                        f"Registering pipeline hook: in {module.__name__}.",)
                     self.pipeline.hook(ph)
 
     def execute(self, *tasks: str) -> bool:
         self.loadBuiltin()
 
-        if not tasks:
-            tasks = ["default"]
-
         async def wrapper():
-            return await self.pipeline(*tasks)
+            return await self.pipeline(*(tasks or ["default"]))
 
         result = asyncio.run(wrapper())
 

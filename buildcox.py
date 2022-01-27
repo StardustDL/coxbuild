@@ -3,43 +3,31 @@ import shutil
 from datetime import timedelta
 from pathlib import Path
 
-import coxbuild.extensions.python.docs
-import coxbuild.extensions.python.format
-import coxbuild.extensions.python.package
-import coxbuild.extensions.python.test
 from coxbuild.extensions import projectSettings
-from coxbuild.extensions.python import settings
-from coxbuild.extensions.python.docs import apidoc as pyapidoc
-from coxbuild.extensions.python.format import format as pyformat
-from coxbuild.extensions.python.package import build as pybuild
-from coxbuild.extensions.python.package import deploy as pydeploy
-from coxbuild.extensions.python.package import installBuilt as install
-from coxbuild.extensions.python.package import restore as pyrestore
-from coxbuild.extensions.python.package import uninstallBuilt as uninstall
-from coxbuild.extensions.python.test import test as pytest
+from coxbuild.extensions.python import settings, docs as pydocs, format as pyformat, package as pypackage, test as pytest
 from coxbuild.schema import depend, loadext, run, setup, task, teardown
 
-loadext(coxbuild.extensions.python.docs)
-loadext(coxbuild.extensions.python.format)
-loadext(coxbuild.extensions.python.package)
-loadext(coxbuild.extensions.python.test)
+loadext(pydocs)
+loadext(pyformat)
+loadext(pypackage)
+loadext(pytest)
 
 readmeDst = Path("./src/README.md")
 
 projectSettings.docs = Path("./docs/gen/ref")
 
 
-@pybuild.setup
+@pypackage.build.setup
 def setupBuild():
     shutil.copyfile(Path("README.md"), readmeDst)
 
 
-@pybuild.teardown
+@pypackage.build.teardown
 def teardownBuild():
     os.remove(readmeDst)
 
 
-@depend(install)
+@depend(pypackage.installBuilt)
 @task
 def demo():
     run(["coxbuild", "--version"])
@@ -49,7 +37,7 @@ def demo():
 demoCmdPre = ["coxbuild", "-vvv", "-D", "./demo"]
 
 
-@depend(install)
+@depend(pypackage.installBuilt)
 @task
 def test_build():
     run(["coxbuild", "-vvvvv", "-D", "./demo"])
@@ -63,33 +51,33 @@ def test_build():
     run([*demoCmdPre, "b"])
 
 
-@depend(install)
+@depend(pypackage.installBuilt)
 @task
 def test_builtin():
     run([*demoCmdPre, ":list"])
     run([*demoCmdPre, ":serve"])
 
 
-@depend(install)
+@depend(pypackage.installBuilt)
 @task
 def test_lifecycle():
     run([*demoCmdPre, "-f", "lifecycle.py"])
 
 
-@depend(install)
+@depend(pypackage.installBuilt)
 @task
 def test_service():
     run([*demoCmdPre, "-f", "event.py", ":serve"])
 
 
-@depend(install)
+@depend(pypackage.installBuilt)
 @task
 def test_event_fs():
     run([*demoCmdPre, "-f", "filewatch.py", ":serve"],
         timeout=timedelta(seconds=3))
 
 
-@depend(install)
+@depend(pypackage.installBuilt)
 @task
 def test_command():
     run([*demoCmdPre, "-f", "command.py"])
@@ -104,7 +92,7 @@ def test_command():
 def integrationtest(): pass
 
 
-@depend(pytest)
+@depend(pytest.test)
 @task
 def unittest(): pass
 
@@ -112,25 +100,25 @@ def unittest(): pass
 @depend(demo, integrationtest, unittest)
 @task
 async def test():
-    await uninstall()
+    await pypackage.uninstallBuilt()
 
 
-@depend(pyapidoc)
+@depend(pydocs.apidoc)
 @task
 def docs(): pass
 
 
-@depend(pydeploy)
+@depend(pypackage.deploy)
 @task
 def deploy(): pass
 
 
-@depend(pyrestore, pybuild)
+@depend(pypackage.restore, pypackage.build)
 @task
 def build(): pass
 
 
-@depend(pyformat)
+@depend(pyformat.format)
 @task
 def format(): pass
 

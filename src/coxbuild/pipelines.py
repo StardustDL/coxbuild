@@ -254,14 +254,18 @@ class PipelineRunner(Runner):
         return self.result
 
 
+@dataclass
 class Pipeline:
     """Pipeline to run tasks."""
 
-    def __init__(self) -> None:
-        self.tasks: dict[str, Task] = {}
-        """tasks in the pipeline"""
-        self.hooks: list[PipelineHook] = []
-        """hook for pipeline"""
+    tasks: dict[str, Task] = field(default_factory=dict)
+    """tasks in the pipeline"""
+    hooks: list[PipelineHook] = field(default_factory=list)
+    """hook for pipeline"""
+
+    def copy(self) -> "Pipeline":
+        """Copy pipeline."""
+        return Pipeline(tasks=self.tasks.copy(), hooks=self.hooks.copy())
 
     def register(self, task: Task) -> None:
         """

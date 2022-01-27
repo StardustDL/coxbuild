@@ -166,6 +166,10 @@ class Task:
     hooks: list[TaskHook] = field(default_factory=list)
     """task hooks"""
 
+    def copy(self) -> "Task":
+        """Clone task."""
+        return Task(self.name, self.body, self.doc, self.deps.copy(), self.hooks.copy())
+
     def __call__(self, *args: Any, **kwds: Any) -> TaskResult:
         """
         Build runner of task.
