@@ -17,12 +17,12 @@ Write in `buildcox.py`.
 ```python
 from coxbuild.schema import task, depend # this line can be omitted
 
-@task()
+@task
 def pre():
     print("pre task")
 
 @depend(pre)
-@task()
+@task
 def default():
     pass
 ```

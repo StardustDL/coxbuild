@@ -33,6 +33,32 @@ def postcond_task2(*args, **kwds):
     return True
 
 
+@log
+def before_task1(context: TaskContext):
+    context.args.extend([1, 2, 3])
+    context.kwds.update(a=1, b=2)
+    # return False to ignore this task
+
+
+@log
+def after_task1(context: TaskContext, result: TaskResult):
+    pass
+
+
+@log
+def setup_task1(*args, **kwds):
+    pass
+
+
+@log
+def teardown_task1(*args, **kwds):
+    pass
+
+
+@teardown(teardown_task1)
+@setup(setup_task1)
+@after(after_task1)
+@before(before_task1)
 @precond(precond_task1)
 @postcond(postcond_task1)
 @task
@@ -58,14 +84,6 @@ def pipeline_before(context: TaskContext):
     # return False to ignore this task
 
 
-@task1.before
-@log
-def before_task1(context: TaskContext):
-    context.args.extend([1, 2, 3])
-    context.kwds.update(a=1, b=2)
-    # return False to ignore this task
-
-
 @task2.before
 @log
 def before_task2(context: TaskContext):
@@ -80,33 +98,15 @@ def pipeline_after(context: TaskContext, result: TaskResult):
     pass
 
 
-@task1.after
-@log
-def after_task1(context: TaskContext, result: TaskResult):
-    pass
-
-
 @task2.after
 @log
 def after_task2(context: TaskContext, result: TaskResult):
     pass
 
 
-@task1.setup
-@log
-def setup_task1(*args, **kwds):
-    pass
-
-
 @task2.setup
 @log
 def setup_task2(*args, **kwds):
-    pass
-
-
-@task1.teardown
-@log
-def teardown_task1(*args, **kwds):
     pass
 
 

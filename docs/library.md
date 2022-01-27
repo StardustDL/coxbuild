@@ -11,10 +11,7 @@ task: Task
 
 # execute task individually (no pipeline, without dependencies and registered hooks)
 
-result = await task(
-    *args, **kwds, 
-    setup=[setup_hook, ...],
-    teardown=[teardown_hook, ...])
+result = await task(*args, **kwds)
 ```
 
 ## Pipeline

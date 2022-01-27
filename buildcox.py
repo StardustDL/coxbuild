@@ -4,19 +4,25 @@ from datetime import timedelta
 from pathlib import Path
 
 from coxbuild.extensions import projectSettings
-import coxbuild.extensions.python.all
-from coxbuild.extensions.python.all import apidoc as pyapidoc
-from coxbuild.extensions.python.all import build as pybuild
-from coxbuild.extensions.python.all import deploy as pydeploy
-from coxbuild.extensions.python.all import format as pyformat
-from coxbuild.extensions.python.all import installBuilt as install
-from coxbuild.extensions.python.all import restore as pyrestore
-from coxbuild.extensions.python.all import settings
-from coxbuild.extensions.python.all import test as pytest
-from coxbuild.extensions.python.all import uninstallBuilt as uninstall
+from coxbuild.extensions.python.docs import apidoc as pyapidoc
+from coxbuild.extensions.python.package import build as pybuild
+from coxbuild.extensions.python.package import deploy as pydeploy
+from coxbuild.extensions.python.format import format as pyformat
+from coxbuild.extensions.python.package import installBuilt as install
+from coxbuild.extensions.python.package import restore as pyrestore
+from coxbuild.extensions.python import settings
+from coxbuild.extensions.python.test import test as pytest
+from coxbuild.extensions.python.package import uninstallBuilt as uninstall
 from coxbuild.schema import depend, loadext, run, setup, task, teardown
+import coxbuild.extensions.python.docs
+import coxbuild.extensions.python.format
+import coxbuild.extensions.python.package
+import coxbuild.extensions.python.test
 
-loadext(coxbuild.extensions.python.all)
+loadext(coxbuild.extensions.python.docs)
+loadext(coxbuild.extensions.python.format)
+loadext(coxbuild.extensions.python.package)
+loadext(coxbuild.extensions.python.test)
 
 readmeDst = Path("./src/README.md")
 

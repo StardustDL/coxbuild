@@ -15,7 +15,7 @@ from .exceptions import CoxbuildException
 from .runners import Runner
 from .tasks import Task, TaskContext, TaskHook, TaskResult
 
-logger = logging.getLogger("manager")
+logger = logging.getLogger("pipelines")
 
 
 @dataclass
@@ -298,13 +298,13 @@ class Pipeline:
 
     def before(self, body: Callable[[PipelineContext], Awaitable[bool] | bool] | PipelineBeforeHook) -> PipelineBeforeHook:
         """Add before hook."""
-        hook = before(body)
+        hook = beforePipeline(body)
         self.hook(hook)
         return hook
 
     def after(self, body: Callable[[PipelineContext, PipelineResult], Awaitable[bool] | bool] | PipelineAfterHook) -> PipelineAfterHook:
         """Add after hook."""
-        hook = after(body)
+        hook = afterPipeline(body)
         self.hook(hook)
         return hook
 

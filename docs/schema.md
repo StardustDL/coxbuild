@@ -3,30 +3,29 @@
 
 ## Task
 
-Use `task` decorator to define a (named) task.
+Use `task` decorator to define a task.
 
 ```python
-@task()
+@task
 def use_function_name_as_task_name(): pass
 
-@task("custom-task-name")
+@named("custom-task-name")
+@task
 async def use_custom_name():
     """task document"""
     pass
 
-@task()
+@task
 async def cost_time():
     print("cost time")
     await asyncio.sleep(0.5)
 
 # default task
-@task()
+@task
 def default(): pass
 ```
 
 Task can have parameters, see [Before/After Hook](#beforeafter-hook) section for details.
-
-> Do **NOT** use `setup` and `teardown` as task parameter name. These parameter names are used by coxbuild.
 
 Builtin tasks:
 
@@ -40,15 +39,26 @@ Builtin tasks:
 Use `depend` decorator to define task dependency (you can use full name or instance of the task).
 
 ```python
-@task()
+@task
 def t1(): pass
 
-@task("t2")
+@task
 def t2(): pass
 
 @depend("t1", t2)
-@task()
+@task
 def default(): pass
+```
+
+Alternative way.
+
+```python
+@task
+def default(): pass
+
+@default.depend
+@task
+def t1(): pass
 ```
 
 ## Group
@@ -56,25 +66,22 @@ def default(): pass
 Use `group` decorator to add namespace to task names (prevent from name conflicting).
 
 ```python
-ns1task = group("ns1")
-ns2task = group("ns2")
-
 # task name: 'ns1:name'
-@ns1task()
+@group("ns1")
+@task
 def name(): pass
 
 # task name: 'ns2:name'
-@ns2task()
+@group("ns2")
+@task
 def name(): pass
 ```
 
 `group` can be nested.
 
 ```python
-nstask = group("ns1", group("sub"))
-
-# task name: 'ns1:sub:name'
-@nstask()
+# task name: 'par:sub:name'
+@group("sub", group("par"))
 def name(): pass
 ```
 
@@ -85,8 +92,21 @@ Use `precondition` to decide whether to run the task, and use `postcondition` to
 ```python
 @precond(lambda: True)
 @postcond(lambda: True)
-@task()
+@task
 def t(): pass
+```
+
+Alternative way.
+
+```python
+@task
+def t(): pass
+
+@t.precond
+def pre(): return True
+
+@t.postcond
+def post(): return True
 ```
 
 ## Hooks
@@ -97,32 +117,27 @@ Use `before` hook to do something before task initializing, configure task argum
 Use `after` hook to do something after task finishing, and check task result.
 
 ```python
-@before(task1)
+def after_task1(context: TaskContext, result: TaskResult):
+    pass
+
+@after(after_task1)
+@task
+def task1():
+    pass
+```
+
+Alternative way.
+
+```python
+@task1.before
 def before_task1(context: TaskContext):
     print(context.task.name)
     context.args.extend([1, 2, 3])
     context.kwds.update(a=1, b=2)
     # return False to ignore this task
 
-@after(task1)
+@task1.after
 def after_task1(context: TaskContext, result: TaskResult):
-    pass
-```
-
-> Use `before` and `after` decorator with **NO** arguments to hook pipeline events.
-
-Use pipeline `before`/`after` hooks to configure and check all tasks globally.
-
-```python
-@before()
-def pipeline_before(context: TaskContext):
-    if context.task.name != "default":
-        context.args.extend(["a", "b", "c"])
-        context.kwds.update(p="p")
-    # return False to ignore this task
-
-@after()
-def pipeline_after(context: TaskContext, result: TaskResult):
     pass
 ```
 
@@ -133,28 +148,69 @@ Use `teardown` hook to do something after task body (in task execution scope, ev
 These hooks have the same parameters as the task body.
 
 ```python
-@setup(task2)
+def setup_task1(*args, **kwds):
+    pass
+
+@setup(setup_task1)
+@task
+def task1():
+    pass
+```
+
+Alternative way.
+
+```python
+@task2.setup
 def setup_task2(*args, **kwds):
     pass
 
-@teardown(task1)
+@task1.teardown
 def teardown_task1(*args, **kwds):
     pass
 ```
 
-> Use `setup` and `teardown` decorator with **NO** arguments to hook pipeline events.
+### Pipeline Hooks
 
-Use `setup` hook to do something before pipeline, and decide whether to run the pipeline.
-Use `teardown` hook to do something after pipeline, and check pipeline result.
+Use pipeline `beforeTask`/`afterTask` hooks to configure and check all tasks globally.
 
 ```python
-@setup()
-def setup_pipeline(context: PipelineContext):
-    # return False to cancel pipeline
-    pass
+@beforeTask
+def pipeline_beforetask(context: TaskContext):
+    if context.task.name != "default":
+        context.args.extend(["a", "b", "c"])
+        context.kwds.update(p="p")
+    # return False to ignore this task
 
-@teardown()
-def teardown_pipeline(context: PipelineContext, result: PipelineResult):
+@afterTask
+def pipeline_aftertask(context: TaskContext, result: TaskResult):
+    pass
+```
+
+Use pipeline `beforePipeline`/`afterPipeline` hooks to do something before and after pipeline running.
+
+```python
+@beforePipeline
+def pipeline_before(context: PipelineContext):
+    if context.task.name != "default":
+        context.args.extend(["a", "b", "c"])
+        context.kwds.update(p="p")
+    # return False to ignore this task
+
+@afterPipeline
+def pipeline_after(context: PipelineContext, result: PipelineResult):
+    pass
+```
+
+Alternative way.
+
+```python
+@pipeline.before
+def pipeline_before(context: PipelineContext):
+    pass
+    # return False to ignore this task
+
+@pipeline.after
+def pipeline_after(context: PipelineContext, result: PipelineResult):
     pass
 ```
 

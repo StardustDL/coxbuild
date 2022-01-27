@@ -42,7 +42,7 @@ async def test_normal():
 async def test_pipeline_before_ignore():
     data = []
     p = pipe(data)
-    p.hook(PipelineBeforeTaskHook(lambda a: False))
+    p.beforeTask(lambda a: False)
 
     res = await p("1")
     assert res

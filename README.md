@@ -44,12 +44,12 @@ pip install coxbuild
 2. Write Schema (buildcox.py)
 
 ```python
-@task()
+@task
 def pre():
     print("pre task")
 
 @depend(pre)
-@task()
+@task
 def default():
     pass
 ```

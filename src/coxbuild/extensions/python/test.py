@@ -9,7 +9,7 @@ from .package import hasPackages, upgradePackages
 
 grouped = group("test", grouped)
 
-
+@grouped
 @precond(lambda: not hasPackages({"pytest": "*",  "pytest-asyncio": "*", "pytest-cov": "*", "coverage": "*"}))
 @task
 def restore():

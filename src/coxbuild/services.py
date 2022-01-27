@@ -82,13 +82,16 @@ class Service:
     """Event-based service."""
 
     def __init__(self) -> None:
-        self.handlers: list[EventHandler] = []
+        self.handlers: dict[str, EventHandler] = {}
         """handlers in the service"""
 
     def register(self, handler: EventHandler):
         """Register handler."""
+        if handler.name in self.handlers:
+            raise CoxbuildException(
+                f"Register multiple task with the same name {handler.name}.")
+        self.handlers[handler.name] = handler
         logger.debug(f"Register event handler: {handler}")
-        self.handlers.append(handler)
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         return ServiceRunner(self)
