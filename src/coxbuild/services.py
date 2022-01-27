@@ -104,7 +104,7 @@ class ServiceRunner(Runner):
 
     async def _run(self):
         logger.debug("Run service.")
-        await asyncio.gather(*[e.handle() for e in self.service.handlers])
+        await asyncio.gather(*[e.handle() for e in self.service.handlers.values()])
         logger.debug("Finish service.")
 
 

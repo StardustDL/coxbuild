@@ -40,10 +40,10 @@ def loadFromModule(module: ModuleType, pipeline: Pipeline, service: Service):
             case EventHandler() as eh:
                 if eh.name not in service.handlers:
                     logger.debug(
-                        f"Registering event handler: {t.name} in {module.__name__}.",)
+                        f"Registering event handler: {eh.name} in {module.__name__}.",)
                     service.register(eh)
                 else:
                     logger.debug(
-                        f"Ignored registered event handler: {t.name} in {module.__name__}.",)
+                        f"Ignored registered event handler: {eh.name} in {module.__name__}.",)
             case PipelineHook() as ph:
                 pipeline.hook(ph)

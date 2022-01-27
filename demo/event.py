@@ -49,7 +49,7 @@ def unsafe_do():
     raise Exception("Unsafe op")
 
 
-@after(serve)
+@serve.after
 def check(context, result):
     assert attime_do_cnt == attime_do_expect
     assert custom_do_cnt == custom_do_expect
