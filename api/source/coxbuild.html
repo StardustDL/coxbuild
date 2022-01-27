@@ -98,6 +98,12 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Build configuration.</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.configuration.Configuration.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.configuration.Configuration" title="coxbuild.configuration.Configuration"><span class="pre">coxbuild.configuration.Configuration</span></a></span></span><a class="headerlink" href="#coxbuild.configuration.Configuration.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy configuration.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.configuration.Configuration.env">
 <span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.configuration.Configuration.env" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get environ section.</p>
@@ -295,11 +301,26 @@ fail: do not raise exception when the final result fails</p>
 <span id="coxbuild-managers-module"></span><h2>coxbuild.managers module<a class="headerlink" href="#module-coxbuild.managers" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="coxbuild.managers.Manager">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.managers.</span></span><span class="sig-name descname"><span class="pre">Manager</span></span><a class="headerlink" href="#coxbuild.managers.Manager" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.managers.</span></span><span class="sig-name descname"><span class="pre">Manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline:</span> <span class="pre">coxbuild.pipelines.Pipeline</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service:</span> <span class="pre">coxbuild.services.Service</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config:</span> <span class="pre">coxbuild.configuration.Configuration</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.managers.Manager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="coxbuild.managers.Manager.config">
+<span class="sig-name descname"><span class="pre">config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.configuration.Configuration" title="coxbuild.configuration.Configuration"><span class="pre">coxbuild.configuration.Configuration</span></a></em><a class="headerlink" href="#coxbuild.managers.Manager.config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.managers.Manager.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.managers.Manager" title="coxbuild.managers.Manager"><span class="pre">coxbuild.managers.Manager</span></a></span></span><a class="headerlink" href="#coxbuild.managers.Manager.copy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.managers.Manager.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">tasks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#coxbuild.managers.Manager.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="coxbuild.managers.Manager.executionState">
+<span class="sig-name descname"><span class="pre">executionState</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.configuration.ExecutionState" title="coxbuild.configuration.ExecutionState"><span class="pre">coxbuild.configuration.ExecutionState</span></a></em><a class="headerlink" href="#coxbuild.managers.Manager.executionState" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -310,6 +331,16 @@ fail: do not raise exception when the final result fails</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.managers.Manager.loadBuiltin">
 <span class="sig-name descname"><span class="pre">loadBuiltin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.managers.Manager.loadBuiltin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="coxbuild.managers.Manager.pipeline">
+<span class="sig-name descname"><span class="pre">pipeline</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.pipelines.Pipeline" title="coxbuild.pipelines.Pipeline"><span class="pre">coxbuild.pipelines.Pipeline</span></a></em><a class="headerlink" href="#coxbuild.managers.Manager.pipeline" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="coxbuild.managers.Manager.service">
+<span class="sig-name descname"><span class="pre">service</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.services.Service" title="coxbuild.services.Service"><span class="pre">coxbuild.services.Service</span></a></em><a class="headerlink" href="#coxbuild.managers.Manager.service" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -329,7 +360,7 @@ fail: do not raise exception when the final result fails</p>
 <span id="coxbuild-pipelines-module"></span><h2>coxbuild.pipelines module<a class="headerlink" href="#module-coxbuild.pipelines" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="coxbuild.pipelines.Pipeline">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.pipelines.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><a class="headerlink" href="#coxbuild.pipelines.Pipeline" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.pipelines.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tasks:</span> <span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coxbuild.tasks.Task]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hooks:</span> <span class="pre">list[coxbuild.pipelines.PipelineHook]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.pipelines.Pipeline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Pipeline to run tasks.</p>
 <dl class="py method">
@@ -354,6 +385,12 @@ fail: do not raise exception when the final result fails</p>
 <dt class="sig sig-object py" id="coxbuild.pipelines.Pipeline.beforeTask">
 <span class="sig-name descname"><span class="pre">beforeTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#coxbuild.tasks.TaskContext" title="coxbuild.tasks.TaskContext"><span class="pre">coxbuild.tasks.TaskContext</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Awaitable</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.pipelines.PipelineBeforeTaskHook" title="coxbuild.pipelines.PipelineBeforeTaskHook"><span class="pre">coxbuild.pipelines.PipelineBeforeTaskHook</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.pipelines.PipelineBeforeTaskHook" title="coxbuild.pipelines.PipelineBeforeTaskHook"><span class="pre">coxbuild.pipelines.PipelineBeforeTaskHook</span></a></span></span><a class="headerlink" href="#coxbuild.pipelines.Pipeline.beforeTask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add before task hook.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.pipelines.Pipeline.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.pipelines.Pipeline" title="coxbuild.pipelines.Pipeline"><span class="pre">coxbuild.pipelines.Pipeline</span></a></span></span><a class="headerlink" href="#coxbuild.pipelines.Pipeline.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy pipeline.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -605,9 +642,15 @@ Run before task.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="coxbuild.services.Service">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.services.</span></span><span class="sig-name descname"><span class="pre">Service</span></span><a class="headerlink" href="#coxbuild.services.Service" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.services.</span></span><span class="sig-name descname"><span class="pre">Service</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handlers:</span> <span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coxbuild.services.EventHandler]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.services.Service" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Event-based service.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.services.Service.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.services.Service" title="coxbuild.services.Service"><span class="pre">coxbuild.services.Service</span></a></span></span><a class="headerlink" href="#coxbuild.services.Service.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy the service.</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="coxbuild.services.Service.handlers">
 <span class="sig-name descname"><span class="pre">handlers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.services.EventHandler" title="coxbuild.services.EventHandler"><span class="pre">coxbuild.services.EventHandler</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#coxbuild.services.Service.handlers" title="Permalink to this definition">¶</a></dt>
@@ -663,6 +706,12 @@ name: handler name, None to use function name</p>
 <dt class="sig sig-object py" id="coxbuild.tasks.Task.body">
 <span class="sig-name descname"><span class="pre">body</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Awaitable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#coxbuild.tasks.Task.body" title="Permalink to this definition">¶</a></dt>
 <dd><p>task body</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.tasks.Task.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a></span></span><a class="headerlink" href="#coxbuild.tasks.Task.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clone task.</p>
 </dd></dl>
 
 <dl class="py method">
