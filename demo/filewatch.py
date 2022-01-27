@@ -11,12 +11,12 @@ from coxbuild.schema import on
 test_file = "watch_temp.txt"
 
 
-@on(once(create(glob=test_file, period=timedelta(seconds=0.3))))
+@on(once(create(glob=test_file)))
 def change(type: FileSystemChangeType, entry: FileSystemEntry):
     print(f"{type}: {entry}")
 
 
-@on(once(delete(glob=test_file, period=timedelta(seconds=0.3))))
+@on(once(delete(glob=test_file)))
 def change(type: FileSystemChangeType, entry: FileSystemEntry):
     print(f"{type}: {entry}")
 

@@ -87,7 +87,7 @@ async def changed(path: Path | None = None, glob: str | None = None, type: set[F
     glob: glob pattern to watch
     type: change type to watch
     """
-    period = period or timedelta(seconds=1)
+    period = period or timedelta(seconds=0)
     path = path or get_working_directory()
 
     snap = FileSystemSnapshot(path, glob)
