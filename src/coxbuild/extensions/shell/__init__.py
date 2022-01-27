@@ -1,8 +1,8 @@
 import platform
 
-from coxbuild.schema import group, run
+from coxbuild.schema import group, run, task
 
-task = group("shell")
+grouped = group("shell")
 
 
 def whereCommand(name: str) -> list[str]:
@@ -24,6 +24,7 @@ def existCommand(name: str) -> bool:
     return len(whereCommand(name)) > 0
 
 
+@grouped
 @task
 def execute(*args, **kwargs):
     run(*args, **kwargs)

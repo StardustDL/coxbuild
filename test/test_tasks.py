@@ -56,8 +56,11 @@ async def test_precond_ignore():
     def add():
         nonlocal c
 
-    r = Task(body=add, precondition=lambda: False)
-    res = await r(setup=add, teardown=add)
+    r = Task(body=add)
+    r.precond(lambda: False)
+    r.setup(add)
+    r.teardown(add)
+    res = await r()
     assert res
     assert c == 0
 
@@ -70,7 +73,8 @@ async def test_postcond_fail():
         nonlocal c
         c = 1
 
-    r = Task(body=f, postcondition=lambda: c == 0)
+    r = Task(body=f)
+    r.postcond(lambda: c == 0)
     res = await r()
     assert not res
     assert c == 1
@@ -85,6 +89,8 @@ async def test_hook():
         c += 1
 
     r = Task(body=add)
-    res = await r(setup=add, teardown=add)
+    r.setup(add)
+    r.teardown(add)
+    res = await r()
     assert res
     assert c == 3

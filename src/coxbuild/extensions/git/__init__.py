@@ -1,9 +1,9 @@
 from pathlib import Path
 
 import coxbuild
-from coxbuild.schema import config, group, run
+from coxbuild.schema import config, group, run, task
 
-task = group("git")
+grouped = group("git")
 mconfig = config.section("git")
 
 

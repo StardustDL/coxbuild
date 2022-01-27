@@ -1,3 +1,4 @@
+from enum import Enum
 import inspect
 import logging
 import sys
@@ -8,37 +9,13 @@ from graphlib import TopologicalSorter
 from queue import Queue
 from typing import Any, Awaitable, Callable
 
+from coxbuild.hooks import Hook
+
 from .exceptions import CoxbuildException
 from .runners import Runner
-from .tasks import Task, TaskFuncDecorator, TaskResult
-from .tasks import group as taskgroup
-from .tasks import task as astask
+from .tasks import Task, TaskContext, TaskHook, TaskResult
 
 logger = logging.getLogger("manager")
-
-
-@dataclass
-class TaskContext:
-    """Execution context for task."""
-    task: Task
-    """running task"""
-    args: list[Any] = field(default_factory=list)
-    """arguments"""
-    kwds: dict[str, Any] = field(default_factory=dict)
-    """keyword arguments"""
-
-
-@dataclass
-class TaskHook:
-    """Hooks for a task."""
-    before: Callable[[TaskContext], Awaitable[bool] | bool] | None = None
-    """before task starting"""
-    setup: Callable[..., Awaitable | None] | None = None
-    """setup before task running"""
-    teardown: Callable[..., Awaitable | None] | None = None
-    """teardown after task running"""
-    after: Callable[[TaskContext, TaskResult], Awaitable | None] | None = None
-    """after task finished"""
 
 
 @dataclass
@@ -68,104 +45,155 @@ class PipelineResult:
 
 
 @dataclass
-class PipelineHook:
+class PipelineHook(Hook):
     """Hooks for a pipeline."""
-    setup: Callable[[PipelineContext], Awaitable[bool] | bool] | None = None
-    """setup before pipeline running"""
-    before: Callable[[TaskContext], Awaitable[bool] | bool] | None = None
-    """before task starting"""
-    after: Callable[[TaskContext, TaskResult], Awaitable | None] | None = None
-    """after task finished"""
-    teardown: Callable[[PipelineContext, PipelineResult],
-                       Awaitable | None] | None = None
-    """teardown after pipeline running"""
+    pass
+
+
+@dataclass
+class PipelineBeforeTaskHook(PipelineHook):
+    """Before task starting"""
+    hook: Callable[[TaskContext], Awaitable[bool] | bool] | None = None
+
+
+@dataclass
+class PipelineBeforeHook(PipelineHook):
+    """Before pipeline starting"""
+    hook: Callable[[PipelineContext], Awaitable[bool] | bool] | None = None
+
+
+@dataclass
+class PipelineAfterHook(PipelineHook):
+    """After pipeline finished"""
+    hook: Callable[[PipelineContext, PipelineResult],
+                   Awaitable | None] | None = None
+
+
+@dataclass
+class PipelineAfterTaskHook(PipelineHook):
+    """After task finished"""
+    hook: Callable[[TaskContext, TaskResult], Awaitable | None] | None = None
+
+
+def beforePipeline(hook: Callable[[PipelineContext], Awaitable[bool]] | PipelineBeforeHook) -> PipelineBeforeHook:
+    """
+    Decorator to configure before hook of a task.
+    Run before pipeline.
+
+    hook: hook function
+    """
+    return hook if isinstance(hook, PipelineBeforeHook) else PipelineBeforeHook(hook)
+
+
+def afterPipeline(hook: Callable[[PipelineContext, PipelineResult], Awaitable[bool]] | PipelineAfterHook) -> PipelineAfterHook:
+    """
+    Decorator to configure after hook of a task.
+    Run after pipeline.
+
+    hook: hook function
+    """
+    return hook if isinstance(hook, PipelineAfterHook) else PipelineAfterHook(hook)
+
+
+def beforeTask(hook: Callable[[TaskContext], Awaitable[bool]] | PipelineBeforeTaskHook) -> PipelineBeforeTaskHook:
+    """
+    Decorator to configure before task hook of a task.
+    Run before task.
+
+    hook: hook function
+    """
+    return hook if isinstance(hook, PipelineBeforeTaskHook) else PipelineBeforeTaskHook(hook)
+
+
+def afterTask(hook: Callable[[TaskContext, TaskResult], Awaitable[bool]] | PipelineAfterTaskHook) -> PipelineAfterTaskHook:
+    """
+    Decorator to configure after task hook of a task.
+    Run after task.
+
+    hook: hook function
+    """
+    return hook if isinstance(hook, PipelineAfterTaskHook) else PipelineAfterTaskHook(hook)
 
 
 class PipelineRunner(Runner):
     """Runner for pipeline."""
 
-    def __init__(self, tasks: list[Task], hooks: dict[str, TaskHook], phook: PipelineHook) -> None:
+    def __init__(self, tasks: list[Task], hooks: list[PipelineHook]) -> None:
         """
         Create runner.
 
         tasks: tasks in the pipeline
-        hooks: hooks for tasks
-        phook: hook for pipeline
+        hooks: hooks for pipeline
         """
         self.tasks = tasks
-        self.hooks = hooks
-        self.phook = phook
+        self.beforeTask = [beforeTask for beforeTask in hooks if isinstance(
+            beforeTask, PipelineBeforeTaskHook)]
+        self.afterTask = [afterTask for afterTask in hooks if isinstance(
+            afterTask, PipelineAfterTaskHook)]
+        self.before = [before for before in hooks if isinstance(
+            before, PipelineBeforeHook)]
+        self.after = [after for after in hooks if isinstance(
+            after, PipelineAfterHook)]
         self.context = PipelineContext(self.tasks)
         self.result = None
 
         super().__init__(self._run)
 
-    async def _run(self):
-        n = len(self.tasks)
+    async def _before(self):
+        logger.debug(f"Run pipeline before hook")
+        for hook in self.before:
+            pre = hook.hook(self.context)
+            if inspect.isawaitable(pre):
+                pre: bool = await pre
 
-        if self.phook.setup:
-            logger.debug(f"Run pipeline setup hook")
-            pre = self.phook.setup(self.context)
+            if pre == False:
+                return False
+
+    async def _beforeTask(self, context: TaskContext):
+        logger.debug(f"Run pipeline before task hook for {context.task.name}")
+        for hook in self.beforeTask:
+            pre = hook.hook(context)
             if inspect.isawaitable(pre):
                 pre: bool = await pre
             if pre == False:
-                message = "Stop pipeline running by pipeline setup hook"
-                logger.info(message)
-                print(message)
-                return
+                return False
 
-        print("")
+    async def _afterTask(self, context: TaskContext, result: TaskResult):
+        logger.debug(f"Run pipeline after task hook for {context.task.name}")
+        for hook in self.afterTask:
+            res = hook.hook(context, result)
+            if inspect.isawaitable(res):
+                await res
+
+    async def _after(self):
+        logger.debug(f"Pipeline after hook.")
+        for hook in self.after:
+            res = hook.hook(self.context, self.result)
+            if inspect.isawaitable(res):
+                await res
+
+    async def _run(self):
+        n = len(self.tasks)
 
         for i, task in enumerate(self.tasks):
             logger.debug(f"Run task {i+1}({task.name}) of {n} tasks")
             print(f"{'-'*15} ({i+1}/{n}) 📜 Task {task.name} {'-'*15}")
             print("")
 
-            hook = self.hooks.get(task.name)
-
             tcontext = TaskContext(task)
 
-            if self.phook.before:
-                logger.debug(f"Run pipeline before hook for {task.name}")
-                pre = self.phook.before(tcontext)
-                if inspect.isawaitable(pre):
-                    pre: bool = await pre
-                if pre == False:
-                    message = f"Stop task {task.name} running by pipeline before hook"
-                    logger.info(message)
-                    print(message)
-                    continue
+            pre = await self._beforeTask(tcontext)
+            if pre == False:
+                message = f"Stop task {task.name} running by pipeline before hook"
+                logger.info(message)
+                print(message)
+                continue
 
-            if hook and hook.before:
-                logger.debug(f"Run task before hook for {task.name}")
-                pre = hook.before(tcontext)
-                if inspect.isawaitable(pre):
-                    pre: bool = await pre
-                if pre == False:
-                    message = f"Stop task {task.name} running by task before hook"
-                    logger.info(message)
-                    print(message)
-                    continue
-
-            setup = hook.setup if hook and hook.setup else None
-            teardown = hook.teardown if hook and hook.teardown else None
-
-            res = await task(*tcontext.args, **tcontext.kwds,
-                             setup=setup, teardown=teardown)
+            res: TaskResult = await task(*tcontext.args, **tcontext.kwds)
 
             self._results.append(res)
 
-            if hook and hook.after:
-                logger.debug(f"Run task after hook for {task.name}")
-                post = hook.after(tcontext, res)
-                if inspect.isawaitable(post):
-                    await post
-
-            if self.phook.after:
-                logger.debug(f"Run pipeline after hook for {task.name}")
-                post = self.phook.after(tcontext, res)
-                if inspect.isawaitable(post):
-                    await post
+            await self._afterTask(tcontext, res)
 
             print("")
 
@@ -179,7 +207,18 @@ class PipelineRunner(Runner):
         self.result = None
         self._results: list[TaskResult] = []
 
-        return await super().__aenter__()
+        res = await super().__aenter__()
+
+        pre = await self._before()
+        if pre == False:
+            message = "Stop pipeline running by pipeline setup hook"
+            logger.info(message)
+            print(message)
+            res = None
+
+        print("")
+
+        return res or (lambda: None)
 
     async def __aexit__(self, exc_type, exc_value, exc_tb) -> bool:
         await super().__aexit__(exc_type, exc_value, exc_tb)
@@ -194,9 +233,7 @@ class PipelineRunner(Runner):
             traceback.print_exception(
                 self.exc_type, self.exc_value, self.exc_tb, file=sys.stdout)
 
-        if self.phook.teardown is not None:
-            logger.debug(f"Pipeline teardown hook.")
-            self.phook.teardown(self.context, self.result)
+        await self._after()
 
         logger.info(f"Finish pipeline: {self.result}")
 
@@ -223,9 +260,7 @@ class Pipeline:
     def __init__(self) -> None:
         self.tasks: dict[str, Task] = {}
         """tasks in the pipeline"""
-        self.hooks: dict[str, TaskHook] = {}
-        """hooks for tasks"""
-        self.phook: PipelineHook = PipelineHook()
+        self.hooks: list[PipelineHook] = []
         """hook for pipeline"""
 
     def register(self, task: Task) -> None:
@@ -240,25 +275,38 @@ class Pipeline:
         self.tasks[task.name] = task
         logger.debug(f"Register task {task.name}")
 
-    def hook(self, thook: TaskHook | PipelineHook, name: str | None = None) -> None:
+    def hook(self, hook: PipelineHook) -> None:
         """
-        Hook task or pipeline.
+        Hook pipeline.
 
-        thook: the updated hook
-        name: the hooked task's name, None for pipeline hook
+        thook: the hook
         """
 
-        if isinstance(thook, TaskHook):
-            if name:
-                self.hooks[name] = thook
-            else:
-                raise CoxbuildException("Empty task name for task hook.")
-        elif isinstance(thook, PipelineHook):
-            if name:
-                raise CoxbuildException(
-                    "Nonempty pipeline name for pipeline hook.")
-            else:
-                self.phook = thook
+        self.hooks.append(hook)
+
+    def beforeTask(self, body: Callable[[TaskContext], Awaitable[bool] | bool] | PipelineBeforeTaskHook) -> PipelineBeforeTaskHook:
+        """Add before task hook."""
+        hook = beforeTask(body)
+        self.hook(hook)
+        return hook
+
+    def afterTask(self, body: Callable[[TaskContext, TaskResult], Awaitable[bool] | bool] | PipelineAfterTaskHook) -> PipelineAfterTaskHook:
+        """Add after task hook."""
+        hook = afterTask(body)
+        self.hook(hook)
+        return hook
+
+    def before(self, body: Callable[[PipelineContext], Awaitable[bool] | bool] | PipelineBeforeHook) -> PipelineBeforeHook:
+        """Add before hook."""
+        hook = before(body)
+        self.hook(hook)
+        return hook
+
+    def after(self, body: Callable[[PipelineContext, PipelineResult], Awaitable[bool] | bool] | PipelineAfterHook) -> PipelineAfterHook:
+        """Add after hook."""
+        hook = after(body)
+        self.hook(hook)
+        return hook
 
     def __call__(self, *args: str | Task, **kwds: Any):
         """
@@ -310,120 +358,4 @@ class Pipeline:
 
         logger.debug(f"Tasks to run: {', '.join((t.name for t in tasks))}")
 
-        return PipelineRunner(tasks, {k: v for k, v in self.hooks.items() if k in tks}, self.phook)
-
-    def before(self, name: str | Task | None = None):
-        """
-        Decorator to configure before hook.
-
-        name: task instance or name, None for pipeline hook
-        """
-        def decorator(body: Callable[[TaskContext], bool]):
-            if name:
-                tname = name if isinstance(name, str) else name.name
-                if tname in self.hooks:
-                    old = asdict(self.hooks[tname])
-                    old.update(before=body)
-                    hk = TaskHook(**old)
-                else:
-                    hk = TaskHook(before=body)
-                self.hook(hk, tname)
-            else:
-                old = asdict(self.phook)
-                old.update(before=body)
-                hk = PipelineHook(**old)
-                self.hook(hk)
-            return body
-        return decorator
-
-    def after(self, name: str | Task | None = None):
-        """
-        Decorator to configure after hook.
-
-        name: task instance or name, None for pipeline hook
-        """
-        def decorator(body: Callable[[TaskContext, TaskResult], None]):
-            if name:
-                tname = name if isinstance(name, str) else name.name
-                if tname in self.hooks:
-                    old = asdict(self.hooks[tname])
-                    old.update(after=body)
-                    hk = TaskHook(**old)
-                else:
-                    hk = TaskHook(after=body)
-                self.hook(hk, tname)
-            else:
-                old = asdict(self.phook)
-                old.update(after=body)
-                hk = PipelineHook(**old)
-                self.hook(hk)
-            return body
-        return decorator
-
-    def setup(self, name: str | Task | None = None):
-        """
-        Decorator to configure setup hook.
-
-        name: task instance or name, None for pipeline hook
-        """
-        def decorator(body: Callable[..., None] | Callable[[PipelineContext], bool]):
-            if name:
-                tname = name if isinstance(name, str) else name.name
-                if tname in self.hooks:
-                    old = asdict(self.hooks[tname])
-                    old.update(setup=body)
-                    hk = TaskHook(**old)
-                else:
-                    hk = TaskHook(setup=body)
-                self.hook(hk, tname)
-            else:
-                old = asdict(self.phook)
-                old.update(setup=body)
-                hk = PipelineHook(**old)
-                self.hook(hk)
-            return body
-        return decorator
-
-    def teardown(self, name: str | Task | None = None):
-        """
-        Decorator to configure teardown hook.
-
-        name: task instance or name, None for pipeline hook
-        """
-        def decorator(body: Callable[..., None] | Callable[[PipelineContext, PipelineResult], None]):
-            if name:
-                tname = name if isinstance(name, str) else name.name
-                if tname in self.hooks:
-                    old = asdict(self.hooks[tname])
-                    old.update(teardown=body)
-                    hk = TaskHook(**old)
-                else:
-                    hk = TaskHook(teardown=body)
-                self.hook(hk, tname)
-            else:
-                old = asdict(self.phook)
-                old.update(teardown=body)
-                hk = PipelineHook(**old)
-                self.hook(hk)
-            return body
-        return decorator
-
-    def task(self, name: str = "") -> TaskFuncDecorator:
-        """
-        Decorator to define a task.
-        """
-        def decorator(body: Callable[..., None]) -> Task:
-            tk = astask(name)(body)
-            self.register(tk)
-            return tk
-        return decorator
-
-    def group(self, name: str, inner: Callable[[str], TaskFuncDecorator] | None = None):
-        """
-        Decorator to add namespace to task names (prevent from name conflicting).
-
-        name: group name
-        inner: inner task definer (for nested group)
-        """
-
-        return taskgroup(name, inner or self.task)
+        return PipelineRunner(tasks, self.hooks)

@@ -162,20 +162,20 @@ def teardown_pipeline(context: PipelineContext, result: PipelineResult):
 
 > The execution scope in written in parentheses.
 
-- Pipeline Setup (Pipeline)
+- Pipeline Before (Pipeline)
   - Task 1
-    - Pipeline Before (Pipeline)
-      - Task Before (Pipeline)
+    - Pipeline Before Task (Pipeline)
+      - Task Before (Task)
         - Task Precondition (Task)
           - Task Setup (Task)
             - Task Body (Task)
           - Task Teardown (Task)
         - Task Postcondition (Task)
-      - Task After (Pipeline)
-    - Pipeline After (Pipeline)
+      - Task After (Task)
+    - Pipeline After Task (Pipeline)
   - Task 2
     - ... (as same as Task 1)
-- Pipeline Teardown (Pipeline)
+- Pipeline After (Pipeline)
 
 Go [here](https://github.com/StardustDL/coxbuild/blob/master/demo/lifecycle.py) to see how to hook these events and how they work.
 

@@ -6,6 +6,7 @@ from pathlib import Path
 import click
 
 from coxbuild import __version__
+from coxbuild.pipelines import Pipeline
 
 
 @click.command()
@@ -42,14 +43,13 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
     if not schemafile.exists():
         raise click.ClickException("Coxbuild schema NOT FOUND.")
 
-    src = schemafile.read_text(encoding="utf-8")
-
-    import coxbuild.extensions.builtin
     from coxbuild import schema
+    from coxbuild import builder
+    from coxbuild.extensions import builtin
 
-    code = compile(src, schemafile, "exec")
+    schema.loadext(builtin)
 
-    exec(code, {attr: getattr(schema, attr) for attr in dir(schema)})
+    schema.loadext(builder.loadModule(schemafile))
 
     if not tasks:
         tasks = ["default"]

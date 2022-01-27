@@ -1,6 +1,7 @@
 import functools
 
 from coxbuild.schema import *
+from coxbuild.tasks import TaskResult
 
 
 def log(f):
@@ -34,7 +35,7 @@ def postcond_task2(*args, **kwds):
 
 @precond(precond_task1)
 @postcond(postcond_task1)
-@task()
+@task
 @log
 def task1(*args, **kwds):
     print(f"task1: {args}, {kwds}")
@@ -42,13 +43,13 @@ def task1(*args, **kwds):
 
 @precond(precond_task2)
 @postcond(postcond_task2)
-@task()
+@task
 @log
 def task2(*args, **kwds):
     print(f"task2: {args}, {kwds}")
 
 
-@before()
+@beforeTask
 @log
 def pipeline_before(context: TaskContext):
     if context.task.name != "default":
@@ -57,7 +58,7 @@ def pipeline_before(context: TaskContext):
     # return False to ignore this task
 
 
-@before(task1)
+@task1.before
 @log
 def before_task1(context: TaskContext):
     context.args.extend([1, 2, 3])
@@ -65,7 +66,7 @@ def before_task1(context: TaskContext):
     # return False to ignore this task
 
 
-@before(task2)
+@task2.before
 @log
 def before_task2(context: TaskContext):
     context.args.extend([4, 5, 6])
@@ -73,61 +74,61 @@ def before_task2(context: TaskContext):
     return True  # return False to ignore this task
 
 
-@after()
+@afterTask
 @log
 def pipeline_after(context: TaskContext, result: TaskResult):
     pass
 
 
-@after(task1)
+@task1.after
 @log
 def after_task1(context: TaskContext, result: TaskResult):
     pass
 
 
-@after(task2)
+@task2.after
 @log
 def after_task2(context: TaskContext, result: TaskResult):
     pass
 
 
-@setup(task1)
+@task1.setup
 @log
 def setup_task1(*args, **kwds):
     pass
 
 
-@setup(task2)
+@task2.setup
 @log
 def setup_task2(*args, **kwds):
     pass
 
 
-@teardown(task1)
+@task1.teardown
 @log
 def teardown_task1(*args, **kwds):
     pass
 
 
-@teardown(task2)
+@task2.teardown
 @log
 def teardown_task2(*args, **kwds):
     pass
 
 
-@setup()
+@beforePipeline
 @log
-def setup_pipeline(context: PipelineContext):
+def before_pipeline(context: PipelineContext):
     return True  # return False to cancel pipeline
 
 
-@teardown()
+@afterPipeline
 @log
-def teardown_pipeline(context: PipelineContext, result: PipelineResult):
+def after_pipeline(context: PipelineContext, result: PipelineResult):
     pass
 
 
 @depend(task1, task2)
-@task()
+@task
 def default():
     pass

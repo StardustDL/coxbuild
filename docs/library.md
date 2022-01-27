@@ -13,8 +13,8 @@ task: Task
 
 result = await task(
     *args, **kwds, 
-    setup=setup_hook,
-    teardown=teardown_hook)
+    setup=[setup_hook, ...],
+    teardown=[teardown_hook, ...])
 ```
 
 ## Pipeline

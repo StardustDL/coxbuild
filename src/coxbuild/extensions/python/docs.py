@@ -1,47 +1,52 @@
 from pathlib import Path
 
 from coxbuild import get_working_directory
-from coxbuild.schema import depend, group, precond, run
+from coxbuild.schema import depend, group, precond, run, task
 
 from .. import projectSettings
-from . import settings, task
+from . import settings, grouped
 from .package import hasPackages, upgradePackages
 
-task = group("docs", task)
+grouped = group("docs", grouped)
 
 
+@grouped
 @precond(lambda: not hasPackages({"Sphinx": "*"}))
-@task()
+@task
 def restore():
     """Restore Python docs tools."""
     upgradePackages("Sphinx")
 
 
+@grouped
 @depend(restore)
-@task()
+@task
 def sphinx_init(docs: Path | None = None):
     """Initialize sphinx to generate API documents."""
     run(["sphinx-quickstart"], cwd=docs or projectSettings.docs)
 
 
+@grouped
 @depend(restore)
-@task()
+@task
 def sphinx_api(src: Path | None = None, docs: Path | None = None):
     """Use sphinx to generate API documents."""
     run(["sphinx-apidoc", "-o", "source", str(src or projectSettings.src)],
         cwd=docs or projectSettings.docs)
 
 
+@grouped
 @depend(sphinx_api)
-@task()
+@task
 def sphinx_html(docs: Path | None = None):
     """Use sphinx to generate API documents in HTML."""
     run(["sphinx-build", "-b", "html", ".", "_build"],
         cwd=docs or projectSettings.docs)
 
 
+@grouped
 @depend(sphinx_html)
-@task()
+@task
 def apidoc():
     """Generate API documents to {projectSettings.docs}/_build."""
     pass

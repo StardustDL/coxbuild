@@ -2,11 +2,11 @@ from pathlib import Path
 
 import coxbuild
 from coxbuild.configuration import Configuration
-from coxbuild.schema import config, group, run
+from coxbuild.schema import config, group, run, task
 
 from .. import projectSettings
 
-task = group("dotnet")
+grouped = group("dotnet")
 
 
 class Settings:
@@ -53,12 +53,14 @@ class Settings:
 settings = Settings(config.section("dotnet"))
 
 
-@task()
+@grouped
+@task
 def restore():
     run(["dotnet", "restore"], cwd=projectSettings.src, retry=3)
 
 
-@task()
+@grouped
+@task
 def build():
     args = ["dotnet", "build", "-c", settings.buildConfig]
     if settings.version:
@@ -66,7 +68,8 @@ def build():
     run(args, cwd=projectSettings.src)
 
 
-@task()
+@grouped
+@task
 def pack():
     args = ["dotnet", "pack", "-c", settings.buildConfig]
     if settings.version:
@@ -75,7 +78,8 @@ def pack():
     run(args, cwd=projectSettings.src)
 
 
-@task()
+@grouped
+@task
 def push():
     run(["dotnet", "nuget", "push", f"{str(projectSettings.package)}/*",
         "-s", settings.nugetSource, "-k", settings.nugetToken])

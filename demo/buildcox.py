@@ -1,39 +1,56 @@
 import asyncio
 
-from coxbuild.schema import depend, precond, task
+from coxbuild.schema import depend, task, precond
 
 
-@task()
+@task
 def pre():
     print("pre")
 
 
+@task
+def b():
+    print("b")
+
+
+@b.depend
 @depend(pre)
-@task()
+@task
 def a():
     print("a")
 
 
 @depend(pre)
-@task()
-def b():
-    print("b")
-
-
-@depend(pre)
-@task()
+@task
 async def cost_time():
     print("cost time")
     await asyncio.sleep(0.5)
 
 
-@precond(lambda: False)
-@task()
+@task
 def ignored():
-    raise Exception("Execute ignored task")
+    pass
+
+
+@ignored.depend
+@precond(lambda: False)
+@task
+def ignoredByPrecond():
+    raise Exception("Execute ignored precond task")
+
+
+@ignored.depend
+@task
+def ignoredByBefore():
+    raise Exception("Execute ignored before task")
+
+
+@ignoredByBefore.before
+def beforeIgnored(context):
+    return False
 
 
 @depend(a, b, ignored, cost_time)
-@task()
+@task
 def default():
     pass

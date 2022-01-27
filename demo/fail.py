@@ -1,37 +1,37 @@
 from coxbuild.schema import depend, postcond, run, task
 
 
-@task()
+@task
 def pre():
     print("pre")
 
 
 @depend(pre)
-@task()
+@task
 def executeFail():
     raise Exception("Try fail")
 
 
 @postcond(lambda: False)
 @depend(pre)
-@task()
+@task
 def postCondFail():
     pass
 
 
 @depend(pre)
-@task()
+@task
 def b():
     print("b")
 
 
 @depend(executeFail, b)
-@task()
+@task
 def default():
     pass
 
 
 @depend(postCondFail, b)
-@task()
+@task
 def default2():
     pass

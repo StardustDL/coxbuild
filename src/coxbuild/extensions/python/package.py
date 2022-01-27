@@ -2,12 +2,12 @@ import shutil
 from pathlib import Path
 from typing import Tuple
 
-from coxbuild.schema import depend, group, precond, run
+from coxbuild.schema import depend, group, precond, run, task
 
 from .. import projectSettings
-from . import settings, task
+from . import settings, grouped
 
-task = group("package", task)
+grouped = group("package", grouped)
 
 
 def loadFromRequirements(lines: list[str]) -> dict[str, str]:
@@ -38,6 +38,15 @@ def upgradePackages(*packages: str):
     run(["python", "-m", "pip", "install", "--upgrade", *packages], retry=3)
 
 
+@grouped
+@task
+def restore(requirements: Path | None = None):
+    """Restore Python packages from requirements.txt."""
+    run(["python", "-m", "pip", "install", "-r",
+        str(requirements or settings.requirements)], retry=3)
+
+
+@restore.precond
 def needRestore():
     req: Path = settings.requirements
     if not req.exists():
@@ -46,23 +55,17 @@ def needRestore():
     return not hasPackages(reqs)
 
 
-@precond(needRestore)
-@task()
-def restore(requirements: Path | None = None):
-    """Restore Python packages from requirements.txt."""
-    run(["python", "-m", "pip", "install", "-r",
-        str(requirements or settings.requirements)], retry=3)
-
-
+@grouped
 @precond(lambda: not hasPackages({"build": "*", "twine": "*"}))
-@task()
+@task
 def prebuild():
     """Restore Python package build tools."""
     upgradePackages("build", "twine")
 
 
+@grouped
 @depend(prebuild)
-@task()
+@task
 def build(src: Path | None = None, dist: Path | None = None):
     """Build Python package."""
     src = src or projectSettings.src
@@ -74,22 +77,25 @@ def build(src: Path | None = None, dist: Path | None = None):
         shutil.rmtree(item)
 
 
-@task()
+@grouped
+@task
 def installBuilt(dist: Path | None = None):
     """Install the built package."""
     run(["python", "-m", "pip", "install",
         str(list((dist or projectSettings.package).glob("*.whl"))[0])])
 
 
-@task()
+@grouped
+@task
 def uninstallBuilt(dist: Path | None = None):
     """Uninstall the built package."""
     run(["python", "-m", "pip", "uninstall",
         str(list((dist or projectSettings.package).glob("*.whl"))[0]), "-y"])
 
 
+@grouped
 @depend(build)
-@task()
+@task
 def deploy(dist: Path | None = None):
     """Upload the package to PYPI."""
     run(["python", "-m", "twine", "upload",

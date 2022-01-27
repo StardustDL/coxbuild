@@ -93,23 +93,6 @@ class Service:
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         return ServiceRunner(self)
 
-    def on(self, event: Callable[[], Awaitable], safe: bool = False, name: str | None = None):
-        """
-        Decorator to register event handler.
-
-        event: event generator, when the event occurs, the awaitable return
-        handler: event handler
-        repeat: repeat times, 0 for no-repeat, positive integer for finite repeat, negative integer for infinite repeat
-        safe: prevent exception
-        name: handler name, None to use function name
-        """
-        def decorator(handler: Callable[[], None]):
-            self.register(EventHandler(event, handler,
-                                       safe, name or handler.__name__))
-            return handler
-
-        return decorator
-
 
 class ServiceRunner(Runner):
     def __init__(self, service: Service) -> None:
@@ -120,3 +103,19 @@ class ServiceRunner(Runner):
         logger.debug("Run service.")
         await asyncio.gather(*[e.handle() for e in self.service.handlers])
         logger.debug("Finish service.")
+
+
+def on(event: Callable[[], Awaitable], safe: bool = False, name: str | None = None):
+    """
+    Decorator to register event handler.
+
+    event: event generator, when the event occurs, the awaitable return
+    handler: event handler
+    repeat: repeat times, 0 for no-repeat, positive integer for finite repeat, negative integer for infinite repeat
+    safe: prevent exception
+    name: handler name, None to use function name
+    """
+    def decorator(handler: Callable[[], None]):
+        return EventHandler(event, handler, safe, name or handler.__name__)
+
+    return decorator

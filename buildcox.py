@@ -4,6 +4,7 @@ from datetime import timedelta
 from pathlib import Path
 
 from coxbuild.extensions import projectSettings
+import coxbuild.extensions.python.all
 from coxbuild.extensions.python.all import apidoc as pyapidoc
 from coxbuild.extensions.python.all import build as pybuild
 from coxbuild.extensions.python.all import deploy as pydeploy
@@ -13,25 +14,27 @@ from coxbuild.extensions.python.all import restore as pyrestore
 from coxbuild.extensions.python.all import settings
 from coxbuild.extensions.python.all import test as pytest
 from coxbuild.extensions.python.all import uninstallBuilt as uninstall
-from coxbuild.schema import depend, run, setup, task, teardown
+from coxbuild.schema import depend, loadext, run, setup, task, teardown
+
+loadext(coxbuild.extensions.python.all)
 
 readmeDst = Path("./src/README.md")
 
 projectSettings.docs = Path("./docs/gen/ref")
 
 
-@setup(pybuild)
+@pybuild.setup
 def setupBuild():
     shutil.copyfile(Path("README.md"), readmeDst)
 
 
-@teardown(pybuild)
+@pybuild.teardown
 def teardownBuild():
     os.remove(readmeDst)
 
 
 @depend(install)
-@task()
+@task
 def demo():
     run(["coxbuild", "--version"])
     run(["coxbuild", "--help"])
@@ -41,7 +44,7 @@ demoCmdPre = ["coxbuild", "-vvv", "-D", "./demo"]
 
 
 @depend(install)
-@task()
+@task
 def test_build():
     run(["coxbuild", "-vvvvv", "-D", "./demo"])
     res = run([*demoCmdPre, "-f", "fail.py"], fail=True)
@@ -55,33 +58,33 @@ def test_build():
 
 
 @depend(install)
-@task()
+@task
 def test_builtin():
     run([*demoCmdPre, ":list"])
     run([*demoCmdPre, ":serve"])
 
 
 @depend(install)
-@task()
+@task
 def test_lifecycle():
     run([*demoCmdPre, "-f", "lifecycle.py"])
 
 
 @depend(install)
-@task()
+@task
 def test_service():
     run([*demoCmdPre, "-f", "event.py", ":serve"])
 
 
 @depend(install)
-@task()
+@task
 def test_event_fs():
     run([*demoCmdPre, "-f", "filewatch.py", ":serve"],
         timeout=timedelta(seconds=3))
 
 
 @depend(install)
-@task()
+@task
 def test_command():
     run([*demoCmdPre, "-f", "command.py"])
     res = run([*demoCmdPre,
@@ -91,46 +94,46 @@ def test_command():
 
 
 @depend(test_build, test_lifecycle, test_command, test_service, test_builtin, test_event_fs)
-@task()
+@task
 def integrationtest(): pass
 
 
 @depend(pytest)
-@task()
+@task
 def unittest(): pass
 
 
 @depend(demo, integrationtest, unittest)
-@task()
+@task
 async def test():
     await uninstall()
 
 
 @depend(pyapidoc)
-@task()
+@task
 def docs(): pass
 
 
 @depend(pydeploy)
-@task()
+@task
 def deploy(): pass
 
 
 @depend(pyrestore, pybuild)
-@task()
+@task
 def build(): pass
 
 
 @depend(pyformat)
-@task()
+@task
 def format(): pass
 
 
 @depend(build)
-@task()
+@task
 def default(): pass
 
 
-@task()
+@task
 def serdoc():
     run(["docsify", "serve", "docs"], shell=True, fail=True)

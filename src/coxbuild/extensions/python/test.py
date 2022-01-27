@@ -1,32 +1,34 @@
 from pathlib import Path
 
 from coxbuild import get_working_directory
-from coxbuild.schema import depend, group, precond, run
+from coxbuild.schema import depend, group, precond, run, task
 
 from .. import projectSettings
-from . import settings, task
+from . import settings, grouped
 from .package import hasPackages, upgradePackages
 
-task = group("test", task)
+grouped = group("test", grouped)
 
 
 @precond(lambda: not hasPackages({"pytest": "*",  "pytest-asyncio": "*", "pytest-cov": "*", "coverage": "*"}))
-@task()
+@task
 def restore():
     """Restore Python test tools."""
     upgradePackages("pytest", "pytest-asyncio", "coverage", "pytest-cov")
 
 
+@grouped
 @depend(restore)
-@task()
+@task
 def pytest(src: Path | None = None, test: Path | None = None):
     """Use pytest to test Python code."""
     run(["pytest", "--cov-report=term-missing",
         "--cov-report=html", f"--cov={str(src or projectSettings.src)}"], cwd=str(test or projectSettings.test))
 
 
+@grouped
 @depend(pytest)
-@task()
+@task
 def test():
     """Test Python code."""
     pass

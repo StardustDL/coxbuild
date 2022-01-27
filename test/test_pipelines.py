@@ -2,7 +2,7 @@ import asyncio
 
 import pytest
 
-from coxbuild.pipelines import Pipeline, PipelineHook, TaskHook
+from coxbuild.pipelines import Pipeline, PipelineBeforeTaskHook, PipelineHook, TaskHook
 from coxbuild.tasks import Task
 
 
@@ -42,40 +42,8 @@ async def test_normal():
 async def test_pipeline_before_ignore():
     data = []
     p = pipe(data)
-    p.hook(PipelineHook(before=lambda a: False))
+    p.hook(PipelineBeforeTaskHook(lambda a: False))
 
     res = await p("1")
     assert res
     assert len(data) == 0
-
-
-@pytest.mark.asyncio
-async def test_task_before_ignore():
-    data = []
-    p = pipe(data)
-    p.hook(TaskHook(before=lambda a: False), "1")
-
-    res = await p("1")
-    assert res
-    assert len(data) == 1
-    assert data[0] == 0
-
-
-@pytest.mark.asyncio
-async def test_hook():
-    c = 0
-    data = []
-
-    def add(*args, **kwds):
-        nonlocal c
-        c += 1
-
-    p = pipe(data)
-    p.hook(PipelineHook(setup=add, before=add, after=add, teardown=add))
-    p.hook(TaskHook(setup=add, before=add, after=add, teardown=add), "pre")
-    p.hook(TaskHook(setup=add, before=add, after=add, teardown=add), "1")
-
-    res = await p("1")
-    assert res
-    assert len(data) == 2
-    assert c == 2 + 2*2 + 4*2
