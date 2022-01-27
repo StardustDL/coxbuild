@@ -13,14 +13,6 @@ Subpackages
 Submodules
 ----------
 
-coxbuild.builder module
------------------------
-
-.. automodule:: coxbuild.builder
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 coxbuild.configuration module
 -----------------------------
 
@@ -49,6 +41,14 @@ coxbuild.invocation module
 --------------------------
 
 .. automodule:: coxbuild.invocation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+coxbuild.managers module
+------------------------
+
+.. automodule:: coxbuild.managers
    :members:
    :undoc-members:
    :show-inheritance:

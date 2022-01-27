@@ -90,19 +90,6 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </section>
-<section id="module-coxbuild.builder">
-<span id="coxbuild-builder-module"></span><h2>coxbuild.builder module<a class="headerlink" href="#module-coxbuild.builder" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="coxbuild.builder.loadFromModule">
-<span class="sig-prename descclassname"><span class="pre">coxbuild.builder.</span></span><span class="sig-name descname"><span class="pre">loadFromModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#coxbuild.pipelines.Pipeline" title="coxbuild.pipelines.Pipeline"><span class="pre">coxbuild.pipelines.Pipeline</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">service</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#coxbuild.services.Service" title="coxbuild.services.Service"><span class="pre">coxbuild.services.Service</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.builder.loadFromModule" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="coxbuild.builder.loadModule">
-<span class="sig-prename descclassname"><span class="pre">coxbuild.builder.</span></span><span class="sig-name descname"><span class="pre">loadModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.builder.loadModule" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</section>
 <section id="module-coxbuild.configuration">
 <span id="coxbuild-configuration-module"></span><h2>coxbuild.configuration module<a class="headerlink" href="#module-coxbuild.configuration" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
@@ -302,6 +289,30 @@ pipe: pipe and collect stdout and stderr
 retry: the number of times to retry when failing
 fail: do not raise exception when the final result fails</p>
 </dd></dl>
+
+</section>
+<section id="module-coxbuild.managers">
+<span id="coxbuild-managers-module"></span><h2>coxbuild.managers module<a class="headerlink" href="#module-coxbuild.managers" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="coxbuild.managers.Manager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.managers.</span></span><span class="sig-name descname"><span class="pre">Manager</span></span><a class="headerlink" href="#coxbuild.managers.Manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.managers.Manager.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">module</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coxbuild.managers.Manager.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.managers.Manager.loadBuiltin">
+<span class="sig-name descname"><span class="pre">loadBuiltin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.managers.Manager.loadBuiltin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coxbuild.managers.loadModule">
+<span class="sig-prename descclassname"><span class="pre">coxbuild.managers.</span></span><span class="sig-name descname"><span class="pre">loadModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.managers.loadModule" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </section>
 <section id="module-coxbuild.pipelines">
