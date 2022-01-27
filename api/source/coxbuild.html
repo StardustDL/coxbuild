@@ -298,6 +298,11 @@ fail: do not raise exception when the final result fails</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.managers.</span></span><span class="sig-name descname"><span class="pre">Manager</span></span><a class="headerlink" href="#coxbuild.managers.Manager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.managers.Manager.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">tasks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#coxbuild.managers.Manager.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.managers.Manager.load">
 <span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">module</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coxbuild.managers.Manager.load" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -310,8 +315,13 @@ fail: do not raise exception when the final result fails</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="coxbuild.managers.loadModule">
-<span class="sig-prename descclassname"><span class="pre">coxbuild.managers.</span></span><span class="sig-name descname"><span class="pre">loadModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.managers.loadModule" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="coxbuild.managers.loadModuleFromFile">
+<span class="sig-prename descclassname"><span class="pre">coxbuild.managers.</span></span><span class="sig-name descname"><span class="pre">loadModuleFromFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.managers.loadModuleFromFile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coxbuild.managers.loadModuleFromSource">
+<span class="sig-prename descclassname"><span class="pre">coxbuild.managers.</span></span><span class="sig-name descname"><span class="pre">loadModuleFromSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.managers.loadModuleFromSource" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -527,7 +537,7 @@ Run before task.</p>
 <span id="coxbuild-schema-module"></span><h2>coxbuild.schema module<a class="headerlink" href="#module-coxbuild.schema" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="coxbuild.schema.loadext">
-<span class="sig-prename descclassname"><span class="pre">coxbuild.schema.</span></span><span class="sig-name descname"><span class="pre">loadext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">module</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.schema.loadext" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">coxbuild.schema.</span></span><span class="sig-name descname"><span class="pre">loadext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">module</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.schema.loadext" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -934,7 +944,7 @@ Run after task body.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="coxbuild.tasks.group">
-<span class="sig-prename descclassname"><span class="pre">coxbuild.tasks.</span></span><span class="sig-name descname"><span class="pre">group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.tasks.group" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">coxbuild.tasks.</span></span><span class="sig-name descname"><span class="pre">group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.tasks.group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to set task group.</p>
 </dd></dl>
 
