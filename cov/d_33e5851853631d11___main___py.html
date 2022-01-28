@@ -43,9 +43,9 @@
             </div>
         </div>
         <h2>
-            <span class="text">27 statements &nbsp;</span>
+            <span class="text">28 statements &nbsp;</span>
             <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">0<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">27<span class="text"> missing</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">28<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <div style="display: none;">
@@ -99,19 +99,21 @@
     <p class="mis show_mis"><span class="n"><a id="t40" href="#t40">40</a></span><span class="t">        <span class="key">raise</span> <span class="nam">click</span><span class="op">.</span><span class="nam">ClickException</span><span class="op">(</span><span class="str">"Coxbuild schema NOT FOUND."</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t41" href="#t41">41</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t42" href="#t42">42</a></span><span class="t">    <span class="key">from</span> <span class="nam">coxbuild</span> <span class="key">import</span> <span class="nam">managers</span><span class="op">,</span> <span class="nam">schema</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t43" href="#t43">43</a></span><span class="t">    <span class="nam">schema</span><span class="op">.</span><span class="nam">manager</span><span class="op">.</span><span class="nam">load</span><span class="op">(</span><span class="nam">managers</span><span class="op">.</span><span class="nam">loadModuleFromFile</span><span class="op">(</span><span class="nam">schemafile</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t43" href="#t43">43</a></span><span class="t">    <span class="key">from</span> <span class="nam">coxbuild</span><span class="op">.</span><span class="nam">extensions</span><span class="op">.</span><span class="nam">loader</span> <span class="key">import</span> <span class="nam">fromFile</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t44" href="#t44">44</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t45" href="#t45">45</a></span><span class="t">    <span class="nam">exit</span><span class="op">(</span><span class="num">0</span> <span class="key">if</span> <span class="nam">schema</span><span class="op">.</span><span class="nam">manager</span><span class="op">.</span><span class="nam">execute</span><span class="op">(</span><span class="op">*</span><span class="op">(</span><span class="nam">tasks</span> <span class="key">or</span> <span class="op">[</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="key">else</span> <span class="num">1</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t45" href="#t45">45</a></span><span class="t">    <span class="nam">schema</span><span class="op">.</span><span class="nam">manager</span><span class="op">.</span><span class="nam">register</span><span class="op">(</span><span class="nam">fromFile</span><span class="op">(</span><span class="nam">schemafile</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t46" href="#t46">46</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t47" href="#t47">47</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t48" href="#t48">48</a></span><span class="t"><span class="key">if</span> <span class="nam">__name__</span> <span class="op">==</span> <span class="str">'__main__'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t49" href="#t49">49</a></span><span class="t">    <span class="nam">main</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t47" href="#t47">47</a></span><span class="t">    <span class="nam">exit</span><span class="op">(</span><span class="num">0</span> <span class="key">if</span> <span class="nam">schema</span><span class="op">.</span><span class="nam">manager</span><span class="op">.</span><span class="nam">execute</span><span class="op">(</span><span class="op">*</span><span class="op">(</span><span class="nam">tasks</span> <span class="key">or</span> <span class="op">[</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="key">else</span> <span class="num">1</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t48" href="#t48">48</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t49" href="#t49">49</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t50" href="#t50">50</a></span><span class="t"><span class="key">if</span> <span class="nam">__name__</span> <span class="op">==</span> <span class="str">'__main__'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t51" href="#t51">51</a></span><span class="t">    <span class="nam">main</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v6.3</a>,
-            created at 2022-01-28 06:46 +0000
+            created at 2022-01-28 14:48 +0000
         </p>
     </div>
 </footer>

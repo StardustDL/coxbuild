@@ -50,11 +50,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="coxbuild.extensions.gradle.html">coxbuild.extensions.gradle package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="coxbuild.extensions.gradle.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coxbuild.extensions.gradle.html#module-coxbuild.extensions.gradle">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="coxbuild.extensions.nodejs.html">coxbuild.extensions.nodejs package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="coxbuild.extensions.nodejs.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coxbuild.extensions.nodejs.html#module-coxbuild.extensions.nodejs">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="coxbuild.extensions.python.html">coxbuild.extensions.python package</a><ul>
@@ -73,8 +73,85 @@
 </ul>
 </div>
 </section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-coxbuild.extensions.loader">
+<span id="coxbuild-extensions-loader-module"></span><h2>coxbuild.extensions.loader module<a class="headerlink" href="#module-coxbuild.extensions.loader" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="coxbuild.extensions.loader.fromFile">
+<span class="sig-prename descclassname"><span class="pre">coxbuild.extensions.loader.</span></span><span class="sig-name descname"><span class="pre">fromFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.extensions.Extension" title="coxbuild.extensions.Extension"><span class="pre">coxbuild.extensions.Extension</span></a></span></span><a class="headerlink" href="#coxbuild.extensions.loader.fromFile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coxbuild.extensions.loader.fromModule">
+<span class="sig-prename descclassname"><span class="pre">coxbuild.extensions.loader.</span></span><span class="sig-name descname"><span class="pre">fromModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">module</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.extensions.Extension" title="coxbuild.extensions.Extension"><span class="pre">coxbuild.extensions.Extension</span></a></span></span><a class="headerlink" href="#coxbuild.extensions.loader.fromModule" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coxbuild.extensions.loader.fromSource">
+<span class="sig-prename descclassname"><span class="pre">coxbuild.extensions.loader.</span></span><span class="sig-name descname"><span class="pre">fromSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'&lt;string&gt;'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.extensions.Extension" title="coxbuild.extensions.Extension"><span class="pre">coxbuild.extensions.Extension</span></a></span></span><a class="headerlink" href="#coxbuild.extensions.loader.fromSource" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coxbuild.extensions.loader.fromUrl">
+<span class="sig-prename descclassname"><span class="pre">coxbuild.extensions.loader.</span></span><span class="sig-name descname"><span class="pre">fromUrl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.extensions.Extension" title="coxbuild.extensions.Extension"><span class="pre">coxbuild.extensions.Extension</span></a></span></span><a class="headerlink" href="#coxbuild.extensions.loader.fromUrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coxbuild.extensions.loader.load">
+<span class="sig-prename descclassname"><span class="pre">coxbuild.extensions.loader.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.extensions.loader.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
 <section id="module-coxbuild.extensions">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-coxbuild.extensions" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="coxbuild.extensions.Extension">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.extensions.</span></span><span class="sig-name descname"><span class="pre">Extension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">module</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.extensions.Extension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="coxbuild.extensions.Extension.content">
+<span class="sig-name descname"><span class="pre">content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">module</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#coxbuild.extensions.Extension.content" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="coxbuild.extensions.Extension.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#coxbuild.extensions.Extension.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="coxbuild.extensions.Extension.events">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">events</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="coxbuild.html#coxbuild.services.EventHandler" title="coxbuild.services.EventHandler"><span class="pre">coxbuild.services.EventHandler</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#coxbuild.extensions.Extension.events" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="coxbuild.extensions.Extension.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#coxbuild.extensions.Extension.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="coxbuild.extensions.Extension.pipelineHooks">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pipelineHooks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="coxbuild.html#coxbuild.pipelines.PipelineHook" title="coxbuild.pipelines.PipelineHook"><span class="pre">coxbuild.pipelines.PipelineHook</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#coxbuild.extensions.Extension.pipelineHooks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="coxbuild.extensions.Extension.tasks">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tasks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="coxbuild.html#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#coxbuild.extensions.Extension.tasks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="coxbuild.extensions.Extension.uri">
+<span class="sig-name descname"><span class="pre">uri</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#coxbuild.extensions.Extension.uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="coxbuild.extensions.Extension.version">
+<span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#coxbuild.extensions.Extension.version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="coxbuild.extensions.ProjectSettings">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.extensions.</span></span><span class="sig-name descname"><span class="pre">ProjectSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="coxbuild.html#coxbuild.configuration.Configuration" title="coxbuild.configuration.Configuration"><span class="pre">coxbuild.configuration.Configuration</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.extensions.ProjectSettings" title="Permalink to this definition">¶</a></dt>

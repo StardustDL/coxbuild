@@ -15,6 +15,17 @@ Subpackages
    coxbuild.extensions.python
    coxbuild.extensions.shell
 
+Submodules
+----------
+
+coxbuild.extensions.loader module
+---------------------------------
+
+.. automodule:: coxbuild.extensions.loader
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
