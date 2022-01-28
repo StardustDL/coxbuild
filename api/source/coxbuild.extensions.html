@@ -50,11 +50,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="coxbuild.extensions.gradle.html">coxbuild.extensions.gradle package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="coxbuild.extensions.gradle.html#module-coxbuild.extensions.gradle">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coxbuild.extensions.gradle.html#module-contents">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="coxbuild.extensions.nodejs.html">coxbuild.extensions.nodejs package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="coxbuild.extensions.nodejs.html#module-coxbuild.extensions.nodejs">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coxbuild.extensions.nodejs.html#module-contents">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="coxbuild.extensions.python.html">coxbuild.extensions.python package</a><ul>
@@ -78,7 +78,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="coxbuild.extensions.ProjectSettings">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.extensions.</span></span><span class="sig-name descname"><span class="pre">ProjectSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="coxbuild.html#coxbuild.configuration.Configuration" title="coxbuild.configuration.Configuration"><span class="pre">coxbuild.configuration.Configuration</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.extensions.ProjectSettings" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="coxbuild.html#coxbuild.configuration.ConfigurationAccessor" title="coxbuild.configuration.ConfigurationAccessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">coxbuild.configuration.ConfigurationAccessor</span></code></a></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="coxbuild.extensions.ProjectSettings.docs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">docs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><a class="headerlink" href="#coxbuild.extensions.ProjectSettings.docs" title="Permalink to this definition">¶</a></dt>
@@ -103,6 +103,12 @@
 <dd><p>Path to test code.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coxbuild.extensions.withProject">
+<span class="sig-prename descclassname"><span class="pre">coxbuild.extensions.</span></span><span class="sig-name descname"><span class="pre">withProject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="coxbuild.html#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="coxbuild.html#coxbuild.tasks.Task" title="coxbuild.tasks.Task"><span class="pre">coxbuild.tasks.Task</span></a></span></span><a class="headerlink" href="#coxbuild.extensions.withProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator to add project argument to task context.</p>
 </dd></dl>
 
 </section>

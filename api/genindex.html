@@ -153,8 +153,20 @@
       <li><a href="source/coxbuild.html#coxbuild.invocation.CommandExecutionResult">CommandExecutionResult (class in coxbuild.invocation)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.managers.Manager.config">config (coxbuild.managers.Manager attribute)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineContext.config">(coxbuild.pipelines.PipelineContext attribute)</a>
 </li>
+        <li><a href="source/coxbuild.html#coxbuild.services.ServiceContext.config">(coxbuild.services.ServiceContext attribute)</a>
+</li>
+        <li><a href="source/coxbuild.html#coxbuild.tasks.TaskContext.config">(coxbuild.tasks.TaskContext attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.configuration.Configuration">Configuration (class in coxbuild.configuration)</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState.configuration">configuration (coxbuild.runtime.ExecutionState property)</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.configuration.ConfigurationAccessor">ConfigurationAccessor (class in coxbuild.configuration)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.configuration.Configuration.copy">copy() (coxbuild.configuration.Configuration method)</a>
 
@@ -238,20 +250,6 @@
         <li><a href="source/coxbuild.extensions.git.html#module-coxbuild.extensions.git">module</a>
 </li>
       </ul></li>
-      <li>
-    coxbuild.extensions.gradle
-
-      <ul>
-        <li><a href="source/coxbuild.extensions.gradle.html#module-coxbuild.extensions.gradle">module</a>
-</li>
-      </ul></li>
-      <li>
-    coxbuild.extensions.nodejs
-
-      <ul>
-        <li><a href="source/coxbuild.extensions.nodejs.html#module-coxbuild.extensions.nodejs">module</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
@@ -329,6 +327,13 @@
 
       <ul>
         <li><a href="source/coxbuild.html#module-coxbuild.runners">module</a>
+</li>
+      </ul></li>
+      <li>
+    coxbuild.runtime
+
+      <ul>
+        <li><a href="source/coxbuild.html#module-coxbuild.runtime">module</a>
 </li>
       </ul></li>
       <li>
@@ -422,27 +427,31 @@
 </li>
       <li><a href="source/coxbuild.html#coxbuild.configuration.Configuration.env">env() (coxbuild.configuration.Configuration method)</a>
 </li>
-      <li><a href="source/coxbuild.html#coxbuild.services.EventHandler.event">event (coxbuild.services.EventHandler attribute)</a>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState.event">event (coxbuild.runtime.ExecutionState property)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.html#coxbuild.services.EventHandler.event">(coxbuild.services.EventHandler attribute)</a>
 </li>
+      </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.services.EventContext">EventContext (class in coxbuild.services)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.services.EventHandler">EventHandler (class in coxbuild.services)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineResult.exception">exception (coxbuild.pipelines.PipelineResult attribute)</a>
 
       <ul>
         <li><a href="source/coxbuild.html#coxbuild.tasks.TaskResult.exception">(coxbuild.tasks.TaskResult attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.invocation.execmd">execmd() (in module coxbuild.invocation)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.managers.Manager.execute">execute() (coxbuild.managers.Manager method)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.managers.Manager.executeAsync">executeAsync() (coxbuild.managers.Manager method)</a>
 </li>
-      <li><a href="source/coxbuild.html#coxbuild.configuration.ExecutionState">ExecutionState (class in coxbuild.configuration)</a>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState">ExecutionState (class in coxbuild.runtime)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.managers.Manager.executionState">executionState (coxbuild.managers.Manager attribute)</a>
 </li>
@@ -490,8 +499,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.services.EventHandler.handle">handle() (coxbuild.services.EventHandler method)</a>
 </li>
-      <li><a href="source/coxbuild.html#coxbuild.services.EventHandler.handler">handler (coxbuild.services.EventHandler attribute)</a>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState.handler">handler (coxbuild.runtime.ExecutionState property)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.html#coxbuild.services.EventHandler.handler">(coxbuild.services.EventHandler attribute)</a>
 </li>
+      </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.services.Service.handlers">handlers (coxbuild.services.Service attribute)</a>
 </li>
       <li><a href="source/coxbuild.extensions.python.html#coxbuild.extensions.python.package.hasPackages">hasPackages() (in module coxbuild.extensions.python.package)</a>
@@ -596,6 +609,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.managers.Manager">Manager (class in coxbuild.managers)</a>
 </li>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState.manager">manager (coxbuild.runtime.ExecutionState property)</a>
+</li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.filesystems.FileSystemEntry.modification">modification (coxbuild.events.filesystems.FileSystemEntry attribute)</a>
 </li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.filesystems.FileSystemChangeType.Modify">Modify (coxbuild.events.filesystems.FileSystemChangeType attribute)</a>
@@ -626,10 +641,6 @@
 </li>
         <li><a href="source/coxbuild.extensions.git.html#module-coxbuild.extensions.git">coxbuild.extensions.git</a>
 </li>
-        <li><a href="source/coxbuild.extensions.gradle.html#module-coxbuild.extensions.gradle">coxbuild.extensions.gradle</a>
-</li>
-        <li><a href="source/coxbuild.extensions.nodejs.html#module-coxbuild.extensions.nodejs">coxbuild.extensions.nodejs</a>
-</li>
         <li><a href="source/coxbuild.extensions.python.html#module-coxbuild.extensions.python">coxbuild.extensions.python</a>
 </li>
         <li><a href="source/coxbuild.extensions.python.html#module-coxbuild.extensions.python.docs">coxbuild.extensions.python.docs</a>
@@ -651,6 +662,8 @@
         <li><a href="source/coxbuild.html#module-coxbuild.pipelines">coxbuild.pipelines</a>
 </li>
         <li><a href="source/coxbuild.html#module-coxbuild.runners">coxbuild.runners</a>
+</li>
+        <li><a href="source/coxbuild.html#module-coxbuild.runtime">coxbuild.runtime</a>
 </li>
         <li><a href="source/coxbuild.html#module-coxbuild.schema">coxbuild.schema</a>
 </li>
@@ -718,15 +731,21 @@
       <li><a href="source/coxbuild.html#coxbuild.pipelines.Pipeline">Pipeline (class in coxbuild.pipelines)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.managers.Manager.pipeline">pipeline (coxbuild.managers.Manager attribute)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineContext.pipeline">(coxbuild.pipelines.PipelineContext attribute)</a>
 </li>
+        <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState.pipeline">(coxbuild.runtime.ExecutionState property)</a>
+</li>
+      </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineAfterHook">PipelineAfterHook (class in coxbuild.pipelines)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineAfterTaskHook">PipelineAfterTaskHook (class in coxbuild.pipelines)</a>
 </li>
-      <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineBeforeHook">PipelineBeforeHook (class in coxbuild.pipelines)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineBeforeHook">PipelineBeforeHook (class in coxbuild.pipelines)</a>
+</li>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineBeforeTaskHook">PipelineBeforeTaskHook (class in coxbuild.pipelines)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineContext">PipelineContext (class in coxbuild.pipelines)</a>
@@ -792,17 +811,25 @@
       <li><a href="source/coxbuild.html#coxbuild.services.Service">Service (class in coxbuild.services)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.managers.Manager.service">service (coxbuild.managers.Manager attribute)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState.service">(coxbuild.runtime.ExecutionState property)</a>
+</li>
+        <li><a href="source/coxbuild.html#coxbuild.services.ServiceContext.service">(coxbuild.services.ServiceContext attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="source/coxbuild.html#coxbuild.services.ServiceContext">ServiceContext (class in coxbuild.services)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.services.ServiceRunner">ServiceRunner (class in coxbuild.services)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.extensions.dotnet.html#coxbuild.extensions.dotnet.Settings">Settings (class in coxbuild.extensions.dotnet)</a>
 
       <ul>
         <li><a href="source/coxbuild.extensions.python.html#coxbuild.extensions.python.Settings">(class in coxbuild.extensions.python)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.tasks.Task.setup">setup() (coxbuild.tasks.Task method)</a>
 
       <ul>
@@ -825,13 +852,19 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.tasks.Task">Task (class in coxbuild.tasks)</a>
 </li>
-      <li><a href="source/coxbuild.html#coxbuild.tasks.TaskContext.task">task (coxbuild.tasks.TaskContext attribute)</a>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState.task">task (coxbuild.runtime.ExecutionState property)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.html#coxbuild.tasks.TaskContext.task">(coxbuild.tasks.TaskContext attribute)</a>
 </li>
+      </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.tasks.task">task() (in module coxbuild.tasks)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.tasks.TaskAfterHook">TaskAfterHook (class in coxbuild.tasks)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.tasks.TaskBeforeHook">TaskBeforeHook (class in coxbuild.tasks)</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.tasks.taskconfigs">taskconfigs() (in module coxbuild.tasks)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.tasks.TaskContext">TaskContext (class in coxbuild.tasks)</a>
 </li>
@@ -843,10 +876,10 @@
 </li>
       <li><a href="source/coxbuild.html#coxbuild.tasks.TaskResult">TaskResult (class in coxbuild.tasks)</a>
 </li>
-      <li><a href="source/coxbuild.html#coxbuild.tasks.TaskRunner">TaskRunner (class in coxbuild.tasks)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/coxbuild.html#coxbuild.tasks.TaskRunner">TaskRunner (class in coxbuild.tasks)</a>
+</li>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.Pipeline.tasks">tasks (coxbuild.pipelines.Pipeline attribute)</a>
 
       <ul>
@@ -881,10 +914,12 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/coxbuild.html#coxbuild.configuration.ExecutionState.unmatchedTasks">unmatchedTasks (coxbuild.configuration.ExecutionState property)</a>
+      <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineContext.unmatchedNames">unmatchedNames (coxbuild.pipelines.PipelineContext attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState.unmatchedTasks">unmatchedTasks (coxbuild.runtime.ExecutionState property)</a>
+</li>
       <li><a href="source/coxbuild.extensions.python.html#coxbuild.extensions.python.package.upgradePackages">upgradePackages() (in module coxbuild.extensions.python.package)</a>
 </li>
   </ul></td>
@@ -903,9 +938,33 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.events.html#coxbuild.events.datetime.weekdays">weekdays() (in module coxbuild.events.datetime)</a>
 </li>
+      <li><a href="source/coxbuild.extensions.shell.html#coxbuild.extensions.shell.whereCommand">whereCommand() (in module coxbuild.extensions.shell)</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.withConfiguration">withConfiguration() (in module coxbuild.runtime)</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.withEvent">withEvent() (in module coxbuild.runtime)</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.withExecutionState">withExecutionState() (in module coxbuild.runtime)</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.withHandler">withHandler() (in module coxbuild.runtime)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/coxbuild.extensions.shell.html#coxbuild.extensions.shell.whereCommand">whereCommand() (in module coxbuild.extensions.shell)</a>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.withManager">withManager() (in module coxbuild.runtime)</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.withPipeline">withPipeline() (in module coxbuild.runtime)</a>
+</li>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.withProject">withProject() (in module coxbuild.extensions)</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.withService">withService() (in module coxbuild.runtime)</a>
+</li>
+      <li><a href="source/coxbuild.extensions.dotnet.html#coxbuild.extensions.dotnet.withSettings">withSettings() (in module coxbuild.extensions.dotnet)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.extensions.python.html#coxbuild.extensions.python.withSettings">(in module coxbuild.extensions.python)</a>
+</li>
+      </ul></li>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.withTask">withTask() (in module coxbuild.runtime)</a>
 </li>
   </ul></td>
 </tr></table>

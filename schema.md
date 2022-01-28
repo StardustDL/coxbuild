@@ -261,7 +261,7 @@ You can schedule some build when event occurs.
 
 Coxbuild provides some builtin events in `coxbuild.events` module, each event return an awaitable iterator, i.e. event generator.
 
-The event handlers are running asynchronously, so use async function and `asyncio.sleep()` instead of sync `time.sleep()`.
+The event handlers are wrapped in a task, and running asynchronously, so use async function and `asyncio.sleep()` instead of sync `time.sleep()`.
 
 ```python
 from coxbuild.events import repeat, onceevent, once
