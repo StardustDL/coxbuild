@@ -42,7 +42,7 @@ class Configuration:
     def __setitem__(self, key: str, value: Any) -> None:
         id = self._getid(key)
         self.data[id] = value
-    
+
     def __delitem__(self, key: str) -> None:
         id = self._getid(key)
         del self.data[id]

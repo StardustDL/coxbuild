@@ -4,7 +4,10 @@ from datetime import timedelta
 from pathlib import Path
 
 from coxbuild.extensions import ProjectSettings
-from coxbuild.extensions.python import docs as pydocs, format as pyformat, package as pypackage, test as pytest
+from coxbuild.extensions.python import docs as pydocs
+from coxbuild.extensions.python import format as pyformat
+from coxbuild.extensions.python import package as pypackage
+from coxbuild.extensions.python import test as pytest
 from coxbuild.pipelines import PipelineContext, beforePipeline
 from coxbuild.schema import depend, loadext, run, setup, task, teardown
 
@@ -23,12 +26,12 @@ def initialize(context: PipelineContext):
 
 
 @pypackage.build.setup
-def setupBuild():
+def setupBuild(*args, **kwds):
     shutil.copyfile(Path("README.md"), readmeDst)
 
 
 @pypackage.build.teardown
-def teardownBuild():
+def teardownBuild(*args, **kwds):
     os.remove(readmeDst)
 
 

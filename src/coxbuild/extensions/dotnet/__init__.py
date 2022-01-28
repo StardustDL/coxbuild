@@ -60,6 +60,7 @@ def withSettings(task: Task) -> Task:
     task.before(hook)
     return task
 
+
 @grouped
 @withProject
 @task

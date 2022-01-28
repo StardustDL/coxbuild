@@ -5,12 +5,12 @@ import sys
 import traceback
 from dataclasses import dataclass, field
 from typing import Any, AsyncIterator, Awaitable, Callable
-from coxbuild.configuration import Configuration
 
+from coxbuild.configuration import Configuration
 from coxbuild.exceptions import CoxbuildException
 from coxbuild.runners import Runner
 from coxbuild.runtime import ExecutionState
-from coxbuild.tasks import Task, task, named
+from coxbuild.tasks import Task, named, task
 
 logger = logging.getLogger("services")
 
@@ -135,7 +135,7 @@ class ServiceRunner(Runner):
         logger.debug("Run service.")
         await asyncio.gather(*[e.handle(self.context.config) for e in self.service.handlers.values()])
         logger.debug("Finish service.")
-    
+
     async def __aenter__(self) -> Callable[[], Awaitable | None]:
         res = await super().__aenter__()
 

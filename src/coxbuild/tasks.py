@@ -6,8 +6,8 @@ import traceback
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Any, Awaitable, Callable
-from coxbuild.configuration import Configuration
 
+from coxbuild.configuration import Configuration
 from coxbuild.hooks import Hook
 
 from .exceptions import CoxbuildException

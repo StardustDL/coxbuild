@@ -8,8 +8,8 @@ from enum import Enum
 from graphlib import TopologicalSorter
 from queue import Queue
 from typing import Any, Awaitable, Callable
-from coxbuild.configuration import Configuration
 
+from coxbuild.configuration import Configuration
 from coxbuild.hooks import Hook
 from coxbuild.runtime import ExecutionState
 
@@ -67,7 +67,8 @@ class PipelineBeforeTaskHook(PipelineHook):
 @dataclass
 class PipelineBeforeHook(PipelineHook):
     """Before pipeline starting"""
-    hook: Callable[[PipelineContext], Awaitable[bool] | bool | None] | None = None
+    hook: Callable[[PipelineContext],
+                   Awaitable[bool] | bool | None] | None = None
 
 
 @dataclass
@@ -93,7 +94,7 @@ def beforePipeline(hook: Callable[[PipelineContext], Awaitable[bool] | bool | No
     return hook if isinstance(hook, PipelineBeforeHook) else PipelineBeforeHook(hook)
 
 
-def afterPipeline(hook: Callable[[PipelineContext, PipelineResult], Awaitable|None] | PipelineAfterHook) -> PipelineAfterHook:
+def afterPipeline(hook: Callable[[PipelineContext, PipelineResult], Awaitable | None] | PipelineAfterHook) -> PipelineAfterHook:
     """
     Decorator to configure after hook of a pipeline.
     Run after pipeline.

@@ -31,6 +31,7 @@ def sphinx_init(docs: Path | None = None, *, project: ProjectSettings):
 
 @grouped
 @subgrouped
+@withProject
 @depend(restore)
 @task
 def sphinx_api(src: Path | None = None, docs: Path | None = None, *, project: ProjectSettings):

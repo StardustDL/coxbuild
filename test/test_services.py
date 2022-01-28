@@ -3,9 +3,9 @@ from datetime import timedelta
 
 import pytest
 
-from coxbuild.tasks import task
 from coxbuild.events import delay, onceevent
 from coxbuild.services import EventHandler, Service
+from coxbuild.tasks import task
 
 
 @pytest.mark.asyncio

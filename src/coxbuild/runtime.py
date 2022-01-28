@@ -1,15 +1,13 @@
-from coxbuild.configuration import Configuration, ConfigurationAccessor
-
 from typing import TYPE_CHECKING
 
+from coxbuild.configuration import Configuration, ConfigurationAccessor
 from coxbuild.tasks import TaskContext
 
 if TYPE_CHECKING:
     from coxbuild.managers import Manager
     from coxbuild.pipelines import Pipeline
+    from coxbuild.services import EventContext, EventHandler, Service
     from coxbuild.tasks import Task
-    from coxbuild.services import Service
-    from coxbuild.services import EventHandler, EventContext
 
 
 class ExecutionState(ConfigurationAccessor):
