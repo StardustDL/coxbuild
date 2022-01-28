@@ -3,7 +3,7 @@ from pathlib import Path
 from coxbuild import get_working_directory
 from coxbuild.schema import depend, group, precond, run, task
 
-from . import grouped, settings
+from . import grouped
 from .package import hasPackages, upgradePackages
 
 subgrouped = group("format")

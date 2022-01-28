@@ -3,8 +3,9 @@ import shutil
 from datetime import timedelta
 from pathlib import Path
 
-from coxbuild.extensions import projectSettings
-from coxbuild.extensions.python import settings, docs as pydocs, format as pyformat, package as pypackage, test as pytest
+from coxbuild.extensions import ProjectSettings
+from coxbuild.extensions.python import docs as pydocs, format as pyformat, package as pypackage, test as pytest
+from coxbuild.pipelines import PipelineContext, beforePipeline
 from coxbuild.schema import depend, loadext, run, setup, task, teardown
 
 loadext(pydocs)
@@ -14,7 +15,11 @@ loadext(pytest)
 
 readmeDst = Path("./src/README.md")
 
-projectSettings.docs = Path("./docs/gen/ref")
+
+@beforePipeline
+def initialize(context: PipelineContext):
+    project = ProjectSettings(context.config)
+    project.docs = Path("./docs/gen/ref")
 
 
 @pypackage.build.setup

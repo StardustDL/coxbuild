@@ -3,6 +3,7 @@ from datetime import timedelta
 
 import pytest
 
+from coxbuild.tasks import task
 from coxbuild.events import delay, onceevent
 from coxbuild.services import EventHandler, Service
 
@@ -12,6 +13,7 @@ async def test_service():
     ser = Service()
     c = 0
 
+    @task
     def handler():
         nonlocal c
         c = 1
@@ -28,6 +30,7 @@ async def test_asynchandler():
     ser = Service()
     c = 0
 
+    @task
     async def handler():
         nonlocal c
         await asyncio.sleep(0.2)
@@ -45,6 +48,7 @@ async def test_unsafehandler():
     ser = Service()
     c = 0
 
+    @task
     def handler():
         nonlocal c
         raise Exception("unsafe")
@@ -66,7 +70,7 @@ async def test_unsafeevent():
     async def event():
         raise Exception("unsafe")
 
-    eh = EventHandler(event(), lambda: None, safe=True)
+    eh = EventHandler(event(), task(lambda: None), safe=True)
     ser.register(eh)
     await ser()
 

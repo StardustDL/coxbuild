@@ -3,8 +3,8 @@ from pathlib import Path
 from coxbuild import get_working_directory
 from coxbuild.schema import depend, group, precond, run, task
 
-from .. import projectSettings
-from . import grouped, settings
+from .. import ProjectSettings, withProject
+from . import grouped
 from .package import hasPackages, upgradePackages
 
 subgrouped = group("test")
@@ -21,12 +21,13 @@ def restore():
 
 @grouped
 @subgrouped
+@withProject
 @depend(restore)
 @task
-def pytest(src: Path | None = None, test: Path | None = None):
+def pytest(src: Path | None = None, test: Path | None = None, *, project: ProjectSettings):
     """Use pytest to test Python code."""
     run(["pytest", "--cov-report=term-missing",
-        "--cov-report=html", f"--cov={str(src or projectSettings.src)}"], cwd=str(test or projectSettings.test))
+        "--cov-report=html", f"--cov={str(src or project.src)}"], cwd=str(test or project.test))
 
 
 @grouped

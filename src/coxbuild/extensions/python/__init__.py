@@ -1,26 +1,37 @@
 from pathlib import Path
 
 import coxbuild
-from coxbuild.configuration import Configuration
+from coxbuild.configuration import Configuration, ConfigurationAccessor
 from coxbuild.schema import config, group, run, task
+from coxbuild.tasks import Task, TaskContext
 
-from .. import projectSettings
+from .. import ProjectSettings
 
 grouped = group("python")
 
 
-class Settings:
+class Settings(ConfigurationAccessor):
+    __configname__ = "python"
+
     def __init__(self, config: Configuration) -> None:
-        self.config = config
+        super().__init__(config)
+        self.project = ProjectSettings(config)
 
     @property
     def requirements(self) -> Path:
         """Path to requirements.txt."""
-        return self.config.get("requirements") or projectSettings.src.joinpath("requirements.txt").resolve()
+        return self.config.get("requirements") or self.project.src.joinpath("requirements.txt").resolve()
 
     @requirements.setter
     def requirements(self, value: Path) -> None:
         self.config["requirements"] = value.resolve()
 
 
-settings = Settings(config.section("python"))
+def withSettings(task: Task) -> Task:
+    """Decorator to add settings argument to task context."""
+    def hook(context: TaskContext):
+        if context.config:
+            context.kwds.update(settings=Settings(context.config))
+
+    task.before(hook)
+    return task

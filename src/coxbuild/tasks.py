@@ -6,6 +6,7 @@ import traceback
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Any, Awaitable, Callable
+from coxbuild.configuration import Configuration
 
 from coxbuild.hooks import Hook
 
@@ -24,6 +25,8 @@ class TaskContext:
     """arguments"""
     kwds: dict[str, Any] = field(default_factory=dict)
     """keyword arguments"""
+    config: Configuration | None = None
+    """configuration"""
 
 
 @dataclass
@@ -59,7 +62,7 @@ class TaskHook(Hook):
 @dataclass
 class TaskBeforeHook(TaskHook):
     """Before task starting"""
-    hook: Callable[[TaskContext], Awaitable[bool] | bool] | None = None
+    hook: Callable[[TaskContext], Awaitable[bool] | bool | None] | None = None
 
 
 @dataclass
@@ -112,7 +115,7 @@ def aspostcond(predicate: Callable[..., bool] | TaskPostconditionHook):
     return predicate if isinstance(predicate, TaskPostconditionHook) else TaskPostconditionHook(predicate)
 
 
-def asbefore(hook: Callable[[TaskContext], Awaitable[bool]] | TaskBeforeHook):
+def asbefore(hook: Callable[[TaskContext], Awaitable[bool] | bool | None] | TaskBeforeHook):
     """
     Decorator to define before hook of a task.
     Run before task body.
@@ -122,7 +125,7 @@ def asbefore(hook: Callable[[TaskContext], Awaitable[bool]] | TaskBeforeHook):
     return hook if isinstance(hook, TaskBeforeHook) else TaskBeforeHook(hook)
 
 
-def asafter(hook: Callable[[TaskContext, TaskResult], Awaitable[bool]] | TaskAfterHook):
+def asafter(hook: Callable[[TaskContext, TaskResult], Awaitable | None] | TaskAfterHook):
     """
     Decorator to define after hook of a task.
     Run after task body.
@@ -132,7 +135,7 @@ def asafter(hook: Callable[[TaskContext, TaskResult], Awaitable[bool]] | TaskAft
     return hook if isinstance(hook, TaskAfterHook) else TaskAfterHook(hook)
 
 
-def assetup(hook: Callable[..., Awaitable[None]] | TaskSetupHook):
+def assetup(hook: Callable[..., Awaitable | None] | TaskSetupHook):
     """
     Decorator to define setup hook of a task.
     Run before task body.
@@ -142,7 +145,7 @@ def assetup(hook: Callable[..., Awaitable[None]] | TaskSetupHook):
     return hook if isinstance(hook, TaskSetupHook) else TaskSetupHook(hook)
 
 
-def asteardown(hook: Callable[..., Awaitable[None]] | TaskTeardownHook):
+def asteardown(hook: Callable[..., Awaitable | None] | TaskTeardownHook):
     """
     Decorator to define teardown hook of a task.
     Run after task body.
@@ -170,7 +173,7 @@ class Task:
         """Clone task."""
         return Task(self.name, self.body, self.doc, self.deps.copy(), self.hooks.copy())
 
-    def __call__(self, *args: Any, **kwds: Any) -> TaskResult:
+    def __call__(self, *args: Any, **kwds: Any) -> "TaskRunner":
         """
         Build runner of task.
 
@@ -199,7 +202,7 @@ class Task:
         """Add postcondition hook."""
         return self.hook(aspostcond(body))
 
-    def before(self, body: Callable[[TaskContext], Awaitable[bool] | bool] | TaskBeforeHook) -> TaskBeforeHook:
+    def before(self, body: Callable[[TaskContext], Awaitable[bool] | bool | None] | TaskBeforeHook) -> TaskBeforeHook:
         """Add before hook."""
         return self.hook(asbefore(body))
 
@@ -460,3 +463,16 @@ def teardown(hook: Callable[..., Awaitable | None] | TaskTeardownHook):
         inner.teardown(hook)
         return inner
     return decorator
+
+
+def taskconfigs(*args: Callable[[Task], Task]) -> Callable[[Task], Task]:
+    """
+    Combine multiple task configs.
+
+    taskconfig(a, b, c) is equivalent to c(b(a(task)))
+    """
+    def wrapper(task: Task):
+        for config in args:
+            task = config(task)
+        return task
+    return wrapper

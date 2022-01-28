@@ -4,8 +4,8 @@ from typing import Tuple
 
 from coxbuild.schema import depend, group, precond, run, task
 
-from .. import projectSettings
-from . import grouped, settings
+from .. import ProjectSettings, withProject
+from . import grouped, withSettings, Settings
 
 subgrouped = group("package")
 
@@ -40,15 +40,16 @@ def upgradePackages(*packages: str):
 
 @grouped
 @subgrouped
+@withSettings
 @task
-def restore(requirements: Path | None = None):
+def restore(requirements: Path | None = None, *, settings: Settings):
     """Restore Python packages from requirements.txt."""
     run(["python", "-m", "pip", "install", "-r",
         str(requirements or settings.requirements)], retry=3)
 
 
 @restore.precond
-def needRestore():
+def needRestore(*, settings: Settings):
     req: Path = settings.requirements
     if not req.exists():
         return False
@@ -67,12 +68,13 @@ def prebuild():
 
 @grouped
 @subgrouped
+@withProject
 @depend(prebuild)
 @task
-def build(src: Path | None = None, dist: Path | None = None):
+def build(src: Path | None = None, dist: Path | None = None, *, project: ProjectSettings):
     """Build Python package."""
-    src = src or projectSettings.src
-    run(["python", "-m", "build", "-o", str(dist or projectSettings.package)],
+    src = src or project.src
+    run(["python", "-m", "build", "-o", str(dist or project.package)],
         cwd=src)
     for item in src.glob("*.egg-info"):
         if not item.is_dir():
@@ -82,27 +84,30 @@ def build(src: Path | None = None, dist: Path | None = None):
 
 @grouped
 @subgrouped
+@withProject
 @task
-def installBuilt(dist: Path | None = None):
+def installBuilt(dist: Path | None = None, *, project: ProjectSettings):
     """Install the built package."""
     run(["python", "-m", "pip", "install",
-        str(list((dist or projectSettings.package).glob("*.whl"))[0])])
+        str(list((dist or project.package).glob("*.whl"))[0])])
 
 
 @grouped
 @subgrouped
+@withProject
 @task
-def uninstallBuilt(dist: Path | None = None):
+def uninstallBuilt(dist: Path | None = None, *, project: ProjectSettings):
     """Uninstall the built package."""
     run(["python", "-m", "pip", "uninstall",
-        str(list((dist or projectSettings.package).glob("*.whl"))[0]), "-y"])
+        str(list((dist or project.package).glob("*.whl"))[0]), "-y"])
 
 
 @grouped
 @subgrouped
+@withProject
 @depend(build)
 @task
-def deploy(dist: Path | None = None):
+def deploy(dist: Path | None = None, *, project: ProjectSettings):
     """Upload the package to PYPI."""
     run(["python", "-m", "twine", "upload",
-        "--skip-existing", "--repository", "pypi", str(dist or projectSettings.package) + "/*"])
+        "--skip-existing", "--repository", "pypi", str(dist or project.package) + "/*"])

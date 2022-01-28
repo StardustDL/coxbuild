@@ -37,6 +37,7 @@ def postcond_task2(*args, **kwds):
 def before_task1(context: TaskContext):
     context.args.extend([1, 2, 3])
     context.kwds.update(a=1, b=2)
+    print(context.config)
     # return False to ignore this task
 
 

@@ -1,13 +1,12 @@
 from pathlib import Path
 
 import coxbuild
-from coxbuild.configuration import Configuration
-from coxbuild.schema import config, group, run
+from coxbuild.configuration import Configuration, ConfigurationAccessor
+from coxbuild.tasks import Task, TaskContext
 
 
-class ProjectSettings:
-    def __init__(self, config: Configuration) -> None:
-        self.config = config
+class ProjectSettings(ConfigurationAccessor):
+    __configname__ = "project"
 
     @property
     def test(self) -> Path:
@@ -46,4 +45,11 @@ class ProjectSettings:
         self.config["docs"] = value.resolve()
 
 
-projectSettings = ProjectSettings(config.section("project"))
+def withProject(task: Task) -> Task:
+    """Decorator to add project argument to task context."""
+    def hook(context: TaskContext):
+        if context.config:
+            context.kwds.update(project=ProjectSettings(context.config))
+
+    task.before(hook)
+    return task

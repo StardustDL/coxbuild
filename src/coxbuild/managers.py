@@ -6,8 +6,9 @@ from dataclasses import dataclass, field
 from importlib.util import module_from_spec, spec_from_loader
 from types import ModuleType
 
-from coxbuild.configuration import Configuration, ExecutionState
+from coxbuild.configuration import Configuration
 from coxbuild.pipelines import Pipeline, PipelineHook, PipelineResult
+from coxbuild.runtime import ExecutionState
 from coxbuild.services import EventHandler, Service
 from coxbuild.tasks import Task
 
@@ -39,7 +40,7 @@ class Manager:
     executionState: ExecutionState = field(init=False)
 
     def __post_init__(self):
-        self.executionState = ExecutionState(self.config.section("execution"))
+        self.executionState = ExecutionState(self.config)
 
     def copy(self) -> "Manager":
         return Manager(
@@ -61,27 +62,33 @@ class Manager:
                 case Task() as t:
                     if t.name not in self.pipeline.tasks:
                         logger.debug(
-                            f"Registering task: {t.name} in {module.__name__}.",)
+                            f"Registering task: {t.name} in {module.__name__}.")
                         self.pipeline.register(t)
                     else:
                         logger.debug(
-                            f"Ignored registered task: {t.name} in {module.__name__}.",)
+                            f"Ignored registered task: {t.name} in {module.__name__}.")
                 case EventHandler() as eh:
                     if eh.name not in self.service.handlers:
                         logger.debug(
-                            f"Registering event handler: {eh.name} in {module.__name__}.",)
+                            f"Registering event handler: {eh.name} in {module.__name__}.")
                         self.service.register(eh)
                     else:
                         logger.debug(
-                            f"Ignored registered event handler: {eh.name} in {module.__name__}.",)
+                            f"Ignored registered event handler: {eh.name} in {module.__name__}.")
                 case PipelineHook() as ph:
                     logger.debug(
-                        f"Registering pipeline hook: in {module.__name__}.",)
+                        f"Registering pipeline hook: in {module.__name__}.")
                     self.pipeline.hook(ph)
 
     async def executeAsync(self, *tasks: str):
-        self.loadBuiltin()
-        return await self.pipeline(*(tasks or ["default"]))
+        try:
+            self.loadBuiltin()
+            runner = self.pipeline(*(tasks or ["default"]))
+            self.executionState.manager = self
+            runner.context.config = self.config
+            return await runner
+        finally:
+            self.executionState.manager = None
 
     def execute(self, *tasks: str) -> PipelineResult:
         return asyncio.run(self.executeAsync(*tasks))

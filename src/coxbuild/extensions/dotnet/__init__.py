@@ -1,15 +1,16 @@
 from pathlib import Path
 
 import coxbuild
-from coxbuild.configuration import Configuration
+from coxbuild.configuration import Configuration, ConfigurationAccessor
 from coxbuild.schema import config, group, run, task
+from coxbuild.tasks import Task, TaskContext
 
-from .. import projectSettings
+from .. import ProjectSettings, withProject
 
 grouped = group("dotnet")
 
 
-class Settings:
+class Settings(ConfigurationAccessor):
     def __init__(self, config: Configuration) -> None:
         self.config = config
 
@@ -50,36 +51,49 @@ class Settings:
         self.config["nugetToken"] = value
 
 
-settings = Settings(config.section("dotnet"))
+def withSettings(task: Task) -> Task:
+    """Decorator to add settings argument to task context."""
+    def hook(context: TaskContext):
+        if context.config:
+            context.kwds.update(settings=Settings(context.config))
+
+    task.before(hook)
+    return task
+
+@grouped
+@withProject
+@task
+def restore(*, project: ProjectSettings):
+    run(["dotnet", "restore"], cwd=project.src, retry=3)
 
 
 @grouped
+@withProject
+@withSettings
 @task
-def restore():
-    run(["dotnet", "restore"], cwd=projectSettings.src, retry=3)
-
-
-@grouped
-@task
-def build():
+def build(*, project: ProjectSettings, settings: Settings):
     args = ["dotnet", "build", "-c", settings.buildConfig]
     if settings.version:
         args.append(f"/p:Version={settings.version}")
-    run(args, cwd=projectSettings.src)
+    run(args, cwd=project.src)
 
 
 @grouped
+@withProject
+@withSettings
 @task
-def pack():
+def pack(*, project: ProjectSettings, settings: Settings):
     args = ["dotnet", "pack", "-c", settings.buildConfig]
     if settings.version:
         args.append(f"/p:Version={settings.version}")
-    args.extend(["-o", str(projectSettings.package)])
-    run(args, cwd=projectSettings.src)
+    args.extend(["-o", str(project.package)])
+    run(args, cwd=project.src)
 
 
 @grouped
+@withProject
+@withSettings
 @task
-def push():
-    run(["dotnet", "nuget", "push", f"{str(projectSettings.package)}/*",
+def push(*, project: ProjectSettings, settings: Settings):
+    run(["dotnet", "nuget", "push", f"{str(project.package)}/*",
         "-s", settings.nugetSource, "-k", settings.nugetToken])

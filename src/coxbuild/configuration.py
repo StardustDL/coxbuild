@@ -42,6 +42,10 @@ class Configuration:
     def __setitem__(self, key: str, value: Any) -> None:
         id = self._getid(key)
         self.data[id] = value
+    
+    def __delitem__(self, key: str) -> None:
+        id = self._getid(key)
+        del self.data[id]
 
     def section(self, name: str):
         """
@@ -64,15 +68,14 @@ class Configuration:
             env[key] = os.getenv(key)
 
 
-class ExecutionState:
+class ConfigurationAccessor:
+    """Configuration accessor."""
+
+    __configname__ = ""
+
     def __init__(self, config: Configuration) -> None:
-        self.config = config
-
-    @property
-    def unmatchedTasks(self) -> list[str]:
-        """Unmatched task names."""
-        return self.config.get("unmatchedTasks") or []
-
-    @unmatchedTasks.setter
-    def unmatchedTasks(self, value: list[str]) -> None:
-        self.config["unmatchedTasks"] = value
+        self.rootConfig = config
+        if self.__configname__:
+            self.config = config.section(self.__configname__)
+        else:
+            self.config = config

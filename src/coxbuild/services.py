@@ -5,9 +5,12 @@ import sys
 import traceback
 from dataclasses import dataclass, field
 from typing import Any, AsyncIterator, Awaitable, Callable
+from coxbuild.configuration import Configuration
 
 from coxbuild.exceptions import CoxbuildException
 from coxbuild.runners import Runner
+from coxbuild.runtime import ExecutionState
+from coxbuild.tasks import Task, task, named
 
 logger = logging.getLogger("services")
 
@@ -33,27 +36,36 @@ class EventHandler:
     """Handler for a event."""
     event: EventType
     """event generator, when the event occurs, the awaitable return"""
-    handler: Callable[..., Awaitable | None]
+    handler: Task
     """event handler"""
     safe: bool = False
     """prevent exception"""
     name: str = ""
     """handler name"""
 
-    async def handle(self):
+    async def handle(self, config: Configuration | None = None):
         logger.debug(f"Handle for event: {self.name}.")
+
+        config = config or Configuration()
+        executionState = ExecutionState(config)
 
         try:
             async for context in self.event:
+                oldhandler = executionState.handler
+                oldevent = executionState.event
+
+                executionState.handler = self
+                executionState.event = context
+
                 logger.debug(f"Event occurs: {self.name}({context}).")
 
                 logger.debug(f"Event handling: {self.name}({context}).")
 
                 try:
-                    result = self.handler(
+                    runner = self.handler(
                         *context.args, **context.kwds) if context else self.handler()
-                    if inspect.isawaitable(result):
-                        result = await result
+                    runner.context.config = config
+                    result = await runner
                 except Exception as ex:
                     if self.safe:
                         print(
@@ -62,6 +74,9 @@ class EventHandler:
                     else:
                         raise CoxbuildException(
                             f"Exception when event handler handling {self.name}({context})", ex)
+                finally:
+                    executionState.handler = oldhandler
+                    executionState.event = oldevent
 
                 logger.debug(f"Event handled: {self.name}({context}).")
         except Exception as ex:
@@ -101,15 +116,42 @@ class Service:
         return ServiceRunner(self)
 
 
+@dataclass
+class ServiceContext:
+    """Service context."""
+    service: Service
+    """service"""
+    config: Configuration | None = None
+    """configuration"""
+
+
 class ServiceRunner(Runner):
     def __init__(self, service: Service) -> None:
         self.service = service
+        self.context = ServiceContext(self.service)
         super().__init__(self._run)
 
     async def _run(self):
         logger.debug("Run service.")
-        await asyncio.gather(*[e.handle() for e in self.service.handlers.values()])
+        await asyncio.gather(*[e.handle(self.context.config) for e in self.service.handlers.values()])
         logger.debug("Finish service.")
+    
+    async def __aenter__(self) -> Callable[[], Awaitable | None]:
+        res = await super().__aenter__()
+
+        self.context.config = self.context.config or Configuration()
+        self._executionState = ExecutionState(self.context.config)
+        self._executionState.service = self.service
+
+        return res
+
+    async def __aexit__(self, exc_type, exc_value, exc_tb) -> bool:
+        result = await super().__aexit__(exc_type, exc_value, exc_tb)
+
+        self._executionState.service = None
+        del self._executionState
+
+        return result
 
 
 def on(event: Callable[[], Awaitable], safe: bool = False, name: str | None = None):
@@ -122,7 +164,11 @@ def on(event: Callable[[], Awaitable], safe: bool = False, name: str | None = No
     safe: prevent exception
     name: handler name, None to use function name
     """
-    def decorator(handler: Callable[[], None]):
-        return EventHandler(event, handler, safe, name or handler.__name__)
+    def decorator(handler: Callable[[], None] | Task):
+        tname = name or handler.__name__
+        if not isinstance(handler, Task):
+            handler = named(tname)(task(handler))
+
+        return EventHandler(event, handler, safe, tname)
 
     return decorator

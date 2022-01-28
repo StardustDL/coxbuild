@@ -8,8 +8,10 @@ from enum import Enum
 from graphlib import TopologicalSorter
 from queue import Queue
 from typing import Any, Awaitable, Callable
+from coxbuild.configuration import Configuration
 
 from coxbuild.hooks import Hook
+from coxbuild.runtime import ExecutionState
 
 from .exceptions import CoxbuildException
 from .runners import Runner
@@ -21,8 +23,14 @@ logger = logging.getLogger("pipelines")
 @dataclass
 class PipelineContext:
     """Execution context for pipeline."""
+    pipeline: "Pipeline"
+    """pipeline"""
     tasks: list[TaskResult]
     """tasks in the pipeline"""
+    unmatchedNames: list[str] = field(default_factory=list)
+    """not found task names"""
+    config: Configuration | None = None
+    """configuration"""
 
 
 @dataclass
@@ -53,13 +61,13 @@ class PipelineHook(Hook):
 @dataclass
 class PipelineBeforeTaskHook(PipelineHook):
     """Before task starting"""
-    hook: Callable[[TaskContext], Awaitable[bool] | bool] | None = None
+    hook: Callable[[TaskContext], Awaitable[bool] | bool | None] | None = None
 
 
 @dataclass
 class PipelineBeforeHook(PipelineHook):
     """Before pipeline starting"""
-    hook: Callable[[PipelineContext], Awaitable[bool] | bool] | None = None
+    hook: Callable[[PipelineContext], Awaitable[bool] | bool | None] | None = None
 
 
 @dataclass
@@ -75,9 +83,9 @@ class PipelineAfterTaskHook(PipelineHook):
     hook: Callable[[TaskContext, TaskResult], Awaitable | None] | None = None
 
 
-def beforePipeline(hook: Callable[[PipelineContext], Awaitable[bool]] | PipelineBeforeHook) -> PipelineBeforeHook:
+def beforePipeline(hook: Callable[[PipelineContext], Awaitable[bool] | bool | None] | PipelineBeforeHook) -> PipelineBeforeHook:
     """
-    Decorator to configure before hook of a task.
+    Decorator to configure before hook of a pipeline.
     Run before pipeline.
 
     hook: hook function
@@ -85,9 +93,9 @@ def beforePipeline(hook: Callable[[PipelineContext], Awaitable[bool]] | Pipeline
     return hook if isinstance(hook, PipelineBeforeHook) else PipelineBeforeHook(hook)
 
 
-def afterPipeline(hook: Callable[[PipelineContext, PipelineResult], Awaitable[bool]] | PipelineAfterHook) -> PipelineAfterHook:
+def afterPipeline(hook: Callable[[PipelineContext, PipelineResult], Awaitable|None] | PipelineAfterHook) -> PipelineAfterHook:
     """
-    Decorator to configure after hook of a task.
+    Decorator to configure after hook of a pipeline.
     Run after pipeline.
 
     hook: hook function
@@ -95,7 +103,7 @@ def afterPipeline(hook: Callable[[PipelineContext, PipelineResult], Awaitable[bo
     return hook if isinstance(hook, PipelineAfterHook) else PipelineAfterHook(hook)
 
 
-def beforeTask(hook: Callable[[TaskContext], Awaitable[bool]] | PipelineBeforeTaskHook) -> PipelineBeforeTaskHook:
+def beforeTask(hook: Callable[[TaskContext], Awaitable[bool] | bool | None] | PipelineBeforeTaskHook) -> PipelineBeforeTaskHook:
     """
     Decorator to configure before task hook of a task.
     Run before task.
@@ -105,7 +113,7 @@ def beforeTask(hook: Callable[[TaskContext], Awaitable[bool]] | PipelineBeforeTa
     return hook if isinstance(hook, PipelineBeforeTaskHook) else PipelineBeforeTaskHook(hook)
 
 
-def afterTask(hook: Callable[[TaskContext, TaskResult], Awaitable[bool]] | PipelineAfterTaskHook) -> PipelineAfterTaskHook:
+def afterTask(hook: Callable[[TaskContext, TaskResult], Awaitable | None] | PipelineAfterTaskHook) -> PipelineAfterTaskHook:
     """
     Decorator to configure after task hook of a task.
     Run after task.
@@ -118,13 +126,16 @@ def afterTask(hook: Callable[[TaskContext, TaskResult], Awaitable[bool]] | Pipel
 class PipelineRunner(Runner):
     """Runner for pipeline."""
 
-    def __init__(self, tasks: list[Task], hooks: list[PipelineHook]) -> None:
+    def __init__(self, pipeline: "Pipeline", tasks: list[Task], hooks: list[PipelineHook], unmatchedNames: list[str]) -> None:
         """
         Create runner.
 
+        pipeline: pipeline
         tasks: tasks in the pipeline
         hooks: hooks for pipeline
+        unmatchedNames: not found task names
         """
+        self.pipeline = pipeline
         self.tasks = tasks
         self.beforeTask = [beforeTask for beforeTask in hooks if isinstance(
             beforeTask, PipelineBeforeTaskHook)]
@@ -134,7 +145,8 @@ class PipelineRunner(Runner):
             before, PipelineBeforeHook)]
         self.after = [after for after in hooks if isinstance(
             after, PipelineAfterHook)]
-        self.context = PipelineContext(self.tasks)
+        self.context = PipelineContext(
+            self.pipeline, self.tasks, unmatchedNames)
         self.result = None
 
         super().__init__(self._run)
@@ -180,20 +192,25 @@ class PipelineRunner(Runner):
             print(f"{'-'*15} ({i+1}/{n}) 📜 Task {task.name} {'-'*15}")
             print("")
 
-            tcontext = TaskContext(task)
+            self._executionState.task = task
 
-            pre = await self._beforeTask(tcontext)
+            runner = task()
+            runner.context.config = self.context.config
+
+            pre = await self._beforeTask(runner.context)
             if pre == False:
                 message = f"Stop task {task.name} running by pipeline before hook"
                 logger.info(message)
                 print(message)
                 continue
 
-            res: TaskResult = await task(*tcontext.args, **tcontext.kwds)
+            res = await runner
 
             self._results.append(res)
 
-            await self._afterTask(tcontext, res)
+            await self._afterTask(runner.context, res)
+
+            self._executionState.task = None
 
             print("")
 
@@ -206,6 +223,11 @@ class PipelineRunner(Runner):
 
         self.result = None
         self._results: list[TaskResult] = []
+
+        self.context.config = self.context.config or Configuration()
+        self._executionState = ExecutionState(self.context.config)
+        self._executionState.pipeline = self.pipeline
+        self._executionState.unmatchedTasks = self.context.unmatchedNames
 
         res = await super().__aenter__()
 
@@ -235,6 +257,9 @@ class PipelineRunner(Runner):
 
         await self._after()
 
+        self._executionState.pipeline = None
+        self._executionState.unmatchedTasks = None
+
         logger.info(f"Finish pipeline: {self.result}")
 
         print(
@@ -246,6 +271,7 @@ class PipelineRunner(Runner):
             print(f"({i+1}/{cnt})\t{tr.description}\t⏱️ {tr.duration}\t📜 {tr.name}")
 
         del self._results
+        del self._executionState
 
         return True
 
@@ -288,25 +314,25 @@ class Pipeline:
 
         self.hooks.append(hook)
 
-    def beforeTask(self, body: Callable[[TaskContext], Awaitable[bool] | bool] | PipelineBeforeTaskHook) -> PipelineBeforeTaskHook:
+    def beforeTask(self, body: Callable[[TaskContext], Awaitable[bool] | bool | None] | PipelineBeforeTaskHook) -> PipelineBeforeTaskHook:
         """Add before task hook."""
         hook = beforeTask(body)
         self.hook(hook)
         return hook
 
-    def afterTask(self, body: Callable[[TaskContext, TaskResult], Awaitable[bool] | bool] | PipelineAfterTaskHook) -> PipelineAfterTaskHook:
+    def afterTask(self, body: Callable[[TaskContext, TaskResult], Awaitable[bool] | bool | None] | PipelineAfterTaskHook) -> PipelineAfterTaskHook:
         """Add after task hook."""
         hook = afterTask(body)
         self.hook(hook)
         return hook
 
-    def before(self, body: Callable[[PipelineContext], Awaitable[bool] | bool] | PipelineBeforeHook) -> PipelineBeforeHook:
+    def before(self, body: Callable[[PipelineContext], Awaitable[bool] | bool | None] | PipelineBeforeHook) -> PipelineBeforeHook:
         """Add before hook."""
         hook = beforePipeline(body)
         self.hook(hook)
         return hook
 
-    def after(self, body: Callable[[PipelineContext, PipelineResult], Awaitable[bool] | bool] | PipelineAfterHook) -> PipelineAfterHook:
+    def after(self, body: Callable[[PipelineContext, PipelineResult], Awaitable | None] | PipelineAfterHook) -> PipelineAfterHook:
         """Add after hook."""
         hook = afterPipeline(body)
         self.hook(hook)
@@ -335,9 +361,6 @@ class Pipeline:
             else:
                 unmatchedNames.append(name)
 
-        from .schema import executionState
-        executionState.unmatchedTasks = unmatchedNames
-
         if len(unmatchedNames) > 0:
             message = f"Not found task names: {unmatchedNames}"
             logger.warning(message)
@@ -362,4 +385,4 @@ class Pipeline:
 
         logger.debug(f"Tasks to run: {', '.join((t.name for t in tasks))}")
 
-        return PipelineRunner(tasks, self.hooks)
+        return PipelineRunner(self, tasks, self.hooks, unmatchedNames)
