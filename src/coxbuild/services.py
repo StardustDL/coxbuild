@@ -136,23 +136,6 @@ class ServiceRunner(Runner):
         await asyncio.gather(*[e.handle(self.context.config) for e in self.service.handlers.values()])
         logger.debug("Finish service.")
 
-    async def __aenter__(self) -> Callable[[], Awaitable | None]:
-        res = await super().__aenter__()
-
-        self.context.config = self.context.config or Configuration()
-        self._executionState = ExecutionState(self.context.config)
-        self._executionState.service = self.service
-
-        return res
-
-    async def __aexit__(self, exc_type, exc_value, exc_tb) -> bool:
-        result = await super().__aexit__(exc_type, exc_value, exc_tb)
-
-        self._executionState.service = None
-        del self._executionState
-
-        return result
-
 
 def on(event: Callable[[], Awaitable], safe: bool = False, name: str | None = None):
     """

@@ -162,7 +162,7 @@ class Task:
     """task name"""
     body: Callable[..., Awaitable | None] | None = None
     """task body"""
-    doc: str = ""
+    description: str = ""
     """task document"""
     deps: list[str] = field(default_factory=list)
     """dependency task names"""
@@ -171,7 +171,7 @@ class Task:
 
     def copy(self) -> "Task":
         """Clone task."""
-        return Task(self.name, self.body, self.doc, self.deps.copy(), self.hooks.copy())
+        return Task(self.name, self.body, self.description, self.deps.copy(), self.hooks.copy())
 
     def __call__(self, *args: Any, **kwds: Any) -> "TaskRunner":
         """

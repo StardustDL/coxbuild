@@ -20,13 +20,13 @@ from .tasks import (after, asafter, asbefore, aspostcond, asprecond, assetup,
 
 manager = Manager()
 
-service = manager.service
-pipeline = manager.pipeline
-config = manager.config
-executionState = manager.executionState
 
+def ext(*exts: ModuleType | str):
+    from .extensions.loader import fromModule, load as loadext
 
-def loadext(module: ModuleType | str):
-    if isinstance(module, str):
-        module = importlib.import_module(module)
-    manager.load(module)
+    for module in exts:
+        if isinstance(module, str):
+            module = loadext(module)
+        else:
+            module = fromModule(module)
+        manager.register(module)

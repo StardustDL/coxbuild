@@ -6,89 +6,74 @@ from dataclasses import dataclass, field
 from importlib.util import module_from_spec, spec_from_loader
 from types import ModuleType
 
-from coxbuild.configuration import Configuration
-from coxbuild.pipelines import Pipeline, PipelineHook, PipelineResult
-from coxbuild.runtime import ExecutionState
-from coxbuild.services import EventHandler, Service
-from coxbuild.tasks import Task
+from coxbuild.exceptions import CoxbuildException
+
+from .configuration import Configuration
+from .pipelines import Pipeline, PipelineHook, PipelineResult
+from .runtime import ExecutionState
+from .services import EventHandler, Service
+from .tasks import Task
+from .extensions import Extension
 
 logger = logging.getLogger("managers")
 
 
-def loadModuleFromSource(src: str, filename: str, modname: str):
-    spec = spec_from_loader(modname, loader=None)
-    mod = module_from_spec(spec)
-
-    code = compile(src, filename, "exec")
-
-    exec("from coxbuild.schema import *", mod.__dict__)
-    exec(code, mod.__dict__)
-
-    return mod
-
-
-def loadModuleFromFile(file: pathlib.Path):
-    return loadModuleFromSource(file.read_text(encoding="utf-8"), str(file), file.stem)
-
-
 @dataclass
 class Manager:
-    pipeline: Pipeline = field(default_factory=Pipeline)
-    service: Service = field(default_factory=Service)
-    config: Configuration = field(default_factory=Configuration)
-
-    executionState: ExecutionState = field(init=False)
-
-    def __post_init__(self):
-        self.executionState = ExecutionState(self.config)
+    extensions: dict[str, Extension] = field(default_factory=dict)
 
     def copy(self) -> "Manager":
-        return Manager(
-            pipeline=self.pipeline.copy(),
-            service=self.service.copy(),
-            config=self.config.copy()
-        )
+        return Manager(extensions=self.extensions)
 
-    def loadBuiltin(self):
-        from coxbuild.extensions import builtin
-        self.load(builtin)
+    def register(self, ext: Extension):
+        if ext.uri in self.extensions:
+            raise CoxbuildException(f"Register existing extension: {ext.uri}.")
+        self.extensions[ext.uri] = ext
 
-    def load(self, module: ModuleType) -> None:
-        for name, member in inspect.getmembers(module):
-            if name.startswith("_"):
-                continue
-
-            match member:
-                case Task() as t:
-                    if t.name not in self.pipeline.tasks:
-                        logger.debug(
-                            f"Registering task: {t.name} in {module.__name__}.")
-                        self.pipeline.register(t)
-                    else:
-                        logger.debug(
-                            f"Ignored registered task: {t.name} in {module.__name__}.")
-                case EventHandler() as eh:
-                    if eh.name not in self.service.handlers:
-                        logger.debug(
-                            f"Registering event handler: {eh.name} in {module.__name__}.")
-                        self.service.register(eh)
-                    else:
-                        logger.debug(
-                            f"Ignored registered event handler: {eh.name} in {module.__name__}.")
-                case PipelineHook() as ph:
+    def _load(self, *exts: Extension, pipeline: Pipeline, service: Service) -> None:
+        for ext in exts:
+            logger.debug(f"Loading extension: {ext.name}({ext.uri})")
+            for t in ext.tasks:
+                if t.name not in pipeline.tasks:
                     logger.debug(
-                        f"Registering pipeline hook: in {module.__name__}.")
-                    self.pipeline.hook(ph)
+                        f"Registering task: {t.name} in {ext.name}({ext.uri}).")
+                    pipeline.register(t)
+                else:
+                    logger.debug(
+                        f"Ignored registered task: {t.name} in {ext.name}({ext.uri}).")
+            for eh in ext.events:
+                if eh.name not in service.handlers:
+                    logger.debug(
+                        f"Registering event handler: {eh.name} in {ext.name}({ext.uri}).")
+                    service.register(eh)
+                else:
+                    logger.debug(
+                        f"Ignored registered event handler: {eh.name} in {ext.name}({ext.uri}).")
+            for ph in ext.pipelineHooks:
+                logger.debug(
+                    f"Registering pipeline hook: in {ext.name}.")
+                pipeline.hook(ph)
+            logger.debug(f"Loaded extension: {ext.name}({ext.uri})")
 
     async def executeAsync(self, *tasks: str):
-        try:
-            self.loadBuiltin()
-            runner = self.pipeline(*(tasks or ["default"]))
-            self.executionState.manager = self
-            runner.context.config = self.config
-            return await runner
-        finally:
-            self.executionState.manager = None
+        from coxbuild.extensions import builtin
+        from coxbuild.extensions.loader import fromModule
+
+        pipeline = Pipeline()
+        config = Configuration()
+        service = Service()
+
+        executionState = ExecutionState(config)
+        executionState.manager = self
+        executionState.configuration = config
+        executionState.service = service
+        executionState.pipeline = pipeline
+
+        self._load(*self.extensions.values(), fromModule(builtin),
+                   pipeline=pipeline, service=service)
+        runner = pipeline(*(tasks or ["default"]))
+        runner.context.config = config
+        return await runner
 
     def execute(self, *tasks: str) -> PipelineResult:
         return asyncio.run(self.executeAsync(*tasks))

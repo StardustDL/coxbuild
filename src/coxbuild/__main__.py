@@ -40,7 +40,9 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
         raise click.ClickException("Coxbuild schema NOT FOUND.")
 
     from coxbuild import managers, schema
-    schema.manager.load(managers.loadModuleFromFile(schemafile))
+    from coxbuild.extensions.loader import fromFile
+
+    schema.manager.register(fromFile(schemafile))
 
     exit(0 if schema.manager.execute(*(tasks or [])) else 1)
 

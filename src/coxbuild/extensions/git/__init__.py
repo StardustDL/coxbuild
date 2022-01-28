@@ -1,10 +1,9 @@
 from pathlib import Path
 
 import coxbuild
-from coxbuild.schema import config, group, run, task
+from coxbuild.schema import group, run, task
 
 grouped = group("git")
-mconfig = config.section("git")
 
 
 class Repository:

@@ -227,7 +227,6 @@ class PipelineRunner(Runner):
 
         self.context.config = self.context.config or Configuration()
         self._executionState = ExecutionState(self.context.config)
-        self._executionState.pipeline = self.pipeline
         self._executionState.unmatchedTasks = self.context.unmatchedNames
 
         res = await super().__aenter__()
@@ -258,7 +257,6 @@ class PipelineRunner(Runner):
 
         await self._after()
 
-        self._executionState.pipeline = None
         self._executionState.unmatchedTasks = None
 
         logger.info(f"Finish pipeline: {self.result}")

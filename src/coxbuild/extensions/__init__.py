@@ -1,8 +1,59 @@
+from dataclasses import dataclass
+import inspect
 from pathlib import Path
+from types import ModuleType
+from typing import Iterable
 
 import coxbuild
 from coxbuild.configuration import Configuration, ConfigurationAccessor
+from coxbuild.pipelines import PipelineHook
+from coxbuild.services import EventHandler
 from coxbuild.tasks import Task, TaskContext
+
+
+@dataclass
+class Extension:
+    uri: str = ""
+    name: str = ""
+    description: str = ""
+    version: str = ""
+    content: ModuleType | None = None
+
+    @property
+    def tasks(self) -> Iterable[Task]:
+        if not self.content:
+            return
+        for name, member in inspect.getmembers(self.content):
+            if name.startswith("_"):
+                continue
+
+            match member:
+                case Task() as t:
+                    yield t
+
+    @property
+    def events(self) -> Iterable[EventHandler]:
+        if not self.content:
+            return
+        for name, member in inspect.getmembers(self.content):
+            if name.startswith("_"):
+                continue
+
+            match member:
+                case EventHandler() as t:
+                    yield t
+
+    @property
+    def pipelineHooks(self) -> Iterable[PipelineHook]:
+        if not self.content:
+            return
+        for name, member in inspect.getmembers(self.content):
+            if name.startswith("_"):
+                continue
+
+            match member:
+                case PipelineHook() as t:
+                    yield t
 
 
 class ProjectSettings(ConfigurationAccessor):

@@ -28,16 +28,16 @@ class ExecutionState(ConfigurationAccessor):
         return self.config.get("manager") or None
 
     @manager.setter
-    def manager(self, value: "Manager") -> None:
+    def manager(self, value: "Manager | None") -> None:
         self.config["manager"] = value
 
     @property
     def pipeline(self) -> "Pipeline | None":
         """Get pipeline."""
-        return self.config.get("pipeline") or (self.manager.pipeline if self.manager else None)
+        return self.config.get("pipeline") or None
 
     @pipeline.setter
-    def pipeline(self, value: "Pipeline") -> None:
+    def pipeline(self, value: "Pipeline | None") -> None:
         self.config["pipeline"] = value
 
     @property
@@ -46,16 +46,16 @@ class ExecutionState(ConfigurationAccessor):
         return self.config.get("task") or None
 
     @task.setter
-    def task(self, value: "Task") -> None:
+    def task(self, value: "Task | None") -> None:
         self.config["task"] = value
 
     @property
     def service(self) -> "Service | None":
         """Get service."""
-        return self.config.get("service") or (self.manager.service if self.manager else None)
+        return self.config.get("service") or None
 
     @service.setter
-    def service(self, value: "Service") -> None:
+    def service(self, value: "Service | None") -> None:
         self.config["service"] = value
 
     @property
@@ -64,7 +64,7 @@ class ExecutionState(ConfigurationAccessor):
         return self.config.get("handler") or None
 
     @handler.setter
-    def handler(self, value: "EventHandler") -> None:
+    def handler(self, value: "EventHandler | None") -> None:
         self.config["handler"] = value
 
     @property
@@ -73,13 +73,17 @@ class ExecutionState(ConfigurationAccessor):
         return self.config.get("event") or None
 
     @event.setter
-    def event(self, value: "EventContext") -> None:
+    def event(self, value: "EventContext | None") -> None:
         self.config["event"] = value
 
     @property
     def configuration(self) -> Configuration | None:
         """Get configuration."""
-        return self.config.get("config") or (self.manager.config if self.manager else None)
+        return self.config.get("config") or None
+
+    @configuration.setter
+    def configuration(self, value: Configuration | None) -> None:
+        self.config["config"] = value
 
 
 def withExecutionState(task: "Task") -> "Task":

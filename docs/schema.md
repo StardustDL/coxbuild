@@ -6,10 +6,6 @@
 | Name             | Description             |
 | ---------------- | ----------------------- |
 | `manager`        | Hosting manager         |
-| `pipeline`       | Pipeline for tasks      |
-| `service`        | Service for events      |
-| `config`         | Configuration           |
-| `executionState` | Runtime execution state |
 
 ## Task
 

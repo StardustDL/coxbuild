@@ -1,32 +1,54 @@
 import coxbuild
-from coxbuild import schema
 from coxbuild.configuration import Configuration
+from coxbuild.pipelines import Pipeline
+from coxbuild.services import Service
 from coxbuild.tasks import depend, group, task
+from coxbuild.runtime import withManager, withPipeline, withService
+from coxbuild.managers import Manager
+
+grouped = group("")
 
 
-@group("")
+@grouped
+@withPipeline
 @task
-def list():
+def list(*, pipeline: Pipeline):
     """List all defined tasks."""
-    for item in schema.pipeline.tasks.values():
+    for item in pipeline.tasks.values():
         print(f"📜 {item.name}")
-        if item.doc:
-            print(f"  #️⃣  {item.doc}")
+        if item.description:
+            print(f"  #️⃣  {item.description}")
         if item.deps:
             print(f"  *️⃣  {', '.join(item.deps)}")
 
 
-@group("")
+@grouped
+@withManager
 @task
-async def serve():
+def ext(*, manager: "Manager"):
+    """List all defined tasks."""
+    for item in manager.extensions.values():
+        print(f"📜 {item.name} ({item.uri})")
+        if item.description:
+            print(f"  #️⃣  {item.description}")
+        if item.version:
+            print(f"  *️⃣  {item.version}")
+
+
+@grouped
+@withService
+@task
+async def serve(*, service: Service):
     """Start event-based service."""
-    await schema.service()
+    await service()
 
 
+@withService
+@withPipeline
 @task
-async def default():
+async def default(*, pipeline: Pipeline, service: Service):
     """Default task when no user-defined default task."""
-    if len(schema.service.handlers) > 0:
-        await serve()
+    if len(service.handlers) > 0:
+        await serve(service=service)
     else:
-        await list()
+        await list(pipeline=pipeline)
