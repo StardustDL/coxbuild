@@ -21,11 +21,11 @@ cb -i src://QHRhc2sKZGVmIGluaXRpYWwoKToKICAgIHByaW50KCJJbml0aWFsaXppbmcuLi4iKQoK
 
 # Life Cycle
 
-cb -u https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/lifecycle.py
+cb -u https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@master/demo/lifecycle.py
 
 # Event-based build
 
-cb -u https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/event.py
+cb -u https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@master/demo/event.py
 ```
 
 ## Usage

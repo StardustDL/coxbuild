@@ -25,7 +25,8 @@ Supported features:
   - File `file://`
   - Url `url://`
   - Source code `src://`
-  - Module `module://`
+  - Module `mod://`
+  - Gallery `ext://`
 
 Extensions:
 
@@ -53,15 +54,13 @@ coxbuild --version
 
 cb -u https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/hello.py
 
-cb -i src://QHRhc2sKZGVmIGluaXRpYWwoKToKICAgIHByaW50KCJJbml0aWFsaXppbmcuLi4iKQoKCkBkZXBlbmQoaW5pdGlhbCkKQHRhc2sKZGVmIGRlZmF1bHQoKToKICAgIHByaW50KCJIZWxsbywgd29ybGQhIik=
-
 # Life Cycle
 
-cb -u https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/lifecycle.py
+cb -u https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@master/demo/lifecycle.py
 
 # Event-based build
 
-cb -u https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/event.py
+cb -u https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@master/demo/event.py
 ```
 
 ## Getting Started
@@ -90,3 +89,7 @@ coxbuild
 
 cb
 ```
+
+## Extensions
+
+We provide a few extensions with coxbuild release package, in `coxbuild.extensions` module. We also provide a gallery of extensions in [exts](https://github.com/StardustDL/coxbuild/blob/master/exts) directory.

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import click
 
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 
 
 def get_app_directory() -> Path:

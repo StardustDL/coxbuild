@@ -33,14 +33,6 @@ def default(): pass
 
 Task can have parameters, see [Before/After Hook](#before-after) section for details.
 
-Builtin tasks:
-
-| Name     | Description               |
-| -------- | ------------------------- |
-| `:list`  | List all defined tasks    |
-| `:serve` | Start event-based service |
-| `:ext`   | List all extensions       |
-
 ## Dependency
 
 Use `depend` decorator to define task dependency (you can use full name or instance of the task).

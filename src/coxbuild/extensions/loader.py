@@ -23,7 +23,7 @@ def fromModule(module: ModuleType, version: str = "") -> Extension:
     """
     Load extension from module.
 
-    module@{hashcode}://{module name}@{version}
+    mod@{hashcode}://{module name}@{version}
 
     :param module: module to load
     :param hashcode: hashcode
@@ -31,7 +31,7 @@ def fromModule(module: ModuleType, version: str = "") -> Extension:
     """
     logger.info("Load extension from module: %s", module.__name__)
 
-    uri = f"module"
+    uri = f"mod"
 
     uri += f"://{module.__name__}"
 
@@ -111,6 +111,27 @@ def fromUrl(url: str, hashcode: str = "") -> Extension:
     return ext
 
 
+def fromGallery(name: str, version: str = "", hashcode: str = "") -> Extension:
+    """
+    Load extension from gallery.
+
+    ext@{hashcode}://{name}@{version}
+
+    :param name: name of extension
+    :param version: version of extension
+    :param hashcode: hashcode
+    """
+    logger.info("Load extension from gallery: %s", name)
+
+    if not version:
+        version = "master"
+
+    ext = fromUrl(
+        f"https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@{version}/exts/{name}.py", hashcode)
+    ext.uri = f"ext@{ext.hashcode}://{name}@{version}"
+    return ext
+
+
 def load(uri: str):
     splited = uri.split("://", 1)
     if len(splited) != 2:
@@ -121,7 +142,7 @@ def load(uri: str):
     hashcode = schema.split("@", 1)[1] if "@" in schema else ""
     schema = schema.split("@", 1)[0] if "@" in schema else schema
 
-    if schema == "module":
+    if schema == "mod":
         items = path.split("@", 1)
         if len(items) != 2:
             name, version = items[0], ""
@@ -139,6 +160,14 @@ def load(uri: str):
         return ext
     elif schema == "url":
         ext = fromUrl(path, hashcode)
+        return ext
+    elif schema == "ext":
+        items = path.split("@", 1)
+        if len(items) != 2:
+            name, version = items[0], ""
+        else:
+            name, version = items
+        ext = fromGallery(name, version, hashcode)
         return ext
     else:
         raise CoxbuildException(f"Unknown extension schema: {schema}")
