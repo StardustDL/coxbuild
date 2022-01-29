@@ -1,4 +1,10 @@
-from coxbuild.schema import task, depend
+"""
+Hello extension
+"""
+
+__version__ = "0.0.0"
+
+from coxbuild.schema import depend, task
 
 
 @task

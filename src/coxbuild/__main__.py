@@ -12,10 +12,11 @@ from coxbuild import __version__
 @click.option('-D', '--directory', type=click.Path(exists=True, file_okay=False, resolve_path=True, path_type=Path), default=".", help="Path to working directory.")
 @click.option('-f', '--file', default="", help="Schema file name (used first).")
 @click.option('-u', '--url', default="", help="Schema URL (used second).")
+@click.option('-e', '--ext', default="", help="Schema Extension in gallery (used third).")
 @click.option('-i', '--uri', default="file://buildcox.py", help="Schema URI (used last).")
 @click.version_option(__version__, package_name="coxbuild", prog_name="coxbuild", message="%(prog)s v%(version)s, written by StardustDL.")
 @click.option('-v', '--verbose', count=True, default=0, type=click.IntRange(0, 5))
-def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: str = "", url: str = "", uri: str = "", verbose: int = 0) -> None:
+def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: str = "", url: str = "", ext: str = "", uri: str = "", verbose: int = 0) -> None:
     """
     Coxbuild is a tiny python-script-based build automation tool, an alternative to make, psake and so on.
 
@@ -41,6 +42,8 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
         uri = f"file://{file}"
     elif url:
         uri = f"url://{url}"
+    elif ext:
+        uri = f"ext://{ext}"
 
     from coxbuild import schema
     from coxbuild.extensions.loader import load as loadext

@@ -93,6 +93,8 @@ def test_uri():
     run([*demoCmdPre, "-i", "url://https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/buildcox.py"])
     run([*demoCmdPre, "-u", "https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/event.py"])
 
+    run([*demoCmdPre, "-e", "hello"])
+
 
 @depend(test_basic, test_lifecycle, test_command, test_service, test_builtin, test_event_fs, test_ext, test_uri)
 @task
