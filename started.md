@@ -17,6 +17,10 @@ coxbuild --version
 
 cb -u https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/hello.py
 
+cb -e hello
+
+cb -i ext://hello
+
 cb -i src://QHRhc2sKZGVmIGluaXRpYWwoKToKICAgIHByaW50KCJJbml0aWFsaXppbmcuLi4iKQoKCkBkZXBlbmQoaW5pdGlhbCkKQHRhc2sKZGVmIGRlZmF1bHQoKToKICAgIHByaW50KCJIZWxsbywgd29ybGQhIik=
 
 # Life Cycle
@@ -58,6 +62,7 @@ coxbuild
     [-D <working directory = '.'>]
     [-f <file>]
     [-u <url>]
+    [-e <extension>]
     [-i <uri = 'file://buildcox.py'>]
     [task names = 'default']
 
@@ -78,6 +83,9 @@ coxbuild -f other.py
 
 # Run using other url
 coxbuild -u url
+
+# Run using extension in gallery
+coxbuild -e <extension name>
 
 # Run using specified URI
 coxbuild -i uri

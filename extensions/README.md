@@ -116,4 +116,6 @@ A extension in the gallery is a single file `<name>.py`. The file is a valid Pyt
 
 Access the extension file: `https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@<version>/exts/<name>.py`
 
-You can use `ext://` URI to load the extension from the gallery. For example, `ext://abc/module@version` will load the extension at `url://https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@version/exts/abc/module.py`
+You can use `ext://` URI to load the extension from the gallery.
+
+For example, `ext://abc/module@0.0.1` will load the extension at `url://https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@0.0.1/exts/abc/module.py`
