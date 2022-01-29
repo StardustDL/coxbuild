@@ -8,6 +8,8 @@ Coxbuild is a tiny python-script-based build automation tool, an alternative to 
 
 > [Test Coverage Report](https://stardustdl.github.io/coxbuild/cov/)
 
+> [Extension Gallery](https://github.com/StardustDL/coxbuild-ext-gallery/)
+
 ![](./assets/images/demo.gif)
 
 Supported features:
@@ -25,6 +27,7 @@ Supported features:
   - Source code `src://`
   - Module `mod://`
   - Gallery `ext://`
+  - Raw Gallery `extraw://`
 
 Extensions:
 
