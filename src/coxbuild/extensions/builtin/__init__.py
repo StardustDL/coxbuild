@@ -15,7 +15,7 @@ grouped = group("")
 def list(*, pipeline: Pipeline):
     """List all defined tasks."""
     for item in pipeline.tasks.values():
-        print(f"📜 {item.name}")
+        print(f"📜  {item.name}")
         if item.description:
             print(f"  📖  {item.description}")
         if item.deps:
@@ -28,7 +28,7 @@ def list(*, pipeline: Pipeline):
 def ext(*, manager: "Manager"):
     """List all defined tasks."""
     for item in manager.extensions.values():
-        print(f"⚙️ {item.name}")
+        print(f"⚙️  {item.name}")
         if item.uri:
             print(f"  #️⃣  {item.uri}")
         if item.description:
