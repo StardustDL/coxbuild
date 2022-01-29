@@ -3,9 +3,9 @@
 
 ## Variables
 
-| Name             | Description             |
-| ---------------- | ----------------------- |
-| `manager`        | Hosting manager         |
+| Name      | Description     |
+| --------- | --------------- |
+| `manager` | Hosting manager |
 
 ## Task
 
@@ -39,6 +39,7 @@ Builtin tasks:
 | -------- | ------------------------- |
 | `:list`  | List all defined tasks    |
 | `:serve` | Start event-based service |
+| `:ext`   | List all extensions       |
 
 ## Dependency
 
