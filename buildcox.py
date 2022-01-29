@@ -1,3 +1,4 @@
+import base64
 import os
 import shutil
 from datetime import timedelta
@@ -64,3 +65,9 @@ def default(): pass
 @task
 def serdoc():
     run(["docsify", "serve", "docs"], shell=True, fail=True)
+
+
+@task
+def genhello():
+    print(
+        f'src://{base64.b64encode(Path("./demo/hello.py").read_text().encode()).decode()}')

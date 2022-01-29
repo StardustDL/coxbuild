@@ -21,6 +21,11 @@ Supported features:
   - Setup / Teardown
   - Before / After
 - Event-based build as a long-run service
+- Multiple schema sources
+  - File `file://`
+  - Url `url://`
+  - Source code `src://`
+  - Module `module://`
 
 Extensions:
 
@@ -31,17 +36,39 @@ Extensions:
 - .NET
 - Gradle
 
-## Getting Started
-
-> Coxbuild build itself by itself, see [here](https://github.com/StardustDL/coxbuild/blob/master/buildcox.py) for details.
-
-1. Install
+## Install
 
 ```sh
 pip install coxbuild
 ```
 
-2. Write Schema (buildcox.py)
+## Try
+
+```sh
+# Version
+
+coxbuild --version
+
+# Hello World
+
+cb -u https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/hello.py
+
+cb -i src://QHRhc2sKZGVmIGluaXRpYWwoKToKICAgIHByaW50KCJJbml0aWFsaXppbmcuLi4iKQoKCkBkZXBlbmQoaW5pdGlhbCkKQHRhc2sKZGVmIGRlZmF1bHQoKToKICAgIHByaW50KCJIZWxsbywgd29ybGQhIik=
+
+# Life Cycle
+
+cb -u https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/lifecycle.py
+
+# Event-based build
+
+cb -u https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/event.py
+```
+
+## Getting Started
+
+> Coxbuild build itself by itself, see [here](https://github.com/StardustDL/coxbuild/blob/master/buildcox.py) for details.
+
+1. Write Schema (buildcox.py)
 
 ```python
 @task
@@ -54,7 +81,7 @@ def default():
     pass
 ```
 
-3. Run
+2. Run
 
 ```sh
 coxbuild
