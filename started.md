@@ -34,7 +34,9 @@ def default():
 ```sh
 coxbuild
     [-D <working directory = '.'>]
-    [-f <file name = 'buildcox.py'>]
+    [-f <file>]
+    [-u <url>]
+    [-i <uri = 'file://buildcox.py'>]
     [task names = 'default']
 
 # or a shortcut
@@ -52,6 +54,14 @@ coxbuild -D path/to/other
 # Run using other file
 coxbuild -f other.py
 
+# Run using other url
+coxbuild -u url
+
+# Run using specified URI
+coxbuild -i uri
+
 # Run specified task
 coxbuild task1 task2
 ```
+
+> For valid URI, see [here](extensions/README.md).
