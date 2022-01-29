@@ -117,7 +117,7 @@ def fromGallery(name: str, version: str = "", hashcode: str = "") -> Extension:
 
     ext@{hashcode}://{name}@{version}
 
-    https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@{version}/exts/{name}.py
+    https://cdn.jsdelivr.net/gh/StardustDL/coxbuild-ext-gallery@{version}/exts/{name}.py
 
     :param name: name of extension
     :param version: version of extension
@@ -126,10 +126,10 @@ def fromGallery(name: str, version: str = "", hashcode: str = "") -> Extension:
     logger.info("Load extension from gallery: %s", name)
 
     if not version:
-        version = "master"
+        version = "main"
 
     ext = fromUrl(
-        f"https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@{version}/exts/{name}.py", hashcode)
+        f"https://cdn.jsdelivr.net/gh/StardustDL/coxbuild-ext-gallery@{version}/exts/{name}.py", hashcode)
     ext.uri = f"ext@{ext.hashcode}://{name}@{version}"
     return ext
 
@@ -140,7 +140,7 @@ def fromGalleryRaw(name: str, version: str = "", hashcode: str = "") -> Extensio
 
     extraw@{hashcode}://{name}@{version}
 
-    https://raw.githubusercontent.com/StardustDL/coxbuild/{version}/exts/{name}.py
+    https://raw.githubusercontent.com/StardustDL/coxbuild-ext-gallery/{version}/exts/{name}.py
 
     :param name: name of extension
     :param version: version of extension
@@ -149,10 +149,10 @@ def fromGalleryRaw(name: str, version: str = "", hashcode: str = "") -> Extensio
     logger.info("Load extension from gallery (raw): %s", name)
 
     if not version:
-        version = "master"
+        version = "main"
 
     ext = fromUrl(
-        f"https://raw.githubusercontent.com/StardustDL/coxbuild/{version}/exts/{name}.py", hashcode)
+        f"https://raw.githubusercontent.com/StardustDL/coxbuild-ext-gallery/{version}/exts/{name}.py", hashcode)
     ext.uri = f"extraw@{ext.hashcode}://{name}@{version}"
     return ext
 

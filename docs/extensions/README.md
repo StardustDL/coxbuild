@@ -112,12 +112,12 @@ from coxbuild.extensions import gradle
 
 ## Extension Gallery
 
-We also provide a gallery of extensions in [exts](https://github.com/StardustDL/coxbuild/blob/master/exts) directory in coxbuild's GitHub repository.
+We also provide a gallery of extensions in [exts](https://github.com/StardustDL/coxbuild-ext-gallery/).
 
 A extension in the gallery is a single file `<name>.py`. The file is a valid Python module.
 
-Access the extension file: `https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@<version>/exts/<name>.py`
+Access the extension file: `https://cdn.jsdelivr.net/gh/StardustDL/coxbuild-ext-gallery@<version>/exts/<name>.py`
 
 You can use `ext://` URI to load the extension from the gallery.
 
-For example, `ext://abc/module@0.0.1` will load the extension at `url://https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@0.0.1/exts/abc/module.py`
+For example, `ext://abc/module@0.0.1` will load the extension at `url://https://cdn.jsdelivr.net/gh/StardustDL/coxbuild-ext-gallery@0.0.1/exts/abc/module.py`

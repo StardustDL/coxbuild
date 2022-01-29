@@ -94,6 +94,6 @@ cb
 
 ## Extensions
 
-We provide a few extensions with coxbuild release package, in `coxbuild.extensions` module. We also provide a gallery of extensions in [exts](https://github.com/StardustDL/coxbuild/blob/master/exts) directory.
+We provide a few extensions with coxbuild release package, in `coxbuild.extensions` module. We also provide a gallery of extensions in [exts](https://github.com/StardustDL/coxbuild-ext-gallery/).
 
 > Visit [here](https://stardustdl.github.io/coxbuild/#/extensions/README) for more details.

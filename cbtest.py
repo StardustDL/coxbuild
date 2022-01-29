@@ -95,6 +95,8 @@ def test_uri():
 
     run([*demoCmdPre, "-e", "hello"])
 
+    run([*demoCmdPre, "-r", "hello"])
+
 
 @depend(test_basic, test_lifecycle, test_command, test_service, test_builtin, test_event_fs, test_ext, test_uri)
 @task
