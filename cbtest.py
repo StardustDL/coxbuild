@@ -1,3 +1,4 @@
+import base64
 import os
 import shutil
 from datetime import timedelta
@@ -24,7 +25,7 @@ demoCmdPre = ["coxbuild", "-vvv", "-D", "./demo"]
 
 @depend(pypackage.installBuilt)
 @task
-def test_build():
+def test_basic():
     run(["coxbuild", "-vvvvv", "-D", "./demo"])
     res = run([*demoCmdPre, "-f", "fail.py"], fail=True)
     if res:
@@ -80,7 +81,20 @@ def test_command():
         raise Exception("Unexpected success for failing command.")
 
 
-@depend(test_build, test_lifecycle, test_command, test_service, test_builtin, test_event_fs, test_ext)
+@depend(pypackage.installBuilt, test_basic, test_lifecycle, test_service, test_ext)
+@task
+def test_uri():
+    run([*demoCmdPre, "-i", "file://lifecycle.py"])
+
+    src = base64.b64encode(
+        Path("./demo/buildcox.py").read_text().encode()).decode()
+    run([*demoCmdPre, "-i", f"src://{src}"])
+
+    run([*demoCmdPre, "-i", "url://https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/buildcox.py"])
+    run([*demoCmdPre, "-u", "https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/event.py"])
+
+
+@depend(test_basic, test_lifecycle, test_command, test_service, test_builtin, test_event_fs, test_ext, test_uri)
 @task
 def integrationtest(): pass
 
