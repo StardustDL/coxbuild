@@ -19,6 +19,11 @@ Supported features:
   - Setup / Teardown
   - Before / After
 - Event-based build as a long-run service
+- Multiple schema sources
+  - File `file://`
+  - Url `url://`
+  - Source code `src://`
+  - Module `module://`
 
 Extensions:
 

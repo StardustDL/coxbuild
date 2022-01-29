@@ -6,6 +6,28 @@
 pip install coxbuild
 ```
 
+## Try
+
+```sh
+# Version
+
+coxbuild --version
+
+# Hello World
+
+cb -u https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/hello.py
+
+cb -i src://QHRhc2sKZGVmIGluaXRpYWwoKToKICAgIHByaW50KCJJbml0aWFsaXppbmcuLi4iKQoKCkBkZXBlbmQoaW5pdGlhbCkKQHRhc2sKZGVmIGRlZmF1bHQoKToKICAgIHByaW50KCJIZWxsbywgd29ybGQhIik=
+
+# Life Cycle
+
+cb -u https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/lifecycle.py
+
+# Event-based build
+
+cb -u https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/event.py
+```
+
 ## Usage
 
 Coxbuild build itself by itself, see [here](https://github.com/StardustDL/coxbuild/blob/master/buildcox.py) for details.
