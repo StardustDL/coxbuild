@@ -28,8 +28,9 @@ class Manager:
 
     def register(self, ext: Extension):
         if ext.uri not in self.extensions:
-            logger.warning(f"Register existed extensions {ext.uri}.")
             self.extensions[ext.uri] = ext
+        else:
+            logger.warning(f"Register existed extensions {ext.uri}.")
 
     def _load(self, *exts: Extension, pipeline: Pipeline, service: Service) -> None:
         for ext in exts:

@@ -117,6 +117,8 @@ def fromGallery(name: str, version: str = "", hashcode: str = "") -> Extension:
 
     ext@{hashcode}://{name}@{version}
 
+    https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@{version}/exts/{name}.py
+
     :param name: name of extension
     :param version: version of extension
     :param hashcode: hashcode
@@ -129,6 +131,29 @@ def fromGallery(name: str, version: str = "", hashcode: str = "") -> Extension:
     ext = fromUrl(
         f"https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@{version}/exts/{name}.py", hashcode)
     ext.uri = f"ext@{ext.hashcode}://{name}@{version}"
+    return ext
+
+
+def fromGalleryRaw(name: str, version: str = "", hashcode: str = "") -> Extension:
+    """
+    Load extension from gallery (raw).
+
+    extraw@{hashcode}://{name}@{version}
+
+    https://raw.githubusercontent.com/StardustDL/coxbuild/{version}/exts/{name}.py
+
+    :param name: name of extension
+    :param version: version of extension
+    :param hashcode: hashcode
+    """
+    logger.info("Load extension from gallery (raw): %s", name)
+
+    if not version:
+        version = "master"
+
+    ext = fromUrl(
+        f"https://raw.githubusercontent.com/StardustDL/coxbuild/{version}/exts/{name}.py", hashcode)
+    ext.uri = f"extraw@{ext.hashcode}://{name}@{version}"
     return ext
 
 
@@ -168,6 +193,14 @@ def load(uri: str):
         else:
             name, version = items
         ext = fromGallery(name, version, hashcode)
+        return ext
+    elif schema == "extraw":
+        items = path.split("@", 1)
+        if len(items) != 2:
+            name, version = items[0], ""
+        else:
+            name, version = items
+        ext = fromGalleryRaw(name, version, hashcode)
         return ext
     else:
         raise CoxbuildException(f"Unknown extension schema: {schema}")
