@@ -40,6 +40,7 @@ def test_build():
 @task
 def test_builtin():
     run([*demoCmdPre, ":list"])
+    run([*demoCmdPre, ":ext"])
     run([*demoCmdPre, ":serve"])
 
 

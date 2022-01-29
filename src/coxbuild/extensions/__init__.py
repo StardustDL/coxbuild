@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 import inspect
+from dataclasses import dataclass
 from pathlib import Path
 from types import ModuleType
 from typing import Iterable
@@ -17,13 +17,14 @@ class Extension:
     name: str = ""
     description: str = ""
     version: str = ""
-    content: ModuleType | None = None
+    hashcode: str = ""
+    module: ModuleType | None = None
 
     @property
     def tasks(self) -> Iterable[Task]:
-        if not self.content:
+        if not self.module:
             return
-        for name, member in inspect.getmembers(self.content):
+        for name, member in inspect.getmembers(self.module):
             if name.startswith("_"):
                 continue
 
@@ -33,9 +34,9 @@ class Extension:
 
     @property
     def events(self) -> Iterable[EventHandler]:
-        if not self.content:
+        if not self.module:
             return
-        for name, member in inspect.getmembers(self.content):
+        for name, member in inspect.getmembers(self.module):
             if name.startswith("_"):
                 continue
 
@@ -45,9 +46,9 @@ class Extension:
 
     @property
     def pipelineHooks(self) -> Iterable[PipelineHook]:
-        if not self.content:
+        if not self.module:
             return
-        for name, member in inspect.getmembers(self.content):
+        for name, member in inspect.getmembers(self.module):
             if name.startswith("_"):
                 continue
 

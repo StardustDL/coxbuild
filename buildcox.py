@@ -11,8 +11,11 @@ from coxbuild.extensions.python import test as pytest
 from coxbuild.pipelines import PipelineContext, beforePipeline
 from coxbuild.schema import depend, ext, run, setup, task, teardown
 
-ext(pydocs, pyformat, pypackage, pytest)
-ext("file://cbtest.py")
+ext(pydocs)
+ext(pyformat)
+ext(pypackage)
+ext(pytest)
+testmod = ext("file://cbtest.py").module
 
 readmeDst = Path("./src/README.md")
 

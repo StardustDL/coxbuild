@@ -1,10 +1,10 @@
 import coxbuild
 from coxbuild.configuration import Configuration
+from coxbuild.managers import Manager
 from coxbuild.pipelines import Pipeline
+from coxbuild.runtime import withManager, withPipeline, withService
 from coxbuild.services import Service
 from coxbuild.tasks import depend, group, task
-from coxbuild.runtime import withManager, withPipeline, withService
-from coxbuild.managers import Manager
 
 grouped = group("")
 
@@ -17,7 +17,7 @@ def list(*, pipeline: Pipeline):
     for item in pipeline.tasks.values():
         print(f"📜 {item.name}")
         if item.description:
-            print(f"  #️⃣  {item.description}")
+            print(f"  📖  {item.description}")
         if item.deps:
             print(f"  *️⃣  {', '.join(item.deps)}")
 
@@ -28,11 +28,15 @@ def list(*, pipeline: Pipeline):
 def ext(*, manager: "Manager"):
     """List all defined tasks."""
     for item in manager.extensions.values():
-        print(f"📜 {item.name} ({item.uri})")
+        print(f"⚙️ {item.name}")
+        if item.uri:
+            print(f"  #️⃣  {item.uri}")
         if item.description:
-            print(f"  #️⃣  {item.description}")
+            print(f"  📖  {item.description}")
         if item.version:
-            print(f"  *️⃣  {item.version}")
+            print(f"  📌  {item.version}")
+        if item.hashcode:
+            print(f"  🔑  {item.hashcode}")
 
 
 @grouped

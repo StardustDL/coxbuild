@@ -6,6 +6,7 @@ from coxbuild.events.datetime import attime
 from coxbuild.extensions.builtin import serve
 from coxbuild.schema import after, on
 from coxbuild.services import EventContext
+from coxbuild.tasks import task
 
 custom_do_cnt = 0
 custom_do_expect = 3
