@@ -23,7 +23,8 @@ Supported features:
   - File `file://`
   - Url `url://`
   - Source code `src://`
-  - Module `module://`
+  - Module `mod://`
+  - Gallery `ext://`
 
 Extensions:
 
