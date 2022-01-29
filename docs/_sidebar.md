@@ -2,4 +2,5 @@
 - [Schema](schema.md "Schema Specification")
 - [How It Works](how-it-works.md "How It Works")
 - [Library](library.md "Library")
+- [Configuration](configuration.md "Configuration")
 - [Extensions](extensions/README.md "Extensions")

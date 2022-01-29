@@ -20,7 +20,7 @@ class Settings(ConfigurationAccessor):
     @property
     def requirements(self) -> Path:
         """Path to requirements.txt."""
-        return self.config.get("requirements") or self.project.src.joinpath("requirements.txt").resolve()
+        return self.getPath("requirements") or self.project.src.joinpath("requirements.txt").resolve()
 
     @requirements.setter
     def requirements(self, value: Path) -> None:

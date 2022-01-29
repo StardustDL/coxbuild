@@ -17,7 +17,7 @@ class Settings(ConfigurationAccessor):
     @property
     def version(self) -> str | None:
         """Build version."""
-        return self.config.get("version") or None
+        return self.get("version") or None
 
     @version.setter
     def version(self, value: str | None) -> None:
@@ -26,7 +26,7 @@ class Settings(ConfigurationAccessor):
     @property
     def buildConfig(self) -> str:
         """Build configuration."""
-        return self.config.get("buildConfig") or "Release"
+        return self.get("buildConfig") or "Release"
 
     @buildConfig.setter
     def buildConfig(self, value: str) -> None:
@@ -35,7 +35,7 @@ class Settings(ConfigurationAccessor):
     @property
     def nugetSource(self) -> str:
         """Url to NuGet source."""
-        return self.config.get("nugetSource") or "https://api.nuget.org/v3/index.json"
+        return self.get("nugetSource") or "https://api.nuget.org/v3/index.json"
 
     @nugetSource.setter
     def nugetSource(self, value: str) -> None:
@@ -44,7 +44,7 @@ class Settings(ConfigurationAccessor):
     @property
     def nugetToken(self) -> str:
         """Token to NuGet source."""
-        return self.config.get("nugetToken") or ""
+        return self.get("nugetToken") or ""
 
     @nugetToken.setter
     def nugetToken(self, value: str) -> None:

@@ -1,9 +1,10 @@
 import os
+from pathlib import Path
 from typing import Any
 
 
 class Configuration:
-    """Build configuration."""
+    """Build configuration, entry key is case-insensitive."""
 
     def __init__(self, name: str = "", data: dict[str, Any] | None = None) -> None:
         """
@@ -23,7 +24,7 @@ class Configuration:
         return Configuration(self.name, self.data.copy())
 
     def _getid(self, attr: str) -> str:
-        return self.name + ":" + attr if self.name else attr
+        return (self.name + ":" + attr if self.name else attr).lower()
 
     def __iter__(self):
         pre = ""
@@ -61,6 +62,10 @@ class Configuration:
         """Get environ section."""
         return self.section("env")
 
+    def envbuild(self):
+        """Get environ:coxbuild section."""
+        return self.env().section("coxbuild")
+
     def loadenv(self):
         """Load environ section from os."""
         env = self.env()
@@ -77,5 +82,18 @@ class ConfigurationAccessor:
         self.rootConfig = config
         if self.__configname__:
             self.config = config.section(self.__configname__)
+            self.fallback = config.envbuild().section(self.__configname__)
         else:
             self.config = config
+            self.fallback = config.envbuild()
+
+    def get(self, key: str) -> Any:
+        """Get configuration value (or fallback)."""
+        return self.config.get(key) or self.fallback.get(key)
+
+    def getPath(self, key: str) -> Path | None:
+        """Get configuration value (or fallback) as Path."""
+        value: Path | None | str = self.get(key)
+        if isinstance(value, str):
+            value = Path(value)
+        return value
