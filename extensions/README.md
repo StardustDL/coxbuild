@@ -22,15 +22,17 @@ module = extension.module
 
 ## Extension URI
 
-| Extension URI                                      | Description                                                  |
-| -------------------------------------------------- | ------------------------------------------------------------ |
-| `mod://{module name}`                           | Load from a Python module.                                   |
-| `mod://{module name}@{module version}`          | Load from a Python module with specified version.            |
-| `src@{hashcode}://{source code encoded in base64}` | Load from a Python source code (single file module).         |
-| `file@{hashcode}://{file path}`                    | Load from a file (single file module).                       |
-| `url@{hashcode}://{url}`                           | Load from a URL (single file module).                        |
-| `ext@{hashcode}://{extension path}`                | Load from coxbuild extension gallery.                        |
-| `ext@{hashcode}://{extension path}@{version}`      | Load from coxbuild extension gallery with specified version. |
+| Extension URI                                      | Description                                                      |
+| -------------------------------------------------- | ---------------------------------------------------------------- |
+| `mod://{module name}`                              | Load from a Python module.                                       |
+| `mod://{module name}@{module version}`             | Load from a Python module with specified version.                |
+| `src@{hashcode}://{source code encoded in base64}` | Load from a Python source code (single file module).             |
+| `file@{hashcode}://{file path}`                    | Load from a file (single file module).                           |
+| `url@{hashcode}://{url}`                           | Load from a URL (single file module).                            |
+| `ext@{hashcode}://{extension path}`                | Load from coxbuild extension gallery (CDN cached source).        |
+| `ext@{hashcode}://{extension path}@{version}`      | Load from coxbuild extension gallery with specified version.     |
+| `extraw@{hashcode}://{extension path}`             | Load from coxbuild extension raw gallery (latest GitHub source). |
+| `extraw@{hashcode}://{extension path}@{version}`   | Load from coxbuild extension raw gallery with specified version. |
 
 > `@{hashcode}` is optional to check the checksum of the source code.
 
