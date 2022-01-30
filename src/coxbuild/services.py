@@ -97,7 +97,7 @@ class EventHandler:
 class Service:
     """Event-based service."""
 
-    handlers: dict[str, EventHandler] = field(default_factory=dict)
+    handlers: list[EventHandler] = field(default_factory=list)
     """handlers in the service"""
 
     def copy(self) -> "Service":
@@ -106,10 +106,7 @@ class Service:
 
     def register(self, handler: EventHandler):
         """Register handler."""
-        if handler.name in self.handlers:
-            raise CoxbuildException(
-                f"Register multiple task with the same name {handler.name}.")
-        self.handlers[handler.name] = handler
+        self.handlers.append(handler)
         logger.debug(f"Register event handler: {handler}")
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
@@ -133,7 +130,7 @@ class ServiceRunner(Runner):
 
     async def _run(self):
         logger.debug("Run service.")
-        await asyncio.gather(*[e.handle(self.context.config) for e in self.service.handlers.values()])
+        await asyncio.gather(*[e.handle(self.context.config) for e in self.service.handlers])
         logger.debug("Finish service.")
 
 

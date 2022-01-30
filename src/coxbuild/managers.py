@@ -36,13 +36,13 @@ class Manager:
         for ext in exts:
             logger.debug(f"Import extension: {ext.name}({ext.uri})")
             for t in ext.tasks:
-                if t.name not in pipeline.tasks:
-                    logger.debug(
-                        f"Registering task: {t.name} in {ext.name}({ext.uri}).")
-                    pipeline.register(t)
-                else:
-                    logger.debug(
-                        f"Ignored registered task: {t.name} in {ext.name}({ext.uri}).")
+                if t.name in pipeline.tasks:
+                    ot = pipeline.tasks.pop(t.name)
+                    logger.warning(
+                        f"Replace registered task: {ot.name}.")
+                logger.debug(
+                    f"Registering task: {t.name} in {ext.name}({ext.uri}).")
+                pipeline.register(t)
             for eh in ext.events:
                 if eh.name not in service.handlers:
                     logger.debug(
