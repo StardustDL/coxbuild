@@ -157,6 +157,29 @@ def fromGalleryRaw(name: str, version: str = "", hashcode: str = "") -> Extensio
     return ext
 
 
+def fromGalleryCn(name: str, version: str = "", hashcode: str = "") -> Extension:
+    """
+    Load extension from gallery (cn).
+
+    extcn@{hashcode}://{name}@{version}
+
+    https://gitee.com/stardustdl/coxbuild-ext-gallery/raw/{version}/exts/{name}.py
+
+    :param name: name of extension
+    :param version: version of extension
+    :param hashcode: hashcode
+    """
+    logger.info("Load extension from gallery (raw): %s", name)
+
+    if not version:
+        version = "main"
+
+    ext = fromUrl(
+        f"https://gitee.com/stardustdl/coxbuild-ext-gallery/raw/{version}/exts/{name}.py", hashcode)
+    ext.uri = f"extcn@{ext.hashcode}://{name}@{version}"
+    return ext
+
+
 def load(uri: str):
     splited = uri.split("://", 1)
     if len(splited) != 2:
@@ -201,6 +224,14 @@ def load(uri: str):
         else:
             name, version = items
         ext = fromGalleryRaw(name, version, hashcode)
+        return ext
+    elif schema == "extcn":
+        items = path.split("@", 1)
+        if len(items) != 2:
+            name, version = items[0], ""
+        else:
+            name, version = items
+        ext = fromGalleryCn(name, version, hashcode)
         return ext
     else:
         raise CoxbuildException(f"Unknown extension schema: {schema}")
