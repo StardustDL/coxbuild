@@ -47,6 +47,7 @@ async def serve(*, service: Service):
     await service()
 
 
+@grouped
 @withService
 @withPipeline
 @task
