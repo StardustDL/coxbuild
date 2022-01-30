@@ -756,7 +756,7 @@ Run before task.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="coxbuild.services.Service">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.services.</span></span><span class="sig-name descname"><span class="pre">Service</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handlers:</span> <span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coxbuild.services.EventHandler]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.services.Service" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.services.</span></span><span class="sig-name descname"><span class="pre">Service</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handlers:</span> <span class="pre">list[coxbuild.services.EventHandler]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.services.Service" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Event-based service.</p>
 <dl class="py method">
@@ -767,7 +767,7 @@ Run before task.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="coxbuild.services.Service.handlers">
-<span class="sig-name descname"><span class="pre">handlers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#coxbuild.services.EventHandler" title="coxbuild.services.EventHandler"><span class="pre">coxbuild.services.EventHandler</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#coxbuild.services.Service.handlers" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">handlers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#coxbuild.services.EventHandler" title="coxbuild.services.EventHandler"><span class="pre">coxbuild.services.EventHandler</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#coxbuild.services.Service.handlers" title="Permalink to this definition">¶</a></dt>
 <dd><p>handlers in the service</p>
 </dd></dl>
 
