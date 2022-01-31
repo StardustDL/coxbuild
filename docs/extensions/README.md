@@ -22,17 +22,15 @@ module = extension.module
 
 ## Extension URI
 
-| Extension URI                                      | Description                                                      |
-| -------------------------------------------------- | ---------------------------------------------------------------- |
-| `mod://{module name}`                              | Load from a Python module.                                       |
-| `mod://{module name}@{module version}`             | Load from a Python module with specified version.                |
-| `src@{hashcode}://{source code encoded in base64}` | Load from a Python source code (single file module).             |
-| `file@{hashcode}://{file path}`                    | Load from a file (single file module).                           |
-| `url@{hashcode}://{url}`                           | Load from a URL (single file module).                            |
-| `ext@{hashcode}://{extension path}`                | Load from coxbuild extension gallery (CDN cached source).        |
-| `ext@{hashcode}://{extension path}@{version}`      | Load from coxbuild extension gallery with specified version.     |
-| `extraw@{hashcode}://{extension path}`             | Load from coxbuild extension raw gallery (latest GitHub source). |
-| `extraw@{hashcode}://{extension path}@{version}`   | Load from coxbuild extension raw gallery with specified version. |
+| Extension URI                                      | Description                                                  |
+| -------------------------------------------------- | ------------------------------------------------------------ |
+| `mod://{module name}`                              | Load from a Python module.                                   |
+| `mod://{module name}@{module version}`             | Load from a Python module with specified version.            |
+| `src@{hashcode}://{source code encoded in base64}` | Load from a Python source code (single file module).         |
+| `file@{hashcode}://{file path}`                    | Load from a file (single file module).                       |
+| `url@{hashcode}://{url}`                           | Load from a URL (single file module).                        |
+| `ext@{hashcode}://{extension path}`                | Load from coxbuild extension gallery (CDN cached source).    |
+| `ext@{hashcode}://{extension path}@{version}`      | Load from coxbuild extension gallery with specified version. |
 
 > `@{hashcode}` is optional to check the checksum of the source code.
 
@@ -52,12 +50,12 @@ Builtin extension provides a few builtin tasks, event handlers, and hooks.
 
 Builtin tasks:
 
-| Name      | Description                                     |
-| --------- | ----------------------------------------------- |
-| `:list`   | List all defined tasks                          |
-| `:serve`  | Start event-based service                       |
-| `:ext`    | List all extensions                             |
-| `default` | Default task when no user-defined default task. |
+| Name       | Description               |
+| ---------- | ------------------------- |
+| `:list`    | List all defined tasks    |
+| `:serve`   | Start event-based service |
+| `:ext`     | List all extensions       |
+| `:default` | Builtin default task      |
 
 ### Python
 
@@ -121,3 +119,9 @@ Access the extension file: `https://cdn.jsdelivr.net/gh/StardustDL/coxbuild-ext-
 You can use `ext://` URI to load the extension from the gallery.
 
 For example, `ext://abc/module@0.0.1` will load the extension at `url://https://cdn.jsdelivr.net/gh/StardustDL/coxbuild-ext-gallery@0.0.1/exts/abc/module.py`
+
+To configure the extension gallery, you can use the environment variable `COXBUILD_GALLERY=gal1;gal2`.
+
+- GitHub: `github@reponame`
+- Gitee: `gitee@reponame`
+- Directory: `directory@/path/to/exts`

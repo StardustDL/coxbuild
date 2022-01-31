@@ -117,67 +117,23 @@ def fromGallery(name: str, version: str = "", hashcode: str = "") -> Extension:
 
     ext@{hashcode}://{name}@{version}
 
-    https://cdn.jsdelivr.net/gh/StardustDL/coxbuild-ext-gallery@{version}/exts/{name}.py
-
     :param name: name of extension
     :param version: version of extension
     :param hashcode: hashcode
     """
     logger.info("Load extension from gallery: %s", name)
 
-    if not version:
-        version = "main"
+    from .gallery import galleries
 
-    ext = fromUrl(
-        f"https://cdn.jsdelivr.net/gh/StardustDL/coxbuild-ext-gallery@{version}/exts/{name}.py", hashcode)
-    ext.uri = f"ext@{ext.hashcode}://{name}@{version}"
-    return ext
+    gals = galleries()
 
+    for gal in gals:
+        ext = gal.load(name, version, hashcode)
+        if ext:
+            return ext
 
-def fromGalleryRaw(name: str, version: str = "", hashcode: str = "") -> Extension:
-    """
-    Load extension from gallery (raw).
-
-    extraw@{hashcode}://{name}@{version}
-
-    https://raw.githubusercontent.com/StardustDL/coxbuild-ext-gallery/{version}/exts/{name}.py
-
-    :param name: name of extension
-    :param version: version of extension
-    :param hashcode: hashcode
-    """
-    logger.info("Load extension from gallery (raw): %s", name)
-
-    if not version:
-        version = "main"
-
-    ext = fromUrl(
-        f"https://raw.githubusercontent.com/StardustDL/coxbuild-ext-gallery/{version}/exts/{name}.py", hashcode)
-    ext.uri = f"extraw@{ext.hashcode}://{name}@{version}"
-    return ext
-
-
-def fromGalleryCn(name: str, version: str = "", hashcode: str = "") -> Extension:
-    """
-    Load extension from gallery (cn).
-
-    extcn@{hashcode}://{name}@{version}
-
-    https://gitee.com/stardustdl/coxbuild-ext-gallery/raw/{version}/exts/{name}.py
-
-    :param name: name of extension
-    :param version: version of extension
-    :param hashcode: hashcode
-    """
-    logger.info("Load extension from gallery (raw): %s", name)
-
-    if not version:
-        version = "main"
-
-    ext = fromUrl(
-        f"https://gitee.com/stardustdl/coxbuild-ext-gallery/raw/{version}/exts/{name}.py", hashcode)
-    ext.uri = f"extcn@{ext.hashcode}://{name}@{version}"
-    return ext
+    raise CoxbuildException(
+        f"Failed to load extension from gallery: {name}@{version}")
 
 
 def load(uri: str):
@@ -216,22 +172,6 @@ def load(uri: str):
         else:
             name, version = items
         ext = fromGallery(name, version, hashcode)
-        return ext
-    elif schema == "extraw":
-        items = path.split("@", 1)
-        if len(items) != 2:
-            name, version = items[0], ""
-        else:
-            name, version = items
-        ext = fromGalleryRaw(name, version, hashcode)
-        return ext
-    elif schema == "extcn":
-        items = path.split("@", 1)
-        if len(items) != 2:
-            name, version = items[0], ""
-        else:
-            name, version = items
-        ext = fromGalleryCn(name, version, hashcode)
         return ext
     else:
         raise CoxbuildException(f"Unknown extension schema: {schema}")

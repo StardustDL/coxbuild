@@ -26,8 +26,10 @@ def ext(extension: ModuleType | str) -> Extension:
     from .extensions.loader import load as loadext
 
     if isinstance(extension, str):
+        print(f"Loading extension from {extension}")
         extension = loadext(extension)
     else:
+        print(f"Loading extension from module {extension.__name__}")
         extension = fromModule(extension)
     manager.register(extension)
     return extension
