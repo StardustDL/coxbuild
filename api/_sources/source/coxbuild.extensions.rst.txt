@@ -18,6 +18,14 @@ Subpackages
 Submodules
 ----------
 
+coxbuild.extensions.gallery module
+----------------------------------
+
+.. automodule:: coxbuild.extensions.gallery
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 coxbuild.extensions.loader module
 ---------------------------------
 

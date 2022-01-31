@@ -43,6 +43,7 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
@@ -242,6 +243,13 @@
 </li>
       </ul></li>
       <li>
+    coxbuild.extensions.gallery
+
+      <ul>
+        <li><a href="source/coxbuild.extensions.html#module-coxbuild.extensions.gallery">module</a>
+</li>
+      </ul></li>
+      <li>
     coxbuild.extensions.git
 
       <ul>
@@ -255,6 +263,8 @@
         <li><a href="source/coxbuild.extensions.gradle.html#module-coxbuild.extensions.gradle">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     coxbuild.extensions.loader
 
@@ -262,8 +272,6 @@
         <li><a href="source/coxbuild.extensions.html#module-coxbuild.extensions.loader">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     coxbuild.extensions.nodejs
 
@@ -426,6 +434,8 @@
 </li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.filesystems.DirectoryEntry">DirectoryEntry (class in coxbuild.events.filesystems)</a>
 </li>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.DirectoryExtensionGallery">DirectoryExtensionGallery (class in coxbuild.extensions.gallery)</a>
+</li>
       <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.ProjectSettings.docs">docs (coxbuild.extensions.ProjectSettings property)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.invocation.CommandExecutionResult.duration">duration (coxbuild.invocation.CommandExecutionResult attribute)</a>
@@ -462,14 +472,14 @@
 </li>
       <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.Extension.events">events (coxbuild.extensions.Extension property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineResult.exception">exception (coxbuild.pipelines.PipelineResult attribute)</a>
 
       <ul>
         <li><a href="source/coxbuild.html#coxbuild.tasks.TaskResult.exception">(coxbuild.tasks.TaskResult attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.invocation.execmd">execmd() (in module coxbuild.invocation)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.managers.Manager.execute">execute() (coxbuild.managers.Manager method)</a>
@@ -483,6 +493,16 @@
       <li><a href="source/coxbuild.html#coxbuild.schema.ext">ext() (in module coxbuild.schema)</a>
 </li>
       <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.Extension">Extension (class in coxbuild.extensions)</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineHook.extension">extension (coxbuild.pipelines.PipelineHook attribute)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.html#coxbuild.services.EventHandler.extension">(coxbuild.services.EventHandler attribute)</a>
+</li>
+        <li><a href="source/coxbuild.html#coxbuild.tasks.Task.extension">(coxbuild.tasks.Task attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.ExtensionGallery">ExtensionGallery (class in coxbuild.extensions.gallery)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.managers.Manager.extensions">extensions (coxbuild.managers.Manager attribute)</a>
 </li>
@@ -502,15 +522,11 @@
 </li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.forever">forever() (in module coxbuild.events)</a>
 </li>
-      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.loader.fromFile">fromFile() (in module coxbuild.extensions.loader)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.loader.fromFile">fromFile() (in module coxbuild.extensions.loader)</a>
+</li>
       <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.loader.fromGallery">fromGallery() (in module coxbuild.extensions.loader)</a>
-</li>
-      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.loader.fromGalleryCn">fromGalleryCn() (in module coxbuild.extensions.loader)</a>
-</li>
-      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.loader.fromGalleryRaw">fromGalleryRaw() (in module coxbuild.extensions.loader)</a>
 </li>
       <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.loader.fromModule">fromModule() (in module coxbuild.extensions.loader)</a>
 </li>
@@ -524,6 +540,8 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.galleries">galleries() (in module coxbuild.extensions.gallery)</a>
+</li>
       <li><a href="source/coxbuild.html#coxbuild.configuration.Configuration.get">get() (coxbuild.configuration.Configuration method)</a>
 
       <ul>
@@ -532,11 +550,33 @@
       </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.get_app_directory">get_app_directory() (in module coxbuild)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.get_working_directory">get_working_directory() (in module coxbuild)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.configuration.ConfigurationAccessor.getPath">getPath() (coxbuild.configuration.ConfigurationAccessor method)</a>
+</li>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.DirectoryExtensionGallery.geturi">geturi() (coxbuild.extensions.gallery.DirectoryExtensionGallery method)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.UriExtensionGallery.geturi">(coxbuild.extensions.gallery.UriExtensionGallery method)</a>
+</li>
+        <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.UrlExtensionGallery.geturi">(coxbuild.extensions.gallery.UrlExtensionGallery method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.GiteeExtensionGallery.geturl">geturl() (coxbuild.extensions.gallery.GiteeExtensionGallery method)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.GitHubExtensionGallery.geturl">(coxbuild.extensions.gallery.GitHubExtensionGallery method)</a>
+</li>
+        <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.JsDelivrExtensionGallery.geturl">(coxbuild.extensions.gallery.JsDelivrExtensionGallery method)</a>
+</li>
+        <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.UrlExtensionGallery.geturl">(coxbuild.extensions.gallery.UrlExtensionGallery method)</a>
+</li>
+      </ul></li>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.GiteeExtensionGallery">GiteeExtensionGallery (class in coxbuild.extensions.gallery)</a>
+</li>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.GitHubExtensionGallery">GitHubExtensionGallery (class in coxbuild.extensions.gallery)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.tasks.group">group() (in module coxbuild.tasks)</a>
 </li>
@@ -619,6 +659,14 @@
   </ul></td>
 </tr></table>
 
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.JsDelivrExtensionGallery">JsDelivrExtensionGallery (class in coxbuild.extensions.gallery)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -638,10 +686,16 @@
 </li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.limit">limit() (in module coxbuild.events)</a>
 </li>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.ExtensionGallery.load">load() (coxbuild.extensions.gallery.ExtensionGallery method)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.UriExtensionGallery.load">(coxbuild.extensions.gallery.UriExtensionGallery method)</a>
+</li>
+        <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.loader.load">(in module coxbuild.extensions.loader)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.loader.load">load() (in module coxbuild.extensions.loader)</a>
-</li>
       <li><a href="source/coxbuild.html#coxbuild.configuration.Configuration.loadenv">loadenv() (coxbuild.configuration.Configuration method)</a>
 </li>
       <li><a href="source/coxbuild.extensions.python.html#coxbuild.extensions.python.package.loadFromRequirements">loadFromRequirements() (in module coxbuild.extensions.python.package)</a>
@@ -683,6 +737,8 @@
         <li><a href="source/coxbuild.extensions.builtin.html#module-coxbuild.extensions.builtin">coxbuild.extensions.builtin</a>
 </li>
         <li><a href="source/coxbuild.extensions.dotnet.html#module-coxbuild.extensions.dotnet">coxbuild.extensions.dotnet</a>
+</li>
+        <li><a href="source/coxbuild.extensions.html#module-coxbuild.extensions.gallery">coxbuild.extensions.gallery</a>
 </li>
         <li><a href="source/coxbuild.extensions.git.html#module-coxbuild.extensions.git">coxbuild.extensions.git</a>
 </li>
@@ -977,11 +1033,15 @@
 </li>
       <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState.unmatchedTasks">unmatchedTasks (coxbuild.runtime.ExecutionState property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.extensions.python.html#coxbuild.extensions.python.package.upgradePackages">upgradePackages() (in module coxbuild.extensions.python.package)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.Extension.uri">uri (coxbuild.extensions.Extension attribute)</a>
+</li>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.UriExtensionGallery">UriExtensionGallery (class in coxbuild.extensions.gallery)</a>
+</li>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.UrlExtensionGallery">UrlExtensionGallery (class in coxbuild.extensions.gallery)</a>
 </li>
   </ul></td>
 </tr></table>
