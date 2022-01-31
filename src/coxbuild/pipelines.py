@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from graphlib import TopologicalSorter
 from queue import Queue
-from typing import Any, Awaitable, Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Awaitable, Callable
 
 from coxbuild.configuration import Configuration
 from coxbuild.hooks import Hook

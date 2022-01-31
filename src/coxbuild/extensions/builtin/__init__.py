@@ -1,5 +1,6 @@
 import coxbuild
 from coxbuild.configuration import Configuration
+from coxbuild.extensions import ProjectSettings, withProject
 from coxbuild.managers import Manager
 from coxbuild.pipelines import Pipeline
 from coxbuild.runtime import withManager, withPipeline, withService
@@ -19,9 +20,19 @@ def list(*, pipeline: Pipeline):
         if item.description:
             print(f"  📖  {item.description}")
         if item.deps:
-            print(f"  *️⃣  {', '.join(item.deps)}")
+            print(f"  🔗  {', '.join(item.deps)}")
         if item.extension:
-            print(f"  ⚙️  {item.extension.uri}")
+            print(f"  ⚓  {item.extension.uri}")
+
+
+@grouped
+@withProject
+@task
+def project(*, project: ProjectSettings):
+    print(f"Source Code : {project.src}")
+    print(f"Test        : {project.test}")
+    print(f"Document    : {project.docs}")
+    print(f"Package     : {project.package}")
 
 
 @grouped
@@ -30,9 +41,9 @@ def list(*, pipeline: Pipeline):
 def ext(*, manager: "Manager"):
     """List all registered extensions."""
     for item in manager.extensions.values():
-        print(f"⚙️  {item.name}")
+        print(f"⚓  {item.name}")
         if item.uri:
-            print(f"  #️⃣  {item.uri}")
+            print(f"  🔗  {item.uri}")
         if item.description:
             print(f"  📖  {item.description}")
         if item.version:

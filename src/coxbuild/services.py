@@ -4,7 +4,7 @@ import logging
 import sys
 import traceback
 from dataclasses import dataclass, field
-from typing import Any, AsyncIterator, Awaitable, Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, AsyncIterator, Awaitable, Callable
 
 from coxbuild.configuration import Configuration
 from coxbuild.exceptions import CoxbuildException

@@ -7,12 +7,14 @@ from . import Extension
 
 
 class ExtensionGallery(ABC):
+    """Extension gallery."""
     @abstractmethod
     def load(self, name: str, version: str = "", hashcode: str = "") -> Extension | None:
         pass
 
 
 class UriExtensionGallery(ExtensionGallery):
+    """Extension gallery by uri."""
     @abstractmethod
     def geturi(self, name: str, version: str = "", hashcode: str = "") -> str | None:
         pass
@@ -34,6 +36,7 @@ class UriExtensionGallery(ExtensionGallery):
 
 
 class UrlExtensionGallery(UriExtensionGallery):
+    """Extension gallery by url."""
     @abstractmethod
     def geturl(self, name: str, version: str = "", hashcode: str = "") -> str | None:
         pass
@@ -46,6 +49,8 @@ class UrlExtensionGallery(UriExtensionGallery):
 
 
 class DirectoryExtensionGallery(UriExtensionGallery):
+    """Extension gallery by directory."""
+
     def __init__(self, path: Path):
         self.path = path.resolve()
 
@@ -55,6 +60,8 @@ class DirectoryExtensionGallery(UriExtensionGallery):
 
 
 class GitHubExtensionGallery(UrlExtensionGallery):
+    """Extension gallery by GitHub repository."""
+
     def __init__(self, repo: str = "StardustDL/coxbuild-ext-gallery", defaultVersion: str = "main") -> None:
         super().__init__()
         self.repo = repo
@@ -67,6 +74,8 @@ class GitHubExtensionGallery(UrlExtensionGallery):
 
 
 class JsDelivrExtensionGallery(UrlExtensionGallery):
+    """Extension gallery by GitHub repository on jsDelivr CDN."""
+
     def __init__(self, repo: str = "StardustDL/coxbuild-ext-gallery", defaultVersion: str = "main") -> None:
         super().__init__()
         self.repo = repo
@@ -79,6 +88,8 @@ class JsDelivrExtensionGallery(UrlExtensionGallery):
 
 
 class GiteeExtensionGallery(UrlExtensionGallery):
+    """Extension gallery by Gitee repository."""
+
     def __init__(self, repo: str = "stardustdl/coxbuild-ext-gallery", defaultVersion: str = "main") -> None:
         super().__init__()
         self.repo = repo
@@ -94,6 +105,14 @@ _galleries: list[ExtensionGallery] = []
 
 
 def galleries():
+    """
+    Get extension galleries.
+
+    From COXBUILD_GALLERY environment variable.
+        GitHub provider: github@reponame
+        Gitee provider: gitee@reponame
+        Directory provider: directory@directory/path
+    """
     if _galleries:
         return _galleries
     env = os.getenv("COXBUILD_GALLERY", "").split(";")
@@ -102,13 +121,6 @@ def galleries():
         item = item.strip()
         if not item:
             continue
-
-        """
-        GitHub provider: github@reponame
-            Add GitHub raw and jsDelivr
-        Gitee provider: gitee@reponame
-        Directory provider: directory@directory path
-        """
 
         try:
             entry = item.split("@", 1)

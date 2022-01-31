@@ -5,7 +5,7 @@ import sys
 import traceback
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Awaitable, Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Awaitable, Callable
 
 from coxbuild.configuration import Configuration
 from coxbuild.hooks import Hook
