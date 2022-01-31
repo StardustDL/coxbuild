@@ -6,7 +6,7 @@ Use `ext` function to register extension by a loaded module or an extension URI.
 
 When executing, the manager will traverse the extension module (no recursion) and register all the tasks, event handlers, and hooks.
 
-> The member name with `_` prefix will be ignored.
+> The member name with `_` prefix will be ignored, so we recomment to use `_` prefix for tasks, event handlers, and hooks imported from other extension.
 
 ```python
 import extension_module
@@ -55,6 +55,7 @@ Builtin tasks:
 | `:list`    | List all defined tasks    |
 | `:serve`   | Start event-based service |
 | `:ext`     | List all extensions       |
+| `:project` | Print project settings    |
 | `:default` | Builtin default task      |
 
 ### Python

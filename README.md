@@ -27,7 +27,6 @@ Supported features:
   - Source code `src://`
   - Module `mod://`
   - Gallery `ext://`
-  - Raw Gallery `extraw://`
 
 Extensions:
 
