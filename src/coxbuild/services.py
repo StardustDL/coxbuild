@@ -4,13 +4,16 @@ import logging
 import sys
 import traceback
 from dataclasses import dataclass, field
-from typing import Any, AsyncIterator, Awaitable, Callable
+from typing import Any, AsyncIterator, Awaitable, Callable, TYPE_CHECKING
 
 from coxbuild.configuration import Configuration
 from coxbuild.exceptions import CoxbuildException
 from coxbuild.runners import Runner
 from coxbuild.runtime import ExecutionState
 from coxbuild.tasks import Task, named, task
+
+if TYPE_CHECKING:
+    from .extensions import Extension
 
 logger = logging.getLogger("services")
 
@@ -42,6 +45,7 @@ class EventHandler:
     """prevent exception"""
     name: str = ""
     """handler name"""
+    extension: "Extension | None" = None
 
     async def handle(self, config: Configuration | None = None):
         logger.debug(f"Handle for event: {self.name}.")

@@ -5,13 +5,16 @@ import sys
 import traceback
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Awaitable, Callable
+from typing import Any, Awaitable, Callable, TYPE_CHECKING
 
 from coxbuild.configuration import Configuration
 from coxbuild.hooks import Hook
 
 from .exceptions import CoxbuildException
 from .runners import Runner
+
+if TYPE_CHECKING:
+    from .extensions import Extension
 
 logger = logging.getLogger("tasks")
 
@@ -168,6 +171,7 @@ class Task:
     """dependency task names"""
     hooks: list[TaskHook] = field(default_factory=list)
     """task hooks"""
+    extension: "Extension | None" = None
 
     def copy(self) -> "Task":
         """Clone task."""

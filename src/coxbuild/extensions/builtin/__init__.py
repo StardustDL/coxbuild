@@ -20,13 +20,15 @@ def list(*, pipeline: Pipeline):
             print(f"  📖  {item.description}")
         if item.deps:
             print(f"  *️⃣  {', '.join(item.deps)}")
+        if item.extension:
+            print(f"  ⚙️  {item.extension.uri}")
 
 
 @grouped
 @withManager
 @task
 def ext(*, manager: "Manager"):
-    """List all defined tasks."""
+    """List all registered extensions."""
     for item in manager.extensions.values():
         print(f"⚙️  {item.name}")
         if item.uri:

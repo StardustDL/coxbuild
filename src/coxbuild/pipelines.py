@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from graphlib import TopologicalSorter
 from queue import Queue
-from typing import Any, Awaitable, Callable
+from typing import Any, Awaitable, Callable, TYPE_CHECKING
 
 from coxbuild.configuration import Configuration
 from coxbuild.hooks import Hook
@@ -16,6 +16,9 @@ from coxbuild.runtime import ExecutionState
 from .exceptions import CoxbuildException
 from .runners import Runner
 from .tasks import Task, TaskContext, TaskHook, TaskResult
+
+if TYPE_CHECKING:
+    from .extensions import Extension
 
 logger = logging.getLogger("pipelines")
 
@@ -55,7 +58,7 @@ class PipelineResult:
 @dataclass
 class PipelineHook(Hook):
     """Hooks for a pipeline."""
-    pass
+    extension: "Extension | None" = None
 
 
 @dataclass
