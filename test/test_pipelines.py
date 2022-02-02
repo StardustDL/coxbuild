@@ -14,17 +14,18 @@ def taskpre(l: list):
     return Task("pre", f)
 
 
-def task1(l: list):
+def task1(l: list, pre: Task):
     def f():
         l.append(1)
 
-    return Task("1", f, deps=["pre"])
+    return Task("1", f, deps=[pre])
 
 
 def pipe(data: list) -> Pipeline:
     p = Pipeline()
-    p.register(task1(data))
-    p.register(taskpre(data))
+    pre = taskpre(data)
+    p.register(task1(data, pre))
+    p.register(pre)
     return p
 
 

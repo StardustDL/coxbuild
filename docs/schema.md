@@ -34,7 +34,7 @@ Task can have parameters, see [Before/After Hook](#before-after) section for det
 
 ## Dependency
 
-Use `depend` decorator to define task dependency (you can use full name or instance of the task).
+Use `depend` decorator to define task dependency.
 
 ```python
 @task
@@ -43,7 +43,7 @@ def t1(): pass
 @task
 def t2(): pass
 
-@depend("t1", t2)
+@depend(t2)
 @task
 def default(): pass
 ```

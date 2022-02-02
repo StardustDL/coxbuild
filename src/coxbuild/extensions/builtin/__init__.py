@@ -20,7 +20,7 @@ def list(*, pipeline: Pipeline):
         if item.description:
             print(f"  📖  {item.description}")
         if item.deps:
-            print(f"  🔗  {', '.join(item.deps)}")
+            print(f"  🔗  {', '.join([t.name for t in item.deps])}")
         if item.extension:
             print(f"  ⚓  {item.extension.uri}")
 

@@ -351,17 +351,18 @@ class Pipeline:
 
         unmatchedNames = []
 
-        tks: set[str] = set()
-        q: Queue[str] = Queue()
-        for name in args:
-            if isinstance(name, Task):
-                name = name.name
-            if name in self.tasks:
-                if name not in tks:
-                    tks.add(name)
-                    q.put(name)
-            else:
-                unmatchedNames.append(name)
+        tks: set[Task] = set()
+        q: Queue[Task] = Queue()
+        for task in args:
+            if isinstance(task, str):
+                if task in self.tasks:
+                    task = self.tasks[task]
+                else:
+                    unmatchedNames.append(task)
+                    continue
+            if task not in tks:
+                tks.add(task)
+                q.put(task)
 
         if len(unmatchedNames) > 0:
             message = f"Not found task names: {unmatchedNames}"
@@ -370,20 +371,20 @@ class Pipeline:
 
         while not q.empty():
             t = q.get()
-            for d in self.tasks[t].deps:
-                if d in self.tasks and d not in tks:
+            for d in t.deps:
+                if d not in tks:
                     tks.add(d)
                     q.put(d)
 
         logger.debug(f"Build pipeline for tasks: {tks}.")
 
-        graph = {}
+        graph: dict[Task, set[Task]] = {}
 
         for key in tks:
-            graph[key] = {d for d in self.tasks[key].deps}
+            graph[key] = {d for d in key.deps}
 
-        tasks = list((self.tasks[name]
-                     for name in TopologicalSorter(graph).static_order()))
+        tasks = list((task
+                     for task in TopologicalSorter(graph).static_order()))
 
         logger.debug(f"Tasks to run: {', '.join((t.name for t in tasks))}")
 

@@ -167,7 +167,7 @@ class Task:
     """task body"""
     description: str = ""
     """task document"""
-    deps: list[str] = field(default_factory=list)
+    deps: list["Task"] = field(default_factory=list)
     """dependency task names"""
     hooks: list[TaskHook] = field(default_factory=list)
     """task hooks"""
@@ -188,9 +188,12 @@ class Task:
         """
         return TaskRunner(self, list(args), kwds)
 
+    def __hash__(self) -> int:
+        return id(self)
+
     def depend(self, task: "Task") -> "Task":
         """Add dependency task."""
-        self.deps.append(task.name)
+        self.deps.append(task)
         return task
 
     def hook(self, hook: TaskHook) -> "TaskHook":
@@ -396,15 +399,15 @@ def group(*names: str):
     return decorator
 
 
-def depend(*names: str | Task):
+def depend(*tasks: Task):
     """
     Decorator to define dependencies of a task.
 
     names: task names or task instances
     """
     def decorator(inner: Task) -> Task:
-        for name in names:
-            inner.deps.append(name if isinstance(name, str) else name.name)
+        for task in tasks:
+            inner.depend(task)
         return inner
     return decorator
 
