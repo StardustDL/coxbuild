@@ -32,6 +32,10 @@ class Extension:
             match member:
                 case Task() as t:
                     yield t
+                case list() as l:
+                    for t in l:
+                        if isinstance(t, Task):
+                            yield t
 
     @property
     def events(self) -> Iterable[EventHandler]:
@@ -44,6 +48,10 @@ class Extension:
             match member:
                 case EventHandler() as t:
                     yield t
+                case list() as l:
+                    for t in l:
+                        if isinstance(t, EventHandler):
+                            yield t
 
     @property
     def pipelineHooks(self) -> Iterable[PipelineHook]:
@@ -56,6 +64,10 @@ class Extension:
             match member:
                 case PipelineHook() as t:
                     yield t
+                case list() as l:
+                    for t in l:
+                        if isinstance(t, PipelineHook):
+                            yield t
 
 
 class ProjectSettings(ConfigurationAccessor):

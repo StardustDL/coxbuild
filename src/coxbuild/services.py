@@ -148,11 +148,30 @@ def on(event: Callable[[], Awaitable], safe: bool = False, name: str | None = No
     safe: prevent exception
     name: handler name, None to use function name
     """
-    def decorator(handler: Callable[[], None] | Task):
-        tname = name or handler.__name__
-        if not isinstance(handler, Task):
-            handler = named(tname)(task(handler))
+    def decorator(handler: Callable[[], None] | Task | EventHandler | list[EventHandler]) -> EventHandler | list[EventHandler]:
+        if isinstance(handler, EventHandler):
+            tname = name or handler.name
+            tk = handler.handler
+        elif isinstance(handler, list):
+            if len(handler) == 0:
+                raise CoxbuildException("No event handler in list.")
+            tname = name or handler[0].name
+            tk = handler[0].handler
+        elif isinstance(handler, Task):
+            tname = name or handler.name
+            tk = handler
+        else:
+            tname = name or handler.__name__
+            tk = named(tname)(task(handler))
 
-        return EventHandler(event, handler, safe, tname)
+        eh = EventHandler(event, tk, safe, tname)
+
+        if isinstance(handler, EventHandler):
+            return [eh, handler]
+        elif isinstance(handler, list):
+            handler.append(eh)
+            return handler
+        else:
+            return eh
 
     return decorator

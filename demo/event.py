@@ -1,7 +1,7 @@
 import asyncio
 from datetime import datetime, time, timedelta
 
-from coxbuild.events import limit, once, onceevent, repeat
+from coxbuild.events import delay, limit, once, onceevent, repeat
 from coxbuild.events.datetime import attime
 from coxbuild.extensions.builtin import serve
 from coxbuild.schema import after, on
@@ -48,6 +48,12 @@ def unsafe_do():
     unsafe_do_cnt += 1
     print("UNSAFE OCCUR")
     raise Exception("Unsafe op")
+
+
+@on(delay(timedelta(seconds=0.4)))
+@on(delay(timedelta(seconds=0.2)))
+def multievent():
+    print(f"multi event done: {datetime.now()}")
 
 
 @serve.after

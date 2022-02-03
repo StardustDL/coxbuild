@@ -4,7 +4,7 @@ An extension is a wrapped Python module, which contains some tasks, event handle
 
 Use `ext` function to register extension by a loaded module or an extension URI. It will load and register the extension and then return it.
 
-When executing, the manager will traverse the extension module (no recursion) and register all the tasks, event handlers, and hooks.
+When executing, the manager will traverse the extension module (no recursion) and register all the tasks, event handlers, and hooks defined in the module (the manager will expand the list attributes in the module).
 
 > The member name with `_` prefix will be ignored, so we recomment to use `_` prefix for tasks, event handlers, and hooks imported from other extension.
 
