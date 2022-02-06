@@ -35,8 +35,8 @@ class TaskContext:
 @dataclass
 class TaskResult:
     """Execution result for task."""
-    name: str
-    """task name"""
+    task: "Task"
+    """task"""
     duration: timedelta
     """execution duration"""
     exception: CoxbuildException | None
@@ -361,7 +361,7 @@ class TaskRunner(Runner):
         exception = None if self.exc_value is None else CoxbuildException(
             f"Failed to run task: {self.context.task.name}", cause=self.exc_value)
         self.result = TaskResult(
-            self.context.task.name, duration=self.duration, exception=exception)
+            self.context.task, duration=self.duration, exception=exception)
 
         if self.exc_value is not None:
             logger.error("Task execute exception.", exc_info=self.exc_value)

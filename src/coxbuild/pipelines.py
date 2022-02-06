@@ -47,7 +47,7 @@ class PipelineResult:
     """exception when running"""
 
     def __bool__(self):
-        return self.exception is None and all(self.tasks)
+        return self.exception is None and all((t for t in self.tasks if not t.task.continueOnError))
 
     @property
     def description(self) -> str:
@@ -284,7 +284,7 @@ class PipelineRunner(Runner):
         cnt = len(self.result.tasks)
 
         for i, tr in enumerate(self.result.tasks):
-            print(f"({i+1}/{cnt})\t{tr.description}\t⏱️ {tr.duration}\t📜 {tr.name}")
+            print(f"({i+1}/{cnt})\t{tr.description}\t⏱️ {tr.duration}\t📜 {tr.task.name}")
 
         del self._results
         del self._executionState
