@@ -97,9 +97,13 @@ def test_functional(): pass
 def test_uri():
     run([*demoCmdPre, "-i", "file://lifecycle.py"])
 
+    srctext = Path("./demo/buildcox.py").read_text()
+
     src = base64.b64encode(
-        Path("./demo/buildcox.py").read_text().encode()).decode()
+        srctext.encode()).decode()
     run([*demoCmdPre, "-i", f"src://{src}"])
+
+    run([*demoCmdPre, "-i", "src://stdin"], input=srctext)
 
     run([*demoCmdPre, "-i", "url://https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/buildcox.py"])
     run([*demoCmdPre, "-u", "https://raw.githubusercontent.com/StardustDL/coxbuild/master/demo/event.py"])
