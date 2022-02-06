@@ -157,13 +157,18 @@ class PipelineRunner(Runner):
 
     async def _before(self):
         logger.debug(f"Run pipeline before hook")
-        for hook in self.before:
-            pre = hook.hook(self.context)
-            if inspect.isawaitable(pre):
-                pre: bool = await pre
+        try:
+            for hook in self.before:
+                pre = hook.hook(self.context)
+                if inspect.isawaitable(pre):
+                    pre: bool = await pre
 
-            if pre == False:
-                return False
+                if pre == False:
+                    return False
+        except Exception as ex:
+            logger.error(f"Run pipeline before hook failed.", exc_info=ex)
+            print(f"Run pipeline before hook failed: {ex}")
+            return False
 
     async def _beforeTask(self, context: TaskContext):
         logger.debug(f"Run pipeline before task hook for {context.task.name}")
@@ -183,10 +188,14 @@ class PipelineRunner(Runner):
 
     async def _after(self):
         logger.debug(f"Pipeline after hook.")
-        for hook in self.after:
-            res = hook.hook(self.context, self.result)
-            if inspect.isawaitable(res):
-                await res
+        try:
+            for hook in self.after:
+                res = hook.hook(self.context, self.result)
+                if inspect.isawaitable(res):
+                    await res
+        except Exception as ex:
+            logger.error(f"Run pipeline after hook failed.", exc_info=ex)
+            print(f"Run pipeline after hook failed: {ex}")
 
     async def _run(self):
         n = len(self.tasks)
@@ -216,10 +225,15 @@ class PipelineRunner(Runner):
 
             self._executionState.task = None
 
-            print("")
-
             if not res:
-                break
+                if task.continueOnError:
+                    message = f"Task {task.name} failed, but continue on error."
+                    logger.error(message)
+                    print(message)
+                    print("")
+                else:
+                    print("")
+                    break
 
     async def __aenter__(self) -> Callable[[], Awaitable | None]:
         logger.debug(f"Running pipeline: {self.tasks}")

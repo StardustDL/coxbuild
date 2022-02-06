@@ -17,8 +17,8 @@ from .runtime import (ExecutionState, withConfiguration, withEvent,
                       withPipeline, withService, withTask)
 from .services import EventHandler, Service, on
 from .tasks import (after, asafter, asbefore, aspostcond, asprecond, assetup,
-                    asteardown, before, depend, group, named, postcond,
-                    precond, setup, task, teardown)
+                    asteardown, before, continueOnError, depend, group, named,
+                    postcond, precond, setup, task, teardown)
 
 manager = Manager()
 

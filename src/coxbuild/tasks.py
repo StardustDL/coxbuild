@@ -171,6 +171,8 @@ class Task:
     """dependency task names"""
     hooks: list[TaskHook] = field(default_factory=list)
     """task hooks"""
+    continueOnError: bool = False
+    """continue execution on error"""
     extension: "Extension | None" = None
 
     def copy(self) -> "Task":
@@ -248,19 +250,31 @@ class TaskRunner(Runner):
 
     async def _before(self):
         logger.debug(f"Run task before hook for {self.context.task.name}")
-        for hook in self.before:
-            pre = hook.hook(self.context)
-            if inspect.isawaitable(pre):
-                pre: bool = await pre
-            if pre == False:
-                return False
+        try:
+            for hook in self.before:
+                pre = hook.hook(self.context)
+                if inspect.isawaitable(pre):
+                    pre: bool = await pre
+                if pre == False:
+                    return False
+        except Exception as ex:
+            logger.error(
+                f"Task before hook failed for {self.context.task.name}", exc_info=ex)
+            print(
+                f"Task before hook failed for {self.context.task.name}: {ex}")
+            return False
 
     async def _after(self):
         logger.debug(f"Run task after hook for {self.context.task.name}")
-        for hook in self.after:
-            res = hook.hook(self.context, self.result)
-            if inspect.isawaitable(res):
-                await res
+        try:
+            for hook in self.after:
+                res = hook.hook(self.context, self.result)
+                if inspect.isawaitable(res):
+                    await res
+        except Exception as ex:
+            logger.error(
+                f"Task after hook failed for {self.context.task.name}", exc_info=ex)
+            print(f"Task after hook failed for {self.context.task.name}: {ex}")
 
     async def _setup(self):
         logger.debug(f"Task {self.context.task.name} setup hook.")
@@ -387,6 +401,14 @@ def named(name: str):
         inner.name = name
         return inner
     return decorator
+
+
+def continueOnError(inner: Task) -> Task:
+    """
+    Decorator to continue task execution on error.
+    """
+    inner.continueOnError = True
+    return inner
 
 
 def group(*names: str):
