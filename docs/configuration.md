@@ -11,6 +11,12 @@ def initialize(context: PipelineContext):
     config["a"] = 1
 ```
 
+Also you can use `-c` option to specify configuration entry:
+
+```sh
+coxbuild -c a=1 -c b=2
+```
+
 Since many settings provider is inherited from `ConfigurationAccessor`, then many configuration entries have a fallback (with prefix `coxbuild:`) in environment variables. For example `project:src` has fallback environment variable `coxbuild:project:src`.
 
 ## Project Settings

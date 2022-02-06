@@ -47,6 +47,12 @@ def test_builtin():
 
 @depend(pypackage.installBuilt)
 @task
+def test_config():
+    run([*demoCmdPre, "-f", "config.py", "-c", "name=test", "-c", "id=testid"])
+
+
+@depend(pypackage.installBuilt)
+@task
 def test_lifecycle():
     run([*demoCmdPre, "-f", "lifecycle.py"])
 
@@ -96,7 +102,7 @@ def test_uri():
     run([*demoCmdPre, "-e", "hello"])
 
 
-@depend(test_basic, test_lifecycle, test_command, test_service, test_builtin, test_event_fs, test_ext, test_uri)
+@depend(test_basic, test_lifecycle, test_command, test_service, test_builtin, test_event_fs, test_ext, test_uri, test_config)
 @task
 def integrationtest(): pass
 

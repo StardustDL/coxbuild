@@ -85,7 +85,7 @@ ext("mod://coxbuild.extensions.nodejs")
 from coxbuild.extensions import nodejs
 ```
 
-## .NET
+### .NET
 
 ```python
 ext("mod://coxbuild.extensions.dotnet")
@@ -93,7 +93,7 @@ ext("mod://coxbuild.extensions.dotnet")
 from coxbuild.extensions import dotnet
 ```
 
-## Git
+### Git
 
 ```python
 ext("mod://coxbuild.extensions.git")
@@ -101,7 +101,7 @@ ext("mod://coxbuild.extensions.git")
 from coxbuild.extensions import git
 ```
 
-## Gradle
+### Gradle
 
 ```python
 ext("mod://coxbuild.extensions.gradle")

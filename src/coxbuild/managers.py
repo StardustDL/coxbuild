@@ -60,12 +60,12 @@ class Manager:
                 pipeline.hook(ph)
             logger.debug(f"Imported extension: {ext.name}({ext.uri})")
 
-    async def executeAsync(self, *tasks: str):
+    async def executeAsync(self, *tasks: str, config: Configuration = None) -> PipelineResult:
         from coxbuild.extensions import builtin
         from coxbuild.extensions.loader import fromModule
 
         pipeline = Pipeline()
-        config = Configuration()
+        config = config or Configuration()
         service = Service()
 
         executionState = ExecutionState(config)
@@ -80,5 +80,5 @@ class Manager:
         runner.context.config = config
         return await runner
 
-    def execute(self, *tasks: str) -> PipelineResult:
-        return asyncio.run(self.executeAsync(*tasks))
+    def execute(self, *tasks: str, config: Configuration = None) -> PipelineResult:
+        return asyncio.run(self.executeAsync(*tasks, config=config))

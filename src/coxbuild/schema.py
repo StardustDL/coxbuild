@@ -6,13 +6,15 @@ from types import ModuleType
 from typing import Awaitable, Callable
 
 from .configuration import Configuration
-from .extensions import Extension, ProjectSettings
+from .extensions import Extension, ProjectSettings, withProject
 from .invocation import CommandExecutionArgs, CommandExecutionResult, run
 from .managers import Manager
 from .pipelines import (Pipeline, PipelineContext, PipelineHook,
                         PipelineResult, TaskContext, TaskHook, afterPipeline,
                         afterTask, beforePipeline, beforeTask)
-from .runtime import ExecutionState
+from .runtime import (ExecutionState, withConfiguration, withEvent,
+                      withExecutionState, withHandler, withManager,
+                      withPipeline, withService, withTask)
 from .services import EventHandler, Service, on
 from .tasks import (after, asafter, asbefore, aspostcond, asprecond, assetup,
                     asteardown, before, depend, group, named, postcond,

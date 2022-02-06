@@ -5,6 +5,7 @@ from pathlib import Path
 import click
 
 from coxbuild import __version__
+from coxbuild.configuration import Configuration
 
 
 @click.command()
@@ -14,9 +15,10 @@ from coxbuild import __version__
 @click.option('-u', '--url', default="", help="Schema URL (used second).")
 @click.option('-e', '--ext', default="", help="Schema Extension in gallery (used third).")
 @click.option('-i', '--uri', default="file://buildcox.py", help="Schema URI (used last).")
+@click.option('-c', '--config', multiple=True, help="Configuration entry 'key=value'.", default=[])
 @click.version_option(__version__, package_name="coxbuild", prog_name="coxbuild", message="%(prog)s v%(version)s, written by StardustDL.")
 @click.option('-v', '--verbose', count=True, default=0, type=click.IntRange(0, 5))
-def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: str = "", url: str = "", ext: str = "", uri: str = "file://buildcox.py", verbose: int = 0) -> None:
+def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: str = "", url: str = "", ext: str = "", uri: str = "file://buildcox.py", config: list[str] | None = None, verbose: int = 0) -> None:
     """
     Coxbuild is a tiny python-script-based build automation tool, an alternative to make, psake and so on.
 
@@ -50,7 +52,18 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
 
     schema.manager.register(loadext(uri))
 
-    exit(0 if schema.manager.execute(*(tasks or [])) else 1)
+    config = config or []
+
+    configdata = {}
+    for item in config:
+        subs = item.split("=", 1)
+        if len(subs) != 2:
+            print("Invalid configuration entry: " + item)
+            continue
+        configdata[subs[0]] = subs[1]
+
+    exit(0 if schema.manager.execute(*(tasks or []),
+         config=Configuration(data=configdata)) else 1)
 
 
 if __name__ == '__main__':
