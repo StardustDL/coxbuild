@@ -323,17 +323,20 @@ fail: do not raise exception when the final result fails</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.managers.Manager.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.managers.Manager" title="coxbuild.managers.Manager"><span class="pre">coxbuild.managers.Manager</span></a></span></span><a class="headerlink" href="#coxbuild.managers.Manager.copy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Copy manager.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.managers.Manager.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">tasks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#coxbuild.configuration.Configuration" title="coxbuild.configuration.Configuration"><span class="pre">coxbuild.configuration.Configuration</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.pipelines.PipelineResult" title="coxbuild.pipelines.PipelineResult"><span class="pre">coxbuild.pipelines.PipelineResult</span></a></span></span><a class="headerlink" href="#coxbuild.managers.Manager.execute" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Execute tasks.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.managers.Manager.executeAsync">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">executeAsync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">tasks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#coxbuild.configuration.Configuration" title="coxbuild.configuration.Configuration"><span class="pre">coxbuild.configuration.Configuration</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.pipelines.PipelineResult" title="coxbuild.pipelines.PipelineResult"><span class="pre">coxbuild.pipelines.PipelineResult</span></a></span></span><a class="headerlink" href="#coxbuild.managers.Manager.executeAsync" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Execute tasks asynchronously.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="coxbuild.managers.Manager.extensions">
@@ -343,7 +346,14 @@ fail: do not raise exception when the final result fails</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="coxbuild.managers.Manager.register">
 <span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="coxbuild.extensions.html#coxbuild.extensions.Extension" title="coxbuild.extensions.Extension"><span class="pre">coxbuild.extensions.Extension</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.managers.Manager.register" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Register extension.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.managers.Manager.unregister">
+<span class="sig-name descname"><span class="pre">unregister</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="coxbuild.extensions.html#coxbuild.extensions.Extension" title="coxbuild.extensions.Extension"><span class="pre">coxbuild.extensions.Extension</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.managers.Manager.unregister" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unregister extension.</p>
+</dd></dl>
 
 </dd></dl>
 
