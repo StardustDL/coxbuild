@@ -88,6 +88,14 @@ def name(): pass
 def name(): pass
 ```
 
+## Continue on Error
+
+```python
+@continueOnError
+@task
+def default(): assert False
+```
+
 ## Pre / Post Condition
 
 Use `precondition` to decide whether to run the task, and use `postcondition` to check the task works well.

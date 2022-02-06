@@ -27,9 +27,11 @@ module = extension.module
 | `mod://{module name}`                              | Load from a Python module.                                   |
 | `mod://{module name}@{module version}`             | Load from a Python module with specified version.            |
 | `src@{hashcode}://{source code encoded in base64}` | Load from a Python source code (single file module).         |
+| `src@{hashcode}://stdin`                           | Load from a Python module from stdin.                        |
+| `src://interactive`                                | Load from a Python module from interactive.                  |
 | `file@{hashcode}://{file path}`                    | Load from a file (single file module).                       |
 | `url@{hashcode}://{url}`                           | Load from a URL (single file module).                        |
-| `ext@{hashcode}://{extension path}`                | Load from coxbuild extension gallery (CDN cached source).    |
+| `ext@{hashcode}://{extension path}`                | Load from coxbuild extension gallery.                        |
 | `ext@{hashcode}://{extension path}@{version}`      | Load from coxbuild extension gallery with specified version. |
 
 > `@{hashcode}` is optional to check the checksum of the source code.
@@ -113,7 +115,7 @@ from coxbuild.extensions import gradle
 
 We also provide a gallery of extensions in [exts](https://github.com/StardustDL/coxbuild-ext-gallery/).
 
-A extension in the gallery is a single file `<name>.py`. The file is a valid Python module.
+An extension in the gallery is a single file `<name>.py`. The file is a valid Python module.
 
 Access the extension file: `https://cdn.jsdelivr.net/gh/StardustDL/coxbuild-ext-gallery@<version>/exts/<name>.py`
 
