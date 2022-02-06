@@ -67,12 +67,16 @@ def fromSource(src: str, filename: str = "<string>", hashcode: str = "") -> Exte
         id = str(uuid1())
         spec = spec_from_loader(id, loader=None)
         mod = module_from_spec(spec)
-
-        exec("from coxbuild.schema import *", mod.__dict__)
-        code.interact(banner="Interactive Schema", local=mod.__dict__)
+        mod.__dict__["__module__"] = mod
 
         ext = fromModule(mod)
         ext.uri = f"src://interactive@{id}"
+        mod.__dict__["__extension__"] = ext
+
+        exec("from coxbuild.schema import *", mod.__dict__)
+        exec("manager.register(__extension__)", mod.__dict__)
+        code.interact(banner="Interactive Schema", local=mod.__dict__)
+        exec("manager.unregister(__extension__)", mod.__dict__)
     else:
         rhashcode = hashed(src)
         if hashcode and rhashcode != hashcode:

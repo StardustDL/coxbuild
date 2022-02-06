@@ -65,6 +65,10 @@ cb -u https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@master/demo/lifecycle.py
 # Event-based build
 
 cb -u https://cdn.jsdelivr.net/gh/StardustDL/coxbuild@master/demo/event.py
+
+# Interactive
+
+cb -i src://interative
 ```
 
 ## Getting Started

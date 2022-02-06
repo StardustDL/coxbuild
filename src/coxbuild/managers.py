@@ -24,13 +24,22 @@ class Manager:
     extensions: dict[str, Extension] = field(default_factory=dict)
 
     def copy(self) -> "Manager":
+        """Copy manager."""
         return Manager(extensions=self.extensions)
 
     def register(self, ext: Extension):
+        """Register extension."""
         if ext.uri not in self.extensions:
             self.extensions[ext.uri] = ext
         else:
             logger.warning(f"Register existed extensions {ext.uri}.")
+
+    def unregister(self, ext: Extension | str):
+        """Unregister extension."""
+        if isinstance(ext, Extension):
+            ext = ext.uri
+        if ext in self.extensions:
+            del self.extensions[ext]
 
     def _load(self, *exts: Extension, pipeline: Pipeline, service: Service) -> None:
         def regTask(t: Task):
@@ -61,6 +70,7 @@ class Manager:
             logger.debug(f"Imported extension: {ext.name}({ext.uri})")
 
     async def executeAsync(self, *tasks: str, config: Configuration = None) -> PipelineResult:
+        """Execute tasks asynchronously."""
         from coxbuild.extensions import builtin
         from coxbuild.extensions.loader import fromModule
 
@@ -81,4 +91,5 @@ class Manager:
         return await runner
 
     def execute(self, *tasks: str, config: Configuration = None) -> PipelineResult:
+        """Execute tasks."""
         return asyncio.run(self.executeAsync(*tasks, config=config))

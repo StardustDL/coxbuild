@@ -21,6 +21,8 @@ from .tasks import (after, asafter, asbefore, aspostcond, asprecond, assetup,
                     postcond, precond, setup, task, teardown)
 
 manager = Manager()
+execute = manager.execute
+executeAsync = manager.executeAsync
 
 
 def ext(extension: ModuleType | str) -> Extension:
