@@ -64,6 +64,7 @@ coxbuild
     [-u <url>]
     [-e <extension>]
     [-i <uri = 'file://buildcox.py'>]
+    [-c <config entry>]
     [task names = 'default']
 
 # or a shortcut
@@ -92,6 +93,9 @@ coxbuild -i uri
 
 # Run specified task
 coxbuild task1 task2
+
+# Run with specified configuration entry
+coxbuild -c a=1 -c b=2
 ```
 
 > For valid URI, see [here](extensions/README.md).

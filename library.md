@@ -4,16 +4,16 @@
 
 ## Manager
 
-Use **Manager** to manage extensions.
+Use **Manager** to manage extensions and execute tasks.
 
 ```python
-from coxbuild.managers import loadModuleFromFile, loadModuleFromSource, Manager
+from coxbuild.managers import Manager
 
 manager: Manager
 
-manager.load(loadModuleFromFile(Path("path/to/extension.py")))
+manager.register(ext1)
 
-manager.load(loadModuleFromSource("# module source code ..."))
+manager.execute("task1", config=config)
 ```
 
 ## Task
