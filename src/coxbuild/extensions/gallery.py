@@ -27,7 +27,9 @@ class UriExtensionGallery(ExtensionGallery):
             if not uri:
                 return None
             ext = loadext(uri)
-            ext.uri = f"ext@{ext.hashcode}://{name}@{version}"
+            sversion = f"@{version}" if version else ""
+            shash = f"@{ext.hashcode}" if ext.hashcode else ""
+            ext.uri = f"ext{shash}://{name}{sversion}"
             return ext
         except Exception as ex:
             logger.warning(

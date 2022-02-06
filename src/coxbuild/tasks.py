@@ -177,7 +177,7 @@ class Task:
 
     def copy(self) -> "Task":
         """Clone task."""
-        return Task(self.name, self.body, self.description, self.deps.copy(), self.hooks.copy())
+        return Task(self.name, self.body, self.description, self.deps.copy(), self.hooks.copy(), self.continueOnError, self.extension)
 
     def __call__(self, *args: Any, **kwds: Any) -> "TaskRunner":
         """

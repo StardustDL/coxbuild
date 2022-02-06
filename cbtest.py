@@ -87,7 +87,12 @@ def test_command():
         raise Exception("Unexpected success for failing command.")
 
 
-@depend(pypackage.installBuilt, test_basic, test_lifecycle, test_service, test_ext)
+@depend(test_basic, test_lifecycle, test_command, test_service, test_builtin, test_event_fs, test_ext, test_config)
+@task
+def test_functional(): pass
+
+
+@depend(test_functional)
 @task
 def test_uri():
     run([*demoCmdPre, "-i", "file://lifecycle.py"])
@@ -102,7 +107,7 @@ def test_uri():
     run([*demoCmdPre, "-e", "hello"])
 
 
-@depend(test_basic, test_lifecycle, test_command, test_service, test_builtin, test_event_fs, test_ext, test_uri, test_config)
+@depend(test_functional, test_uri)
 @task
 def integrationtest(): pass
 

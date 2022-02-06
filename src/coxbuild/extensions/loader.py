@@ -1,6 +1,7 @@
 import base64
 import importlib
 import logging
+import sys
 from hashlib import sha256
 from importlib.util import module_from_spec, spec_from_loader
 from pathlib import Path
@@ -55,21 +56,40 @@ def fromSource(src: str, filename: str = "<string>", hashcode: str = "") -> Exte
     """
     logger.info("Load extension from source: %s...", src[:20])
 
-    rhashcode = hashed(src)
-    if hashcode and rhashcode != hashcode:
-        raise CoxbuildException("Unmatched hashcode.")
+    if src == "stdin":
+        src = sys.stdin.read()
+    if src == "interactive":
+        if hashcode:
+            raise CoxbuildException(
+                "Cannot specify hashcode for interactive source.")
+        import code
 
-    spec = spec_from_loader(rhashcode, loader=None)
-    mod = module_from_spec(spec)
+        id = str(uuid1())
+        spec = spec_from_loader(id, loader=None)
+        mod = module_from_spec(spec)
 
-    code = compile(src, filename, "exec")
+        exec("from coxbuild.schema import *", mod.__dict__)
+        code.interact(banner="Interactive Schema", local=mod.__dict__)
 
-    exec("from coxbuild.schema import *", mod.__dict__)
-    exec(code, mod.__dict__)
+        ext = fromModule(mod)
+        ext.uri = f"src://interactive@{id}"
+    else:
+        rhashcode = hashed(src)
+        if hashcode and rhashcode != hashcode:
+            raise CoxbuildException("Unmatched hashcode.")
 
-    ext = fromModule(mod)
-    ext.uri = f"src@{rhashcode}://{base64.b64encode(src.encode()).decode()}"
-    ext.hashcode = rhashcode
+        spec = spec_from_loader(rhashcode, loader=None)
+        mod = module_from_spec(spec)
+
+        srccode = compile(src, filename, "exec")
+
+        exec("from coxbuild.schema import *", mod.__dict__)
+        exec(srccode, mod.__dict__)
+
+        ext = fromModule(mod)
+        ext.uri = f"src@{rhashcode}://{base64.b64encode(src.encode()).decode()}"
+        ext.hashcode = rhashcode
+
     return ext
 
 
@@ -155,7 +175,13 @@ def load(uri: str):
         ext = fromModule(importlib.import_module(name), version)
         return ext
     elif schema == "src":
-        src = base64.b64decode(path.encode()).decode()
+        path = path.strip()
+        if path == "stdin":
+            src = path
+        elif path == "interactive":
+            src = path
+        else:
+            src = base64.b64decode(path.encode()).decode()
         ext = fromSource(src, filename="<string>", hashcode=hashcode)
         return ext
     elif schema == "file":
