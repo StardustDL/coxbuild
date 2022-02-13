@@ -5,10 +5,11 @@ import pathlib
 from dataclasses import dataclass, field
 from importlib.util import module_from_spec, spec_from_loader
 from types import ModuleType
+from coxbuild.configurations.builders import ConfigurationBuilderCollection, getDefaultBuilder
 
 from coxbuild.exceptions import CoxbuildException
 
-from .configuration import Configuration
+from .configurations import Configuration
 from .extensions import Extension
 from .pipelines import Pipeline, PipelineHook, PipelineResult
 from .runtime import ExecutionState
@@ -22,6 +23,8 @@ logger = logging.getLogger("managers")
 class Manager:
     """Manage extensions and execution."""
     extensions: dict[str, Extension] = field(default_factory=dict)
+    configBuilders: ConfigurationBuilderCollection = field(
+        default_factory=getDefaultBuilder)
 
     def copy(self) -> "Manager":
         """Copy manager."""
@@ -69,13 +72,13 @@ class Manager:
                 pipeline.hook(ph)
             logger.debug(f"Imported extension: {ext.name}({ext.uri})")
 
-    async def executeAsync(self, *tasks: str, config: Configuration = None) -> PipelineResult:
+    async def executeAsync(self, *tasks: str) -> PipelineResult:
         """Execute tasks asynchronously."""
         from coxbuild.extensions import builtin
         from coxbuild.extensions.loader import fromModule
 
         pipeline = Pipeline()
-        config = config or Configuration()
+        config = Configuration()
         service = Service()
 
         executionState = ExecutionState(config)
@@ -84,12 +87,14 @@ class Manager:
         executionState.service = service
         executionState.pipeline = pipeline
 
+        self.configBuilders.build(config)
+
         self._load(*self.extensions.values(), fromModule(builtin),
                    pipeline=pipeline, service=service)
-        runner = pipeline(*(tasks or ["default"]))
+        runner = pipeline(*(tasks or ["default", builtin.__default__]))
         runner.context.config = config
         return await runner
 
-    def execute(self, *tasks: str, config: Configuration = None) -> PipelineResult:
+    def execute(self, *tasks: str) -> PipelineResult:
         """Execute tasks."""
-        return asyncio.run(self.executeAsync(*tasks, config=config))
+        return asyncio.run(self.executeAsync(*tasks))

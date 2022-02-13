@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import TYPE_CHECKING, Any, Awaitable, Callable
 
-from coxbuild.configuration import Configuration
+from coxbuild.configurations import Configuration
 from coxbuild.hooks import Hook
 
 from .exceptions import CoxbuildException

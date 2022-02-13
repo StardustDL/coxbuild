@@ -1,4 +1,4 @@
-from coxbuild.configuration import Configuration
+from coxbuild.configurations import Configuration
 
 
 def test_config():
@@ -9,7 +9,3 @@ def test_config():
 
     assert s["a"] == 1
     assert c["test:a"] == 1
-
-
-def test_env():
-    assert Configuration().env().data

@@ -5,14 +5,15 @@ from datetime import timedelta
 from types import ModuleType
 from typing import Awaitable, Callable
 
-from .configuration import Configuration
+from .configurations import Configuration
+from .configurations.builders import ConfigurationBuilderCollection, JsonConfigurationBuilder, YamlConfigurationBuilder
 from .extensions import Extension, ProjectSettings, withProject
 from .invocation import CommandExecutionArgs, CommandExecutionResult, run
 from .managers import Manager
 from .pipelines import (Pipeline, PipelineContext, PipelineHook,
                         PipelineResult, TaskContext, TaskHook, afterPipeline,
                         afterTask, beforePipeline, beforeTask)
-from .runtime import (ExecutionState, withConfiguration, withEvent,
+from .runtime import (ExecutionState, withConfig, withEvent,
                       withExecutionState, withHandler, withManager,
                       withPipeline, withService, withTask)
 from .services import EventHandler, Service, on

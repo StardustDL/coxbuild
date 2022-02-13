@@ -4,7 +4,7 @@
 
 ## Manager
 
-Use **Manager** to manage extensions and execute tasks.
+Use **Manager** to manage extensions, configurations and execute tasks.
 
 ```python
 from coxbuild.managers import Manager
@@ -12,8 +12,9 @@ from coxbuild.managers import Manager
 manager: Manager
 
 manager.register(ext1)
+manager.configBuilders.add(configBuilder1)
 
-manager.execute("task1", config=config)
+manager.execute("task1")
 ```
 
 ## Task

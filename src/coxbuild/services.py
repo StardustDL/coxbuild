@@ -6,7 +6,7 @@ import traceback
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, AsyncIterator, Awaitable, Callable
 
-from coxbuild.configuration import Configuration
+from coxbuild.configurations import Configuration
 from coxbuild.exceptions import CoxbuildException
 from coxbuild.runners import Runner
 from coxbuild.runtime import ExecutionState

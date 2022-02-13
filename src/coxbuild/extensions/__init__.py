@@ -6,7 +6,7 @@ from types import ModuleType
 from typing import Iterable
 
 import coxbuild
-from coxbuild.configuration import Configuration, ConfigurationAccessor
+from coxbuild.configurations import Configuration, ConfigurationAccessor
 from coxbuild.pipelines import PipelineHook
 from coxbuild.services import EventHandler
 from coxbuild.tasks import Task, TaskContext

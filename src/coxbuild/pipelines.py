@@ -9,7 +9,7 @@ from graphlib import TopologicalSorter
 from queue import Queue
 from typing import TYPE_CHECKING, Any, Awaitable, Callable
 
-from coxbuild.configuration import Configuration
+from coxbuild.configurations import Configuration
 from coxbuild.hooks import Hook
 from coxbuild.runtime import ExecutionState
 
@@ -244,6 +244,7 @@ class PipelineRunner(Runner):
 
         self.context.config = self.context.config or Configuration()
         self._executionState = ExecutionState(self.context.config)
+        self._executionState.matchedTasks = self.tasks
         self._executionState.unmatchedTasks = self.context.unmatchedNames
 
         res = await super().__aenter__()
@@ -273,8 +274,6 @@ class PipelineRunner(Runner):
                 self.exc_type, self.exc_value, self.exc_tb, file=sys.stdout)
 
         await self._after()
-
-        self._executionState.unmatchedTasks = None
 
         logger.info(f"Finish pipeline: {self.result}")
 

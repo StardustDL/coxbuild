@@ -3,7 +3,7 @@ from coxbuild.configuration import Configuration
 from coxbuild.extensions import ProjectSettings, withProject
 from coxbuild.managers import Manager
 from coxbuild.pipelines import Pipeline
-from coxbuild.runtime import withManager, withPipeline, withService
+from coxbuild.runtime import ExecutionState, withExecutionState, withManager, withPipeline, withService
 from coxbuild.services import Service
 from coxbuild.tasks import depend, group, task
 
@@ -60,12 +60,14 @@ async def serve(*, service: Service):
     await service()
 
 
-@grouped
 @withService
 @withPipeline
+@withExecutionState
 @task
-async def default(*, pipeline: Pipeline, service: Service):
+async def __default__(*, pipeline: Pipeline, service: Service, executionState: ExecutionState):
     """Default task when no user-defined default task."""
+    if "default" not in executionState.unmatchedTasks:
+        return
     if len(service.handlers) > 0:
         await serve(service=service)
     else:

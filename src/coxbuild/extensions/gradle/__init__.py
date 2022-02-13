@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import coxbuild
-from coxbuild.configuration import Configuration
+from coxbuild.configurations import Configuration
 from coxbuild.schema import group, run, task
 
 from .. import ProjectSettings, withProject

@@ -17,7 +17,10 @@ Also you can use `-c` option to specify configuration entry:
 coxbuild -c a=1 -c b=2
 ```
 
-Since many settings provider is inherited from `ConfigurationAccessor`, then many configuration entries have a fallback (with prefix `coxbuild:`) in environment variables. For example `project:src` has fallback environment variable `coxbuild:project:src`.
+Coxbuild will read configuration entries defined in environment variables (with prefix `coxbuild:`). For example `project:src` has fallback environment variable `coxbuild:project:src`.
+
+Coxbuild will also read configuration in `coxbuild.y[a]ml` or `buildcox.json` in the current directory.
+Nested dictionary will be set as sub-section.
 
 ## Project Settings
 

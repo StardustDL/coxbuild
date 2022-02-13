@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from coxbuild.configuration import Configuration, ConfigurationAccessor
+from coxbuild.configurations import Configuration, ConfigurationAccessor
 from coxbuild.tasks import TaskContext
 
 if TYPE_CHECKING:
@@ -12,6 +12,15 @@ if TYPE_CHECKING:
 
 class ExecutionState(ConfigurationAccessor):
     __configname__ = "execution"
+
+    @property
+    def matchedTasks(self) -> "list[Task]":
+        """Matched task names."""
+        return self.config.get("matchedTasks") or []
+
+    @matchedTasks.setter
+    def matchedTasks(self, value: "list[Task]") -> None:
+        self.config["matchedTasks"] = value
 
     @property
     def unmatchedTasks(self) -> list[str]:
@@ -157,7 +166,7 @@ def withEvent(task: "Task") -> "Task":
     return task
 
 
-def withConfiguration(task: "Task") -> "Task":
+def withConfig(task: "Task") -> "Task":
     """Decorator to add config argument to task context."""
     def hook(context: TaskContext):
         if context.config:

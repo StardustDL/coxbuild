@@ -5,7 +5,8 @@ from pathlib import Path
 import click
 
 from coxbuild import __version__
-from coxbuild.configuration import Configuration
+from coxbuild.configurations import Configuration
+from coxbuild.configurations.builders import DictionaryConfigurationBuilder
 
 
 @click.command()
@@ -62,8 +63,10 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
             continue
         configdata[subs[0]] = subs[1]
 
-    exit(0 if schema.manager.execute(*(tasks or []),
-         config=Configuration(data=configdata)) else 1)
+    schema.manager.configBuilders.add(
+        DictionaryConfigurationBuilder(configdata))
+
+    exit(0 if schema.manager.execute(*(tasks or [])) else 1)
 
 
 if __name__ == '__main__':
