@@ -110,6 +110,8 @@
 </li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.datetime.attime">attime() (in module coxbuild.events.datetime)</a>
 </li>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.ProjectSettings.author">author (coxbuild.extensions.ProjectSettings property)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -167,6 +169,8 @@
       <li><a href="source/coxbuild.html#coxbuild.invocation.CommandExecutionResult.code">code (coxbuild.invocation.CommandExecutionResult attribute)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.invocation.CommandExecutionArgs">CommandExecutionArgs (class in coxbuild.invocation)</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.invocation.CommandExecutionException">CommandExecutionException</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.invocation.CommandExecutionResult">CommandExecutionResult (class in coxbuild.invocation)</a>
 </li>
@@ -293,8 +297,6 @@
         <li><a href="source/coxbuild.extensions.dotnet.html#module-coxbuild.extensions.dotnet">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     coxbuild.extensions.gallery
 
@@ -302,6 +304,8 @@
         <li><a href="source/coxbuild.extensions.html#module-coxbuild.extensions.gallery">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     coxbuild.extensions.git
 
@@ -437,6 +441,12 @@
       </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.exceptions.CoxbuildException">CoxbuildException</a>
 </li>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.loader.CoxbuildExtensionException">CoxbuildExtensionException</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.exceptions.CoxbuildRuntimeException">CoxbuildRuntimeException</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.exceptions.CoxbuildSchemaException">CoxbuildSchemaException</a>
+</li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.filesystems.FileSystemChangeType.Create">Create (coxbuild.events.filesystems.FileSystemChangeType attribute)</a>
 </li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.filesystems.create">create() (in module coxbuild.events.filesystems)</a>
@@ -470,6 +480,8 @@
       <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.Extension.description">description (coxbuild.extensions.Extension attribute)</a>
 
       <ul>
+        <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.ProjectSettings.description">(coxbuild.extensions.ProjectSettings property)</a>
+</li>
         <li><a href="source/coxbuild.html#coxbuild.invocation.CommandExecutionResult.description">(coxbuild.invocation.CommandExecutionResult property)</a>
 </li>
         <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineResult.description">(coxbuild.pipelines.PipelineResult property)</a>
@@ -505,8 +517,12 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/coxbuild.html#coxbuild.tasks.TaskResult.ensure">ensure() (coxbuild.tasks.TaskResult method)</a>
+      <li><a href="source/coxbuild.html#coxbuild.invocation.CommandExecutionResult.ensure">ensure() (coxbuild.invocation.CommandExecutionResult method)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.html#coxbuild.tasks.TaskResult.ensure">(coxbuild.tasks.TaskResult method)</a>
 </li>
+      </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.invocation.CommandExecutionArgs.env">env (coxbuild.invocation.CommandExecutionArgs attribute)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.configuration.Configuration.env">env() (coxbuild.configuration.Configuration method)</a>
@@ -527,18 +543,22 @@
       </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.services.EventContext">EventContext (class in coxbuild.services)</a>
 </li>
+      <li><a href="source/coxbuild.html#coxbuild.services.EventFailed">EventFailed</a>
+</li>
       <li><a href="source/coxbuild.html#coxbuild.services.EventHandler">EventHandler (class in coxbuild.services)</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.services.EventHandlerFailed">EventHandlerFailed</a>
 </li>
       <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.Extension.events">events (coxbuild.extensions.Extension property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineResult.exception">exception (coxbuild.pipelines.PipelineResult attribute)</a>
 
       <ul>
         <li><a href="source/coxbuild.html#coxbuild.tasks.TaskResult.exception">(coxbuild.tasks.TaskResult attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.invocation.execmd">execmd() (in module coxbuild.invocation)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.managers.Manager.execute">execute() (coxbuild.managers.Manager method)</a>
@@ -871,15 +891,17 @@
       <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.Extension.name">name (coxbuild.extensions.Extension attribute)</a>
 
       <ul>
+        <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.ProjectSettings.name">(coxbuild.extensions.ProjectSettings property)</a>
+</li>
         <li><a href="source/coxbuild.html#coxbuild.services.EventHandler.name">(coxbuild.services.EventHandler attribute)</a>
 </li>
         <li><a href="source/coxbuild.html#coxbuild.tasks.Task.name">(coxbuild.tasks.Task attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/coxbuild.html#coxbuild.tasks.named">named() (in module coxbuild.tasks)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/coxbuild.html#coxbuild.tasks.named">named() (in module coxbuild.tasks)</a>
+</li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.datetime.nextWeek">nextWeek() (in module coxbuild.events.datetime)</a>
 </li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.now">now() (in module coxbuild.events)</a>
@@ -932,10 +954,10 @@
 </li>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineBeforeHook">PipelineBeforeHook (class in coxbuild.pipelines)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineBeforeTaskHook">PipelineBeforeTaskHook (class in coxbuild.pipelines)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineContext">PipelineContext (class in coxbuild.pipelines)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineHook">PipelineHook (class in coxbuild.pipelines)</a>
@@ -945,6 +967,8 @@
       <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineResult">PipelineResult (class in coxbuild.pipelines)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineRunner">PipelineRunner (class in coxbuild.pipelines)</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.pipelines.PipelineRuntimeException">PipelineRuntimeException</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.tasks.Task.postcond">postcond() (coxbuild.tasks.Task method)</a>
 
@@ -1066,6 +1090,8 @@
 </li>
       <li><a href="source/coxbuild.html#coxbuild.tasks.TaskHook">TaskHook (class in coxbuild.tasks)</a>
 </li>
+      <li><a href="source/coxbuild.html#coxbuild.tasks.TaskPostConditionFailed">TaskPostConditionFailed</a>
+</li>
       <li><a href="source/coxbuild.html#coxbuild.tasks.TaskPostconditionHook">TaskPostconditionHook (class in coxbuild.tasks)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.tasks.TaskPreconditionHook">TaskPreconditionHook (class in coxbuild.tasks)</a>
@@ -1075,6 +1101,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.tasks.TaskRunner">TaskRunner (class in coxbuild.tasks)</a>
+</li>
+      <li><a href="source/coxbuild.html#coxbuild.tasks.TaskRuntimeException">TaskRuntimeException</a>
 </li>
       <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.Extension.tasks">tasks (coxbuild.extensions.Extension property)</a>
 
@@ -1134,10 +1162,10 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/coxbuild.extensions.dotnet.html#coxbuild.extensions.dotnet.Settings.version">version (coxbuild.extensions.dotnet.Settings property)</a>
+      <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.Extension.version">version (coxbuild.extensions.Extension attribute)</a>
 
       <ul>
-        <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.Extension.version">(coxbuild.extensions.Extension attribute)</a>
+        <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.ProjectSettings.version">(coxbuild.extensions.ProjectSettings property)</a>
 </li>
       </ul></li>
   </ul></td>

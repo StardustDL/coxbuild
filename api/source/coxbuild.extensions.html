@@ -187,6 +187,13 @@ Directory provider: <a class="reference external" href="mailto:directory&#37;&#5
 </section>
 <section id="module-coxbuild.extensions.loader">
 <span id="coxbuild-extensions-loader-module"></span><h2>coxbuild.extensions.loader module<a class="headerlink" href="#module-coxbuild.extensions.loader" title="Permalink to this headline">¶</a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="coxbuild.extensions.loader.CoxbuildExtensionException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.extensions.loader.</span></span><span class="sig-name descname"><span class="pre">CoxbuildExtensionException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cause</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.extensions.loader.CoxbuildExtensionException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="coxbuild.html#coxbuild.exceptions.CoxbuildSchemaException" title="coxbuild.exceptions.CoxbuildSchemaException"><code class="xref py py-class docutils literal notranslate"><span class="pre">coxbuild.exceptions.CoxbuildSchemaException</span></code></a></p>
+<p>Exception for coxbuild extension.</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="coxbuild.extensions.loader.fromFile">
 <span class="sig-prename descclassname"><span class="pre">coxbuild.extensions.loader.</span></span><span class="sig-name descname"><span class="pre">fromFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashcode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.extensions.Extension" title="coxbuild.extensions.Extension"><span class="pre">coxbuild.extensions.Extension</span></a></span></span><a class="headerlink" href="#coxbuild.extensions.loader.fromFile" title="Permalink to this definition">¶</a></dt>
@@ -334,10 +341,27 @@ Directory provider: <a class="reference external" href="mailto:directory&#37;&#5
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.extensions.</span></span><span class="sig-name descname"><span class="pre">ProjectSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="coxbuild.configurations.html#coxbuild.configurations.Configuration" title="coxbuild.configurations.Configuration"><span class="pre">coxbuild.configurations.Configuration</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.extensions.ProjectSettings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="coxbuild.configurations.html#coxbuild.configurations.ConfigurationAccessor" title="coxbuild.configurations.ConfigurationAccessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">coxbuild.configurations.ConfigurationAccessor</span></code></a></p>
 <dl class="py property">
+<dt class="sig sig-object py" id="coxbuild.extensions.ProjectSettings.author">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">author</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#coxbuild.extensions.ProjectSettings.author" title="Permalink to this definition">¶</a></dt>
+<dd><p>Author name.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="coxbuild.extensions.ProjectSettings.description">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#coxbuild.extensions.ProjectSettings.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project description.</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="coxbuild.extensions.ProjectSettings.docs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">docs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><a class="headerlink" href="#coxbuild.extensions.ProjectSettings.docs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Path to docs source.</p>
 </dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="coxbuild.extensions.ProjectSettings.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#coxbuild.extensions.ProjectSettings.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="coxbuild.extensions.ProjectSettings.package">
@@ -355,6 +379,12 @@ Directory provider: <a class="reference external" href="mailto:directory&#37;&#5
 <dt class="sig sig-object py" id="coxbuild.extensions.ProjectSettings.test">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><a class="headerlink" href="#coxbuild.extensions.ProjectSettings.test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Path to test code.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="coxbuild.extensions.ProjectSettings.version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#coxbuild.extensions.ProjectSettings.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build version.</p>
 </dd></dl>
 
 </dd></dl>
