@@ -1,20 +1,15 @@
 import asyncio
-import inspect
 import logging
-import pathlib
 from dataclasses import dataclass, field
-from importlib.util import module_from_spec, spec_from_loader
-from types import ModuleType
 
 from coxbuild.configurations.builders import (ConfigurationBuilderCollection,
                                               getDefaultBuilder)
-from coxbuild.exceptions import CoxbuildException
 
 from .configurations import Configuration
 from .extensions import Extension
-from .pipelines import Pipeline, PipelineHook, PipelineResult
+from .pipelines import Pipeline, PipelineResult
 from .runtime import ExecutionState
-from .services import EventHandler, Service
+from .services import Service
 from .tasks import Task
 
 logger = logging.getLogger("managers")
@@ -47,12 +42,6 @@ class Manager:
 
     def _load(self, *exts: Extension, pipeline: Pipeline, service: Service) -> None:
         def regTask(t: Task):
-            if t.name in pipeline.tasks:
-                ot = pipeline.tasks.pop(t.name)
-                logger.warning(
-                    f"Replace registered task: {ot.name}.")
-            logger.debug(
-                f"Registering task: {t.name} in {ext.name}({ext.uri}).")
             t.extension = ext
             pipeline.register(t)
 

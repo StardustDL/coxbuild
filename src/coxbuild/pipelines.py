@@ -13,7 +13,7 @@ from coxbuild.configurations import Configuration
 from coxbuild.hooks import Hook
 from coxbuild.runtime import ExecutionState
 
-from .exceptions import CoxbuildException
+from .exceptions import CoxbuildRuntimeException, CoxbuildSchemaException
 from .runners import Runner
 from .tasks import Task, TaskContext, TaskHook, TaskResult
 
@@ -21,6 +21,11 @@ if TYPE_CHECKING:
     from .extensions import Extension
 
 logger = logging.getLogger("pipelines")
+
+
+class PipelineRuntimeException(CoxbuildRuntimeException):
+    """Exception for pipeline running."""
+    pass
 
 
 @dataclass
@@ -43,7 +48,7 @@ class PipelineResult:
     """execution duration"""
     tasks: list[TaskResult]
     """tasks in the pipeline"""
-    exception: CoxbuildException | None = None
+    exception: PipelineRuntimeException | None = None
     """exception when running"""
 
     def __bool__(self):
@@ -263,8 +268,8 @@ class PipelineRunner(Runner):
     async def __aexit__(self, exc_type, exc_value, exc_tb) -> bool:
         await super().__aexit__(exc_type, exc_value, exc_tb)
 
-        exception = None if self.exc_value is None else CoxbuildException(
-            f"Failed to run runner", cause=self.exc_value)
+        exception = None if self.exc_value is None else PipelineRuntimeException(
+            f"Failed to run pipeline", cause=self.exc_value)
         self.result = PipelineResult(
             duration=self.duration, tasks=self._results, exception=exception)
 
@@ -316,10 +321,10 @@ class Pipeline:
         task: task to register
         """
         if task.name in self.tasks:
-            raise CoxbuildException(
-                f"Register multiple task with the same name {task.name}.")
+            logger.warning(
+                f"Replace registered task: {self.tasks[task.name]}.")
         self.tasks[task.name] = task
-        logger.debug(f"Register task {task.name}")
+        logger.debug(f"Register task {task}")
 
     def hook(self, hook: PipelineHook) -> None:
         """

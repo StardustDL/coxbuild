@@ -9,11 +9,16 @@ from types import ModuleType
 from urllib import request
 from uuid import uuid1
 
-from coxbuild.exceptions import CoxbuildException
+from coxbuild.exceptions import CoxbuildSchemaException
 
 from . import Extension
 
 logger = logging.getLogger("extension-loader")
+
+
+class CoxbuildExtensionException(CoxbuildSchemaException):
+    """Exception for coxbuild extension."""
+    pass
 
 
 def hashed(src: str):
@@ -38,7 +43,8 @@ def fromModule(module: ModuleType, version: str = "") -> Extension:
 
     rversion = getattr(module, "__version__", "")
     if version and rversion != version:
-        raise CoxbuildException("Unmatched version.")
+        raise CoxbuildExtensionException(
+            f"Unmatched extension version, expect {version} but got {rversion}.")
     if rversion:
         uri += f"@{rversion}"
     return Extension(uri, module.__name__, module.__doc__ or "", version, "", module)
@@ -60,7 +66,7 @@ def fromSource(src: str, filename: str = "<string>", hashcode: str = "") -> Exte
         src = sys.stdin.read()
     if src == "interactive":
         if hashcode:
-            raise CoxbuildException(
+            raise CoxbuildExtensionException(
                 "Cannot specify hashcode for interactive source.")
         import code
 
@@ -80,7 +86,8 @@ def fromSource(src: str, filename: str = "<string>", hashcode: str = "") -> Exte
     else:
         rhashcode = hashed(src)
         if hashcode and rhashcode != hashcode:
-            raise CoxbuildException("Unmatched hashcode.")
+            raise CoxbuildExtensionException(
+                f"Unmatched hashcode, expect {hashcode} but got {rhashcode}.")
 
         spec = spec_from_loader(rhashcode, loader=None)
         mod = module_from_spec(spec)
@@ -156,7 +163,7 @@ def fromGallery(name: str, version: str = "", hashcode: str = "") -> Extension:
         if ext:
             return ext
 
-    raise CoxbuildException(
+    raise CoxbuildExtensionException(
         f"Failed to load extension from gallery: {name}@{version}")
 
 
@@ -204,4 +211,4 @@ def load(uri: str):
         ext = fromGallery(name, version, hashcode)
         return ext
     else:
-        raise CoxbuildException(f"Unknown extension schema: {schema}")
+        raise CoxbuildExtensionException(f"Unknown extension schema: {schema}")

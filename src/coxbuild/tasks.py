@@ -10,13 +10,32 @@ from typing import TYPE_CHECKING, Any, Awaitable, Callable
 from coxbuild.configurations import Configuration
 from coxbuild.hooks import Hook
 
-from .exceptions import CoxbuildException
+from .exceptions import CoxbuildRuntimeException
 from .runners import Runner
 
 if TYPE_CHECKING:
     from .extensions import Extension
 
 logger = logging.getLogger("tasks")
+
+
+class TaskRuntimeException(CoxbuildRuntimeException):
+    """
+    Exception to indicate task is running.
+    """
+
+    def __init__(self, task: "Task", error: str = "", cause: Exception | None = None):
+        super().__init__(
+            f"Failed to run task {task.name} due to {error}.", cause=cause)
+
+
+class TaskPostConditionFailed(TaskRuntimeException):
+    """
+    Exception to indicate postcondition of a task is failed.
+    """
+
+    def __init__(self, task: "Task"):
+        super().__init__(task, error="postcondition failed")
 
 
 @dataclass
@@ -39,7 +58,7 @@ class TaskResult:
     """task"""
     duration: timedelta
     """execution duration"""
-    exception: CoxbuildException | None
+    exception: TaskRuntimeException | None
     """exception when running"""
 
     def __bool__(self):
@@ -334,8 +353,7 @@ class TaskRunner(Runner):
 
         post = await self._postcond()
         if not post:
-            raise CoxbuildException(
-                f"Task {self.context.task.name} failed: postcondition checking broken")
+            raise TaskPostConditionFailed(self.context.task)
 
     async def __aenter__(self) -> Callable[[], Awaitable | None]:
         logger.debug(f"Start task {self.context.task.name}.")
@@ -358,8 +376,8 @@ class TaskRunner(Runner):
     async def __aexit__(self, exc_type, exc_value, exc_tb) -> bool:
         await super().__aexit__(exc_type, exc_value, exc_tb)
 
-        exception = None if self.exc_value is None else CoxbuildException(
-            f"Failed to run task: {self.context.task.name}", cause=self.exc_value)
+        exception = None if self.exc_value is None else TaskRunningException(
+            self.context.task, cause=self.exc_value)
         self.result = TaskResult(
             self.context.task, duration=self.duration, exception=exception)
 

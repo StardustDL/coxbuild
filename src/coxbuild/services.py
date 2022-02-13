@@ -7,7 +7,8 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, AsyncIterator, Awaitable, Callable
 
 from coxbuild.configurations import Configuration
-from coxbuild.exceptions import CoxbuildException
+from coxbuild.exceptions import (CoxbuildRuntimeException,
+                                 CoxbuildSchemaException)
 from coxbuild.runners import Runner
 from coxbuild.runtime import ExecutionState
 from coxbuild.tasks import Task, named, task
@@ -16,6 +17,16 @@ if TYPE_CHECKING:
     from .extensions import Extension
 
 logger = logging.getLogger("services")
+
+
+class EventFailed(CoxbuildRuntimeException):
+    """Event failed."""
+    pass
+
+
+class EventHandlerFailed(CoxbuildRuntimeException):
+    """Event handler failed."""
+    pass
 
 
 @dataclass
@@ -76,7 +87,7 @@ class EventHandler:
                             f"Exception when event handler handling {self.name}({context}).")
                         traceback.print_exception(ex, file=sys.stdout)
                     else:
-                        raise CoxbuildException(
+                        raise EventHandlerFailed(
                             f"Exception when event handler handling {self.name}({context})", ex)
                 finally:
                     executionState.handler = oldhandler
@@ -91,7 +102,7 @@ class EventHandler:
                 print(f"Exception in event handler {self.name}.")
                 traceback.print_exception(ex, file=sys.stdout)
             else:
-                raise CoxbuildException(
+                raise EventFailed(
                     f"Exception in event handler {self.name}", ex)
 
         logger.debug(f"Finish handle for event: {self.name}.")
@@ -154,7 +165,7 @@ def on(event: Callable[[], Awaitable], safe: bool = False, name: str | None = No
             tk = handler.handler
         elif isinstance(handler, list):
             if len(handler) == 0:
-                raise CoxbuildException("No event handler in list.")
+                raise CoxbuildSchemaException("No event handler in list.")
             tname = name or handler[0].name
             tk = handler[0].handler
         elif isinstance(handler, Task):

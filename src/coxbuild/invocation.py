@@ -5,9 +5,27 @@ from dataclasses import dataclass, field
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from .exceptions import CoxbuildException
+from .exceptions import CoxbuildRuntimeException
 
 logger = logging.getLogger("invocation")
+
+
+class CommandExecutionException(CoxbuildRuntimeException):
+    """Exception for command execution."""
+
+    def __init__(self, result: "CommandExecutionResult", error: str = ""):
+        message = f"Command {' '.join(result.args.cmds)} failed with error {error}"
+        if result.timeout:
+            message += " (timeout)"
+        else:
+            message += f" (exit code {result.code})"
+        if result.stdout:
+            message += f"\nstdout: {result.stdout}"
+        if result.stderr:
+            message += f"\nstderr: {result.stderr}"
+        super().__init__(message)
+        self.result = result
+        self.error = error
 
 
 @dataclass
@@ -36,6 +54,10 @@ class CommandExecutionResult:
     def description(self):
         """Return result's description string."""
         return "🟢 SUCCESS" if self else ("🟡 TIMEOUT" if self.timeout else f"🔴 FAILING({self.code})")
+
+    def ensure(self):
+        if not self:
+            raise CommandExecutionException(self)
 
 
 def execmd(args: "CommandExecutionArgs"):
@@ -93,21 +115,8 @@ class CommandExecutionArgs:
                 result = execmd(self)
                 if result:
                     break
-        if not fail and not result:
-            if result.timeout:
-                raise CoxbuildException("\n".join([
-                    f"Timeout to execute command ({result.duration}).",
-                    "Standard Output:",
-                    result.stdout,
-                    "Standard Error:",
-                    result.stderr]))
-            else:
-                raise CoxbuildException("\n".join([
-                    f"Fail to execute command ({result.duration}): exitcode {result.code}.",
-                    "Standard Output:",
-                    result.stdout,
-                    "Standard Error:",
-                    result.stderr]))
+        if not fail:
+            result.ensure()
         return result
 
 

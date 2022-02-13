@@ -17,3 +17,13 @@ class CoxbuildException(Exception):
 
     def __repr__(self) -> str:
         return str(self)
+
+
+class CoxbuildRuntimeException(CoxbuildException):
+    """Base exception for runtime errors."""
+    pass
+
+
+class CoxbuildSchemaException(CoxbuildException):
+    """Base exception for schema errors."""
+    pass
