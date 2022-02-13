@@ -1,5 +1,6 @@
 from coxbuild.configurations import Configuration
-from coxbuild.configurations.builders import DictionaryConfigurationBuilder, EnvironmentConfigurationBuilder
+from coxbuild.configurations.builders import (DictionaryConfigurationBuilder,
+                                              EnvironmentConfigurationBuilder)
 
 
 def test_nested_dict():

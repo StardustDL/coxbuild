@@ -283,7 +283,8 @@ class PipelineRunner(Runner):
         cnt = len(self.result.tasks)
 
         for i, tr in enumerate(self.result.tasks):
-            print(f"({i+1}/{cnt})\t{tr.description}\t⏱️ {tr.duration}\t📜 {tr.task.name}")
+            print(
+                f"({i+1}/{cnt})\t{tr.description}\t⏱️ {tr.duration}\t📜 {tr.task.name}")
 
         del self._results
         del self._executionState

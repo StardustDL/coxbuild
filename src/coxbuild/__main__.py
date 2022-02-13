@@ -6,7 +6,9 @@ import click
 
 from coxbuild import __version__
 from coxbuild.configurations import Configuration
-from coxbuild.configurations.builders import DictionaryConfigurationBuilder
+from coxbuild.configurations.builders import (DictionaryConfigurationBuilder,
+                                              JsonConfigurationBuilder,
+                                              YamlConfigurationBuilder)
 
 
 @click.command()
@@ -17,9 +19,11 @@ from coxbuild.configurations.builders import DictionaryConfigurationBuilder
 @click.option('-e', '--ext', default="", help="Schema Extension in gallery (used third).")
 @click.option('-i', '--uri', default="file://buildcox.py", help="Schema URI (used last).")
 @click.option('-c', '--config', multiple=True, help="Configuration entry 'key=value'.", default=[])
+@click.option('-j', '--json', multiple=True, help="Configuration in JSON.", default=[])
+@click.option('-y', '--yaml', multiple=True, help="Configuration in YAML.", default=[])
 @click.version_option(__version__, package_name="coxbuild", prog_name="coxbuild", message="%(prog)s v%(version)s, written by StardustDL.")
 @click.option('-v', '--verbose', count=True, default=0, type=click.IntRange(0, 5))
-def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: str = "", url: str = "", ext: str = "", uri: str = "file://buildcox.py", config: list[str] | None = None, verbose: int = 0) -> None:
+def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: str = "", url: str = "", ext: str = "", uri: str = "file://buildcox.py", config: list[str] | None = None, yaml: list[str] | None = None, json: list[str] | None = None, verbose: int = 0) -> None:
     """
     Coxbuild is a tiny python-script-based build automation tool, an alternative to make, psake and so on.
 
@@ -52,6 +56,17 @@ def main(ctx=None, tasks: list[str] | None = None, directory: Path = ".", file: 
     from coxbuild.extensions.loader import load as loadext
 
     schema.manager.register(loadext(uri))
+
+    json = json or []
+    yaml = yaml or []
+
+    for item in json:
+        logger.debug(f"Loading json config: {item}")
+        schema.manager.configBuilders.add(JsonConfigurationBuilder(Path(item)))
+
+    for item in yaml:
+        logger.debug(f"Loading yaml config: {item}")
+        schema.manager.configBuilders.add(YamlConfigurationBuilder(Path(item)))
 
     config = config or []
 

@@ -6,7 +6,9 @@ from types import ModuleType
 from typing import Awaitable, Callable
 
 from .configurations import Configuration
-from .configurations.builders import ConfigurationBuilderCollection, JsonConfigurationBuilder, YamlConfigurationBuilder
+from .configurations.builders import (ConfigurationBuilderCollection,
+                                      JsonConfigurationBuilder,
+                                      YamlConfigurationBuilder)
 from .extensions import Extension, ProjectSettings, withProject
 from .invocation import CommandExecutionArgs, CommandExecutionResult, run
 from .managers import Manager

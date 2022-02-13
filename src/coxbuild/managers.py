@@ -5,8 +5,9 @@ import pathlib
 from dataclasses import dataclass, field
 from importlib.util import module_from_spec, spec_from_loader
 from types import ModuleType
-from coxbuild.configurations.builders import ConfigurationBuilderCollection, getDefaultBuilder
 
+from coxbuild.configurations.builders import (ConfigurationBuilderCollection,
+                                              getDefaultBuilder)
 from coxbuild.exceptions import CoxbuildException
 
 from .configurations import Configuration
@@ -91,7 +92,7 @@ class Manager:
 
         self._load(*self.extensions.values(), fromModule(builtin),
                    pipeline=pipeline, service=service)
-        runner = pipeline(*(tasks or ["default", builtin.__default__]))
+        runner = pipeline(*(tasks or ["default"]))
         runner.context.config = config
         return await runner
 
