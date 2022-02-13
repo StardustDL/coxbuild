@@ -56,6 +56,7 @@
  | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
+ | <a href="#Y"><strong>Y</strong></a>
  
 </div>
 <h2 id="A">A</h2>
@@ -66,6 +67,8 @@
       <li><a href="source/coxbuild.events.html#coxbuild.events.filesystems.FileSystemEntry.access">access (coxbuild.events.filesystems.FileSystemEntry attribute)</a>
 </li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.filesystems.access">access() (in module coxbuild.events.filesystems)</a>
+</li>
+      <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.builders.ConfigurationBuilderCollection.add">add() (coxbuild.configurations.builders.ConfigurationBuilderCollection method)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.Pipeline.after">after() (coxbuild.pipelines.Pipeline method)</a>
 
@@ -123,8 +126,6 @@
       </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.beforePipeline">beforePipeline() (in module coxbuild.pipelines)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.html#coxbuild.pipelines.Pipeline.beforeTask">beforeTask() (coxbuild.pipelines.Pipeline method)</a>
 
       <ul>
@@ -133,8 +134,24 @@
       </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.tasks.Task.body">body (coxbuild.tasks.Task attribute)</a>
 </li>
-      <li><a href="source/coxbuild.html#coxbuild.services.EventContext.build">build() (coxbuild.services.EventContext class method)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.builders.ConfigurationBuilder.build">build() (coxbuild.configurations.builders.ConfigurationBuilder method)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.builders.ConfigurationBuilderCollection.build">(coxbuild.configurations.builders.ConfigurationBuilderCollection method)</a>
 </li>
+        <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.builders.DictionaryConfigurationBuilder.build">(coxbuild.configurations.builders.DictionaryConfigurationBuilder method)</a>
+</li>
+        <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.builders.EnvironmentConfigurationBuilder.build">(coxbuild.configurations.builders.EnvironmentConfigurationBuilder method)</a>
+</li>
+        <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.builders.JsonConfigurationBuilder.build">(coxbuild.configurations.builders.JsonConfigurationBuilder method)</a>
+</li>
+        <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.builders.YamlConfigurationBuilder.build">(coxbuild.configurations.builders.YamlConfigurationBuilder method)</a>
+</li>
+        <li><a href="source/coxbuild.html#coxbuild.services.EventContext.build">(coxbuild.services.EventContext class method)</a>
+</li>
+      </ul></li>
       <li><a href="source/coxbuild.extensions.dotnet.html#coxbuild.extensions.dotnet.Settings.buildConfig">buildConfig (coxbuild.extensions.dotnet.Settings property)</a>
 </li>
   </ul></td>
@@ -161,11 +178,25 @@
         <li><a href="source/coxbuild.html#coxbuild.tasks.TaskContext.config">(coxbuild.tasks.TaskContext attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/coxbuild.html#coxbuild.configuration.Configuration">Configuration (class in coxbuild.configuration)</a>
+      <li><a href="source/coxbuild.html#coxbuild.managers.Manager.configBuilders">configBuilders (coxbuild.managers.Manager attribute)</a>
 </li>
+      <li><a href="source/coxbuild.html#coxbuild.configuration.Configuration">Configuration (class in coxbuild.configuration)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.Configuration">(class in coxbuild.configurations)</a>
+</li>
+      </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState.configuration">configuration (coxbuild.runtime.ExecutionState property)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.configuration.ConfigurationAccessor">ConfigurationAccessor (class in coxbuild.configuration)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.ConfigurationAccessor">(class in coxbuild.configurations)</a>
+</li>
+      </ul></li>
+      <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.builders.ConfigurationBuilder">ConfigurationBuilder (class in coxbuild.configurations.builders)</a>
+</li>
+      <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.builders.ConfigurationBuilderCollection">ConfigurationBuilderCollection (class in coxbuild.configurations.builders)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.tasks.Task.continueOnError">continueOnError (coxbuild.tasks.Task attribute)</a>
 </li>
@@ -174,6 +205,8 @@
       <li><a href="source/coxbuild.html#coxbuild.configuration.Configuration.copy">copy() (coxbuild.configuration.Configuration method)</a>
 
       <ul>
+        <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.Configuration.copy">(coxbuild.configurations.Configuration method)</a>
+</li>
         <li><a href="source/coxbuild.html#coxbuild.managers.Manager.copy">(coxbuild.managers.Manager method)</a>
 </li>
         <li><a href="source/coxbuild.html#coxbuild.pipelines.Pipeline.copy">(coxbuild.pipelines.Pipeline method)</a>
@@ -195,6 +228,20 @@
 
       <ul>
         <li><a href="source/coxbuild.html#module-coxbuild.configuration">module</a>
+</li>
+      </ul></li>
+      <li>
+    coxbuild.configurations
+
+      <ul>
+        <li><a href="source/coxbuild.configurations.html#module-coxbuild.configurations">module</a>
+</li>
+      </ul></li>
+      <li>
+    coxbuild.configurations.builders
+
+      <ul>
+        <li><a href="source/coxbuild.configurations.html#module-coxbuild.configurations.builders">module</a>
 </li>
       </ul></li>
       <li>
@@ -246,6 +293,8 @@
         <li><a href="source/coxbuild.extensions.dotnet.html#module-coxbuild.extensions.dotnet">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     coxbuild.extensions.gallery
 
@@ -267,8 +316,6 @@
         <li><a href="source/coxbuild.extensions.gradle.html#module-coxbuild.extensions.gradle">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     coxbuild.extensions.loader
 
@@ -434,6 +481,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.builders.DictionaryConfigurationBuilder">DictionaryConfigurationBuilder (class in coxbuild.configurations.builders)</a>
+</li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.filesystems.diff">diff() (in module coxbuild.events.filesystems)</a>
 </li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.filesystems.DirectoryEntry">DirectoryEntry (class in coxbuild.events.filesystems)</a>
@@ -461,8 +510,14 @@
       <li><a href="source/coxbuild.html#coxbuild.invocation.CommandExecutionArgs.env">env (coxbuild.invocation.CommandExecutionArgs attribute)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.configuration.Configuration.env">env() (coxbuild.configuration.Configuration method)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.Configuration.env">(coxbuild.configurations.Configuration method)</a>
 </li>
+      </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.configuration.Configuration.envbuild">envbuild() (coxbuild.configuration.Configuration method)</a>
+</li>
+      <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.builders.EnvironmentConfigurationBuilder">EnvironmentConfigurationBuilder (class in coxbuild.configurations.builders)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState.event">event (coxbuild.runtime.ExecutionState property)</a>
 
@@ -551,13 +606,25 @@
       <ul>
         <li><a href="source/coxbuild.html#coxbuild.configuration.ConfigurationAccessor.get">(coxbuild.configuration.ConfigurationAccessor method)</a>
 </li>
+        <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.Configuration.get">(coxbuild.configurations.Configuration method)</a>
+</li>
+        <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.ConfigurationAccessor.get">(coxbuild.configurations.ConfigurationAccessor method)</a>
+</li>
       </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.get_app_directory">get_app_directory() (in module coxbuild)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.get_working_directory">get_working_directory() (in module coxbuild)</a>
 </li>
-      <li><a href="source/coxbuild.html#coxbuild.configuration.ConfigurationAccessor.getPath">getPath() (coxbuild.configuration.ConfigurationAccessor method)</a>
+      <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.builders.getDefaultBuilder">getDefaultBuilder() (in module coxbuild.configurations.builders)</a>
 </li>
+      <li><a href="source/coxbuild.html#coxbuild.configuration.ConfigurationAccessor.getPath">getPath() (coxbuild.configuration.ConfigurationAccessor method)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.ConfigurationAccessor.getPath">(coxbuild.configurations.ConfigurationAccessor method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.DirectoryExtensionGallery.geturi">geturi() (coxbuild.extensions.gallery.DirectoryExtensionGallery method)</a>
 
       <ul>
@@ -566,8 +633,6 @@
         <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.UrlExtensionGallery.geturi">(coxbuild.extensions.gallery.UrlExtensionGallery method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.GiteeExtensionGallery.geturl">geturl() (coxbuild.extensions.gallery.GiteeExtensionGallery method)</a>
 
       <ul>
@@ -669,6 +734,10 @@
       <li><a href="source/coxbuild.extensions.html#coxbuild.extensions.gallery.JsDelivrExtensionGallery">JsDelivrExtensionGallery (class in coxbuild.extensions.gallery)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.builders.JsonConfigurationBuilder">JsonConfigurationBuilder (class in coxbuild.configurations.builders)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="K">K</h2>
@@ -714,6 +783,8 @@
 </li>
       <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState.manager">manager (coxbuild.runtime.ExecutionState property)</a>
 </li>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState.matchedTasks">matchedTasks (coxbuild.runtime.ExecutionState property)</a>
+</li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.filesystems.FileSystemEntry.modification">modification (coxbuild.events.filesystems.FileSystemEntry attribute)</a>
 </li>
       <li><a href="source/coxbuild.events.html#coxbuild.events.filesystems.FileSystemChangeType.Modify">Modify (coxbuild.events.filesystems.FileSystemChangeType attribute)</a>
@@ -727,6 +798,10 @@
         <li><a href="source/coxbuild.html#module-coxbuild">coxbuild</a>
 </li>
         <li><a href="source/coxbuild.html#module-coxbuild.configuration">coxbuild.configuration</a>
+</li>
+        <li><a href="source/coxbuild.configurations.html#module-coxbuild.configurations">coxbuild.configurations</a>
+</li>
+        <li><a href="source/coxbuild.configurations.html#module-coxbuild.configurations.builders">coxbuild.configurations.builders</a>
 </li>
         <li><a href="source/coxbuild.events.html#module-coxbuild.events">coxbuild.events</a>
 </li>
@@ -924,7 +999,11 @@
       <li><a href="source/coxbuild.html#coxbuild.services.EventHandler.safe">safe (coxbuild.services.EventHandler attribute)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.configuration.Configuration.section">section() (coxbuild.configuration.Configuration method)</a>
+
+      <ul>
+        <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.Configuration.section">(coxbuild.configurations.Configuration method)</a>
 </li>
+      </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.services.Service">Service (class in coxbuild.services)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.runtime.ExecutionState.service">service (coxbuild.runtime.ExecutionState property)</a>
@@ -1071,7 +1150,7 @@
 </li>
       <li><a href="source/coxbuild.extensions.shell.html#coxbuild.extensions.shell.whereCommand">whereCommand() (in module coxbuild.extensions.shell)</a>
 </li>
-      <li><a href="source/coxbuild.html#coxbuild.runtime.withConfiguration">withConfiguration() (in module coxbuild.runtime)</a>
+      <li><a href="source/coxbuild.html#coxbuild.runtime.withConfig">withConfig() (in module coxbuild.runtime)</a>
 </li>
       <li><a href="source/coxbuild.html#coxbuild.runtime.withEvent">withEvent() (in module coxbuild.runtime)</a>
 </li>
@@ -1096,6 +1175,14 @@
 </li>
       </ul></li>
       <li><a href="source/coxbuild.html#coxbuild.runtime.withTask">withTask() (in module coxbuild.runtime)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Y">Y</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/coxbuild.configurations.html#coxbuild.configurations.builders.YamlConfigurationBuilder">YamlConfigurationBuilder (class in coxbuild.configurations.builders)</a>
 </li>
   </ul></td>
 </tr></table>

@@ -14,10 +14,23 @@ def initialize(context: PipelineContext):
 Also you can use `-c` option to specify configuration entry:
 
 ```sh
-coxbuild -c a=1 -c b=2
+coxbuild -c a=1 -c b=2 -y config.yml -j config.json
 ```
 
-Since many settings provider is inherited from `ConfigurationAccessor`, then many configuration entries have a fallback (with prefix `coxbuild:`) in environment variables. For example `project:src` has fallback environment variable `coxbuild:project:src`.
+Coxbuild will read configuration entries defined in environment variables (with prefix `coxbuild:`). For example `project:src` has fallback environment variable `coxbuild:project:src`.
+
+Coxbuild will also read configuration in `buildcox.y[a]ml` or `buildcox.json` in the current directory.
+Nested dictionary will be set as sub-section.
+
+Build order (later builder has higher priority):
+
+1. Environment variables
+2. buildcox.json
+3. buildcox.yaml
+4. buildcox.yml
+5. User-defined Json configuration file
+6. User-defined Yaml configuration file
+7. Command line options
 
 ## Project Settings
 

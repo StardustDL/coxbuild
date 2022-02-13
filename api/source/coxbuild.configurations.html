@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>coxbuild.configurations package &#8212; coxbuild  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="coxbuild-configurations-package">
+<h1>coxbuild.configurations package<a class="headerlink" href="#coxbuild-configurations-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-coxbuild.configurations.builders">
+<span id="coxbuild-configurations-builders-module"></span><h2>coxbuild.configurations.builders module<a class="headerlink" href="#module-coxbuild.configurations.builders" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="coxbuild.configurations.builders.ConfigurationBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.configurations.builders.</span></span><span class="sig-name descname"><span class="pre">ConfigurationBuilder</span></span><a class="headerlink" href="#coxbuild.configurations.builders.ConfigurationBuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.configurations.builders.ConfigurationBuilder.build">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#coxbuild.configurations.Configuration" title="coxbuild.configurations.Configuration"><span class="pre">coxbuild.configurations.Configuration</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coxbuild.configurations.builders.ConfigurationBuilder.build" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="coxbuild.configurations.builders.ConfigurationBuilderCollection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.configurations.builders.</span></span><span class="sig-name descname"><span class="pre">ConfigurationBuilderCollection</span></span><a class="headerlink" href="#coxbuild.configurations.builders.ConfigurationBuilderCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#coxbuild.configurations.builders.ConfigurationBuilder" title="coxbuild.configurations.builders.ConfigurationBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">coxbuild.configurations.builders.ConfigurationBuilder</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.configurations.builders.ConfigurationBuilderCollection.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#coxbuild.configurations.builders.ConfigurationBuilder" title="coxbuild.configurations.builders.ConfigurationBuilder"><span class="pre">coxbuild.configurations.builders.ConfigurationBuilder</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.configurations.builders.ConfigurationBuilderCollection" title="coxbuild.configurations.builders.ConfigurationBuilderCollection"><span class="pre">coxbuild.configurations.builders.ConfigurationBuilderCollection</span></a></span></span><a class="headerlink" href="#coxbuild.configurations.builders.ConfigurationBuilderCollection.add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.configurations.builders.ConfigurationBuilderCollection.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#coxbuild.configurations.Configuration" title="coxbuild.configurations.Configuration"><span class="pre">coxbuild.configurations.Configuration</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coxbuild.configurations.builders.ConfigurationBuilderCollection.build" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="coxbuild.configurations.builders.DictionaryConfigurationBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.configurations.builders.</span></span><span class="sig-name descname"><span class="pre">DictionaryConfigurationBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.configurations.builders.DictionaryConfigurationBuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#coxbuild.configurations.builders.ConfigurationBuilder" title="coxbuild.configurations.builders.ConfigurationBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">coxbuild.configurations.builders.ConfigurationBuilder</span></code></a></p>
+<p>Use dictionary to build configuration.</p>
+<p>Nested dictionary will be converted to a subsection.
+To avoid this behavior, use an entry with key ‘__keep__’.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.configurations.builders.DictionaryConfigurationBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#coxbuild.configurations.Configuration" title="coxbuild.configurations.Configuration"><span class="pre">coxbuild.configurations.Configuration</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coxbuild.configurations.builders.DictionaryConfigurationBuilder.build" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="coxbuild.configurations.builders.EnvironmentConfigurationBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.configurations.builders.</span></span><span class="sig-name descname"><span class="pre">EnvironmentConfigurationBuilder</span></span><a class="headerlink" href="#coxbuild.configurations.builders.EnvironmentConfigurationBuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#coxbuild.configurations.builders.ConfigurationBuilder" title="coxbuild.configurations.builders.ConfigurationBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">coxbuild.configurations.builders.ConfigurationBuilder</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.configurations.builders.EnvironmentConfigurationBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#coxbuild.configurations.Configuration" title="coxbuild.configurations.Configuration"><span class="pre">coxbuild.configurations.Configuration</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coxbuild.configurations.builders.EnvironmentConfigurationBuilder.build" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="coxbuild.configurations.builders.JsonConfigurationBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.configurations.builders.</span></span><span class="sig-name descname"><span class="pre">JsonConfigurationBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.configurations.builders.JsonConfigurationBuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#coxbuild.configurations.builders.ConfigurationBuilder" title="coxbuild.configurations.builders.ConfigurationBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">coxbuild.configurations.builders.ConfigurationBuilder</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.configurations.builders.JsonConfigurationBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#coxbuild.configurations.Configuration" title="coxbuild.configurations.Configuration"><span class="pre">coxbuild.configurations.Configuration</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coxbuild.configurations.builders.JsonConfigurationBuilder.build" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="coxbuild.configurations.builders.YamlConfigurationBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.configurations.builders.</span></span><span class="sig-name descname"><span class="pre">YamlConfigurationBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.configurations.builders.YamlConfigurationBuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#coxbuild.configurations.builders.ConfigurationBuilder" title="coxbuild.configurations.builders.ConfigurationBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">coxbuild.configurations.builders.ConfigurationBuilder</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.configurations.builders.YamlConfigurationBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#coxbuild.configurations.Configuration" title="coxbuild.configurations.Configuration"><span class="pre">coxbuild.configurations.Configuration</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#coxbuild.configurations.builders.YamlConfigurationBuilder.build" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coxbuild.configurations.builders.getDefaultBuilder">
+<span class="sig-prename descclassname"><span class="pre">coxbuild.configurations.builders.</span></span><span class="sig-name descname"><span class="pre">getDefaultBuilder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.configurations.builders.ConfigurationBuilderCollection" title="coxbuild.configurations.builders.ConfigurationBuilderCollection"><span class="pre">coxbuild.configurations.builders.ConfigurationBuilderCollection</span></a></span></span><a class="headerlink" href="#coxbuild.configurations.builders.getDefaultBuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use environment variables and file buildcox.[json/yaml] to build configuration.</p>
+</dd></dl>
+
+</section>
+<section id="module-coxbuild.configurations">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-coxbuild.configurations" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="coxbuild.configurations.Configuration">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.configurations.</span></span><span class="sig-name descname"><span class="pre">Configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.configurations.Configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Build configuration, entry key is case-insensitive.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.configurations.Configuration.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#coxbuild.configurations.Configuration" title="coxbuild.configurations.Configuration"><span class="pre">coxbuild.configurations.Configuration</span></a></span></span><a class="headerlink" href="#coxbuild.configurations.Configuration.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy configuration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.configurations.Configuration.env">
+<span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.configurations.Configuration.env" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.configurations.Configuration.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#coxbuild.configurations.Configuration.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.configurations.Configuration.section">
+<span class="sig-name descname"><span class="pre">section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.configurations.Configuration.section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get sub-section.</p>
+<p>name: sub-section name</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="coxbuild.configurations.ConfigurationAccessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coxbuild.configurations.</span></span><span class="sig-name descname"><span class="pre">ConfigurationAccessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#coxbuild.configurations.Configuration" title="coxbuild.configurations.Configuration"><span class="pre">coxbuild.configurations.Configuration</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coxbuild.configurations.ConfigurationAccessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Configuration accessor.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.configurations.ConfigurationAccessor.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#coxbuild.configurations.ConfigurationAccessor.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get configuration value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="coxbuild.configurations.ConfigurationAccessor.getPath">
+<span class="sig-name descname"><span class="pre">getPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#coxbuild.configurations.ConfigurationAccessor.getPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get configuration value as Path.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">coxbuild</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, StardustDL.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/source/coxbuild.configurations.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

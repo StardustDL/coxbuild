@@ -1,0 +1,21 @@
+coxbuild.configurations package
+===============================
+
+Submodules
+----------
+
+coxbuild.configurations.builders module
+---------------------------------------
+
+.. automodule:: coxbuild.configurations.builders
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: coxbuild.configurations
+   :members:
+   :undoc-members:
+   :show-inheritance:
