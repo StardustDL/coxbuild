@@ -1,5 +1,5 @@
 from coxbuild.schema import (Configuration, continueOnError, depend, task,
-                             withConfiguration)
+                             withConfig)
 
 
 @continueOnError
@@ -7,7 +7,7 @@ from coxbuild.schema import (Configuration, continueOnError, depend, task,
 def error(): assert False
 
 
-@withConfiguration
+@withConfig
 @depend(error)
 @task
 def default(config: Configuration):
