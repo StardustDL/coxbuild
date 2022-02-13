@@ -376,7 +376,7 @@ class TaskRunner(Runner):
     async def __aexit__(self, exc_type, exc_value, exc_tb) -> bool:
         await super().__aexit__(exc_type, exc_value, exc_tb)
 
-        exception = None if self.exc_value is None else TaskRunningException(
+        exception = None if self.exc_value is None else TaskRuntimeException(
             self.context.task, cause=self.exc_value)
         self.result = TaskResult(
             self.context.task, duration=self.duration, exception=exception)

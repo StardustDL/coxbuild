@@ -30,6 +30,10 @@ def list(*, pipeline: Pipeline):
 @withProject
 @task
 def project(*, project: ProjectSettings):
+    print(f"Name        : {project.name}")
+    print(f"Description : {project.description}")
+    print(f"Version     : {project.version}")
+    print(f"Author      : {project.author}")
     print(f"Source Code : {project.src}")
     print(f"Test        : {project.test}")
     print(f"Document    : {project.docs}")

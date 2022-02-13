@@ -11,17 +11,10 @@ grouped = group("dotnet")
 
 
 class Settings(ConfigurationAccessor):
+    __configname__ = "dotnet"
+
     def __init__(self, config: Configuration) -> None:
         self.config = config
-
-    @property
-    def version(self) -> str | None:
-        """Build version."""
-        return self.get("version") or None
-
-    @version.setter
-    def version(self, value: str | None) -> None:
-        self.config["version"] = value
 
     @property
     def buildConfig(self) -> str:
@@ -74,8 +67,8 @@ def restore(*, project: ProjectSettings):
 @task
 def build(*, project: ProjectSettings, settings: Settings):
     args = ["dotnet", "build", "-c", settings.buildConfig]
-    if settings.version:
-        args.append(f"/p:Version={settings.version}")
+    if project.version:
+        args.append(f"/p:Version={project.version}")
     run(args, cwd=project.src)
 
 
@@ -85,8 +78,8 @@ def build(*, project: ProjectSettings, settings: Settings):
 @task
 def pack(*, project: ProjectSettings, settings: Settings):
     args = ["dotnet", "pack", "-c", settings.buildConfig]
-    if settings.version:
-        args.append(f"/p:Version={settings.version}")
+    if project.version:
+        args.append(f"/p:Version={project.version}")
     args.extend(["-o", str(project.package)])
     run(args, cwd=project.src)
 
