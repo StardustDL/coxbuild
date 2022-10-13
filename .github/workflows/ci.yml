@@ -108,7 +108,7 @@ jobs:
         name: apidocs
         path: ./docs/api
     - name: Deploy GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4.2.3
+      uses: JamesIves/github-pages-deploy-action@v4.4.1
       with:
         token: ${{ secrets.PA_TOKEN }}
         branch: gh-pages
